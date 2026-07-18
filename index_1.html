@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fitness Directive Builder — PFL Tool</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --charcoal:#1B1F26;
+    --panel:#242A33;
+    --panel-line:#3A4150;
+    --paper:#E7E2D4;
+    --paper-dark:#DAD3BF;
+    --ink:#20241F;
+    --ink-soft:#54503f;
+    --amber:#C8791F;
+    --amber-bright:#E0972F;
+    --stamp-red:#A6362B;
+    --stamp-green:#3E6B4A;
+    --off-white:#EFEBE0;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--charcoal);
+    font-family:'IBM Plex Sans',sans-serif;
+    color:var(--off-white);
+    min-height:100vh;
+  }
+  ::selection{background:var(--amber);color:#1B1F26;}
+
+  /* ---- Top bar ---- */
+  .topbar{
+    border-bottom:1px solid var(--panel-line);
+    padding:18px 28px;
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .topbar .brand{
+    font-family:'IBM Plex Mono',monospace;
+    letter-spacing:0.12em;
+    font-size:13px;
+    color:var(--amber-bright);
+    text-transform:uppercase;
+  }
+  .topbar .brand b{color:var(--off-white);}
+  .topbar .refs{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:#8891A0;
+    letter-spacing:0.04em;
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns:360px 1fr;
+    gap:0;
+    min-height:calc(100vh - 60px);
+  }
+  @media (max-width:920px){
+    .layout{grid-template-columns:1fr;}
+  }
+
+  /* ---- Intake panel ---- */
+  .intake{
+    background:var(--panel);
+    border-right:1px solid var(--panel-line);
+    padding:26px 24px 60px;
+  }
+  .intake h2{
+    font-family:'IBM Plex Sans Condensed',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:var(--off-white);
+    margin:0 0 4px;
+  }
+  .intake .sub{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:#8891A0;
+    margin-bottom:22px;
+  }
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:#9FA8B5;
+    margin-bottom:6px;
+  }
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  select, input[type=number], input[type=text]{
+    width:100%;
+    background:var(--charcoal);
+    border:1px solid var(--panel-line);
+    color:var(--off-white);
+    padding:9px 10px;
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:13.5px;
+    border-radius:2px;
+  }
+  select:focus, input:focus{
+    outline:none;
+    border-color:var(--amber);
+  }
+  fieldset{
+    border:1px solid var(--panel-line);
+    border-radius:2px;
+    padding:12px 12px 4px;
+    margin:0 0 16px;
+  }
+  legend{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--amber-bright);
+    padding:0 6px;
+  }
+  .chk{
+    display:flex;
+    align-items:flex-start;
+    gap:9px;
+    margin-bottom:10px;
+    font-size:13px;
+    line-height:1.35;
+  }
+  .chk input{margin-top:3px;accent-color:var(--amber);width:15px;height:15px;flex:none;}
+  .chk .lbl{color:var(--off-white);}
+  .chk .desc{display:block;font-size:11px;color:#8891A0;margin-top:1px;}
+  textarea{
+    width:100%;
+    background:var(--charcoal);
+    border:1px solid var(--panel-line);
+    color:var(--off-white);
+    padding:9px 10px;
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:13px;
+    border-radius:2px;
+    min-height:56px;
+    resize:vertical;
+  }
+  .genbtn{
+    width:100%;
+    margin-top:8px;
+    background:var(--amber);
+    color:#1B1F26;
+    border:none;
+    padding:13px;
+    font-family:'IBM Plex Sans Condensed',sans-serif;
+    font-weight:700;
+    font-size:14px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    cursor:pointer;
+    border-radius:2px;
+    transition:background .15s ease;
+  }
+  .genbtn:hover{background:var(--amber-bright);}
+  .disclaimer{
+    margin-top:18px;
+    font-size:11px;
+    color:#8891A0;
+    line-height:1.5;
+    border-top:1px solid var(--panel-line);
+    padding-top:14px;
+  }
+
+  /* ---- Output / document area ---- */
+  .doc-wrap{
+    background:
+      radial-gradient(ellipse at top left, rgba(255,255,255,0.03), transparent 60%),
+      var(--charcoal);
+    padding:40px 44px 80px;
+  }
+  .empty-state{
+    max-width:520px;
+    margin:80px auto;
+    text-align:center;
+    color:#6B7280;
+  }
+  .empty-state .mark{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:46px;
+    color:var(--panel-line);
+    margin-bottom:14px;
+  }
+  .empty-state h3{
+    font-family:'IBM Plex Sans Condensed',sans-serif;
+    color:#9FA8B5;
+    font-size:17px;
+    letter-spacing:0.03em;
+    margin-bottom:8px;
+  }
+  .empty-state p{font-size:13px;line-height:1.6;}
+
+  .paper{
+    background:var(--paper);
+    color:var(--ink);
+    max-width:820px;
+    margin:0 auto;
+    padding:38px 42px 46px;
+    border-radius:1px;
+    box-shadow:0 30px 60px -20px rgba(0,0,0,0.55);
+    position:relative;
+  }
+  .paper::before{
+    content:"";
+    position:absolute;inset:0;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.015) 0px, transparent 1px, transparent 3px);
+    pointer-events:none;
+  }
+  .doc-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    border-bottom:2px solid var(--ink);
+    padding-bottom:14px;
+    margin-bottom:18px;
+  }
+  .doc-head .title{
+    font-family:'IBM Plex Sans Condensed',sans-serif;
+    font-weight:700;
+    font-size:22px;
+    letter-spacing:0.01em;
+  }
+  .doc-head .doc-id{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--ink-soft);
+    text-align:right;
+    line-height:1.6;
+  }
+  .memo-line{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    color:var(--ink-soft);
+    margin-bottom:3px;
+  }
+  .memo-line b{color:var(--ink);font-weight:600;}
+
+  /* dog-tag profile strip */
+  .profile-strip{
+    display:flex;
+    gap:0;
+    margin:22px 0 26px;
+    border:1.5px solid var(--ink);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .profile-strip .cell{
+    flex:1;
+    padding:10px 14px;
+    border-right:1px solid var(--ink);
+  }
+  .profile-strip .cell:last-child{border-right:none;}
+  .profile-strip .cell .k{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-bottom:3px;
+  }
+  .profile-strip .cell .v{
+    font-family:'IBM Plex Sans Condensed',sans-serif;
+    font-weight:700;
+    font-size:16px;
+  }
+
+  h4.section-h{
+    font-family:'IBM Plex Sans Condensed',sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    letter-spacing:0.09em;
+    text-transform:uppercase;
+    margin:26px 0 10px;
+    padding-bottom:6px;
+    border-bottom:1px solid rgba(32,36,31,0.25);
+  }
+
+  /* component matrix */
+  .matrix{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:6px;
+  }
+  .matrix th{
+    text-align:left;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    padding:6px 8px;
+    border-bottom:1px solid rgba(32,36,31,0.3);
+  }
+  .matrix td{
+    padding:9px 8px;
+    font-size:12.5px;
+    border-bottom:1px solid rgba(32,36,31,0.12);
+    vertical-align:top;
+  }
+  .matrix td.comp-name{font-weight:600;}
+  .stamp{
+    display:inline-block;
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:700;
+    font-size:10.5px;
+    letter-spacing:0.08em;
+    padding:3px 8px;
+    border-width:1.5px;
+    border-style:solid;
+    border-radius:2px;
+    transform:rotate(-3deg);
+  }
+  .stamp.exempt{color:var(--stamp-red);border-color:var(--stamp-red);}
+  .stamp.tested{color:var(--stamp-green);border-color:var(--stamp-green);}
+
+  /* phase cards */
+  .phase{
+    border:1px solid rgba(32,36,31,0.25);
+    border-radius:3px;
+    margin-bottom:14px;
+    overflow:hidden;
+  }
+  .phase-head{
+    background:var(--paper-dark);
+    padding:9px 14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+  }
+  .phase-head .name{
+    font-family:'IBM Plex Sans Condensed',sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    letter-spacing:0.03em;
+  }
+  .phase-head .weeks{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;
+    color:var(--ink-soft);
+  }
+  .phase-body{padding:12px 16px 14px;}
+  .day{
+    margin-bottom:10px;
+    padding-bottom:10px;
+    border-bottom:1px dashed rgba(32,36,31,0.2);
+  }
+  .day:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+  .day .dname{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    font-size:11px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--ink);
+    margin-bottom:3px;
+  }
+  .day .ddesc{font-size:12.5px;line-height:1.55;color:var(--ink);}
+  .day .dnote{font-size:11.5px;color:var(--stamp-red);margin-top:3px;font-style:italic;}
+  .exlist{width:100%;border-collapse:collapse;margin-top:7px;}
+  .exlist th{
+    text-align:left;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:9px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    padding:3px 6px 4px 0;
+    border-bottom:1px solid rgba(32,36,31,0.25);
+  }
+  .exlist td{
+    padding:4px 6px 4px 0;
+    font-size:12px;
+    vertical-align:top;
+    border-bottom:1px dotted rgba(32,36,31,0.15);
+  }
+  .exlist td.exname{font-weight:600;width:38%;}
+  .focustag{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:500;
+    font-size:9px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--amber);
+    margin-top:1px;
+  }
+  .exlist td.exsr{width:24%;color:var(--ink);}
+  .exlist td.exload{color:var(--ink-soft);}
+
+  .notes-box{
+    background:rgba(200,121,31,0.08);
+    border-left:3px solid var(--amber);
+    padding:12px 14px;
+    font-size:12.5px;
+    line-height:1.6;
+    margin-top:8px;
+  }
+  .notes-box ul{margin:6px 0 0;padding-left:18px;}
+
+  .footer-note{
+    margin-top:30px;
+    padding-top:14px;
+    border-top:1px solid rgba(32,36,31,0.25);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    color:var(--ink-soft);
+    line-height:1.6;
+  }
+
+  .print-btn{
+    display:block;
+    max-width:820px;
+    margin:14px auto 0;
+    background:transparent;
+    border:1px solid var(--panel-line);
+    color:#9FA8B5;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    padding:9px 14px;
+    cursor:pointer;
+    border-radius:2px;
+  }
+  .print-btn:hover{border-color:var(--amber);color:var(--amber-bright);}
+
+  @media print{
+    *{
+      -webkit-print-color-adjust:exact !important;
+      print-color-adjust:exact !important;
+      color-adjust:exact !important;
+    }
+    .intake, .topbar, .print-btn{display:none;}
+    .doc-wrap{padding:0;background:#fff;}
+    .paper{box-shadow:none;max-width:100%;}
+    body{background:#fff;}
+    .stamp{transform:none;}
+    .matrix tr, .day, .phase, .profile-strip, .notes-box{page-break-inside:avoid;break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><b>Fitness Directive Builder</b> · PFL Programming Tool</div>
+  <div class="refs">REF: DAFMAN 36-2905 · Warfighter's Fitness Playbook 2.0 · UNOFFICIAL PLANNING AID</div>
+</div>
+
+<div class="layout">
+  <div class="intake">
+    <h2>Member Profile Intake</h2>
+    <div class="sub">Enter no names or personal identifiers — profile-only</div>
+
+    <form id="intakeForm" onsubmit="generate(); return false;">
+    <div class="field">
+      <label for="gender">Gender</label>
+      <select id="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+      </select>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="age">Age</label>
+        <input type="number" id="age" min="17" max="65" value="28">
+      </div>
+      <div class="field">
+        <label for="timeline">Goal Timeline</label>
+        <select id="timeline">
+          <option value="8">8-week block</option>
+          <option value="12">12-week block</option>
+          <option value="6">6-week block (short)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="height">Height (in)</label>
+        <input type="number" id="height" min="48" max="84" value="68">
+      </div>
+      <div class="field">
+        <label for="weight">Weight (lb)</label>
+        <input type="number" id="weight" min="80" max="400" value="170">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="objective">Primary Objective</label>
+      <select id="objective">
+        <option value="general">General conditioning / maintain</option>
+        <option value="retest">Preparing for reassessment</option>
+        <option value="rtd">Return-to-duty progression</option>
+        <option value="fip">Fitness Improvement Program (FIP)</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label for="ability">Current Ability Level</label>
+      <select id="ability">
+        <option value="1">Level 1 — PFA &lt;80 or not completed, 2-mi 18:00+, HAMR &lt;60</option>
+        <option value="2" selected>Level 2 — PFA 80–89.9, 2-mi 16:00–18:00, HAMR 60–79</option>
+        <option value="3">Level 3 — PFA 90+, 2-mi &lt;16:00, HAMR 80+</option>
+      </select>
+    </div>
+
+    <fieldset>
+      <legend>Documented Restrictions</legend>
+      <div class="chk">
+        <input type="checkbox" id="r_run">
+        <label for="r_run"><span class="lbl">No running / high-impact cardio</span><span class="desc">Profile restricts running or repetitive impact loading</span></label>
+      </div>
+      <div class="chk">
+        <input type="checkbox" id="r_upper">
+        <label for="r_upper"><span class="lbl">No upper-body weight-bearing</span><span class="desc">Push-ups / hand-release push-ups restricted</span></label>
+      </div>
+      <div class="chk">
+        <input type="checkbox" id="r_core">
+        <label for="r_core"><span class="lbl">No core flexion / trunk loading</span><span class="desc">Sit-ups, crunches, or weighted core work restricted</span></label>
+      </div>
+      <div class="chk">
+        <input type="checkbox" id="r_lower">
+        <label for="r_lower"><span class="lbl">Lower-body / joint restriction</span><span class="desc">Knee, hip, ankle, or back limitation affecting standing or loading</span></label>
+      </div>
+      <div class="chk">
+        <input type="checkbox" id="r_preg">
+        <label for="r_preg"><span class="lbl">Pregnancy profile</span><span class="desc">Program follows OB/profile guidance only</span></label>
+      </div>
+      <div class="chk">
+        <input type="checkbox" id="r_standing">
+        <label for="r_standing"><span class="lbl">No prolonged standing / static hold</span><span class="desc">Plank or extended isometric positions restricted</span></label>
+      </div>
+    </fieldset>
+
+    <div class="field">
+      <label for="notes">Profile notes (from AF Form 469, optional)</label>
+      <textarea id="notes" placeholder="e.g. LIMFAC: no running >10 min through 15 Sep; cleared for bike/elliptical"></textarea>
+    </div>
+
+    <button type="submit" class="genbtn">Generate Fitness Directive</button>
+    </form>
+
+    <div class="disclaimer">
+      This tool builds training programming around restrictions a medical authority has already documented — it does not diagnose, clear, or determine medical necessity. It does not calculate official PFA/HPA scores; use myFitness / the current DAF Form 469 for that. Standards changed under the Sep–Dec 2025 Secretary of War memos, so verify current component rules with your UFPM before finalizing any plan. Keep member-identifying details out of this tool.
+    </div>
+  </div>
+
+  <div class="doc-wrap" id="docwrap">
+    <div class="empty-state">
+      <div class="mark">⌁</div>
+      <h3>No directive generated</h3>
+      <p>Fill in the member profile and documented restrictions on the left, then generate a phased fitness directive built around what they can safely train.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function clamp(n, min, max){ return Math.min(Math.max(n, min), max); }
+
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function generate(){
+  const gender = document.getElementById('gender').value;
+  const age = clamp(parseInt(document.getElementById('age').value)||28, 17, 65);
+  const height = clamp(parseInt(document.getElementById('height').value)||68, 48, 84);
+  const weight = clamp(parseInt(document.getElementById('weight').value)||170, 80, 400);
+  const timeline = parseInt(document.getElementById('timeline').value)||8;
+  const objective = document.getElementById('objective').value;
+  const ability = parseInt(document.getElementById('ability').value)||2;
+  const notes = escapeHtml(document.getElementById('notes').value.trim());
+
+  const R = {
+    run: document.getElementById('r_run').checked,
+    upper: document.getElementById('r_upper').checked,
+    core: document.getElementById('r_core').checked,
+    lower: document.getElementById('r_lower').checked,
+    preg: document.getElementById('r_preg').checked,
+    standing: document.getElementById('r_standing').checked
+  };
+
+  const objLabel = {
+    general:"General Conditioning / Maintenance",
+    retest:"Preparation for Reassessment",
+    rtd:"Return-to-Duty Progression",
+    fip:"Fitness Improvement Program (FIP)"
+  }[objective];
+
+  // ---- Component matrix ----
+  const cardioExempt = R.run || R.preg;
+  const strengthExempt = R.upper;
+  const coreExempt = R.core || R.standing;
+  const bodyCompExempt = R.preg; // pregnancy profiles typically defer body comp alongside cardio
+
+  const matrixRows = [
+    {
+      name:"Cardiorespiratory",
+      exempt: cardioExempt,
+      note: R.preg ? "Pregnancy profile — deferred per OB/profile" : (R.run ? "Component-exempt per profile" : "Tested — program as normal")
+    },
+    {
+      name:"Body Composition",
+      exempt: bodyCompExempt,
+      note: R.preg ? "Deferred with cardio per pregnancy profile" : "Not typically exempted — verify current DAF Form 469"
+    },
+    {
+      name:"Muscular Strength",
+      exempt: strengthExempt,
+      note: R.upper ? "Component-exempt per profile — max points awarded for this component" : "Tested — program as normal"
+    },
+    {
+      name:"Core Endurance",
+      exempt: coreExempt,
+      note: (R.core||R.standing) ? "Component-exempt per profile — max points awarded for this component" : "Tested — program as normal"
+    }
+  ];
+
+  // ---- Exercise prescription database ----
+  // Each kind maps to [phase0, phase1, phase2] -> {sr, load}
+  const RX = {
+    compound_lower:[{sr:"3x10",load:"Bodyweight or light DB/KB (RPE 6)"},{sr:"3x10",load:"Moderate DB/KB (RPE 7)"},{sr:"4x8",load:"Moderate-heavy DB/KB (RPE 7-8)"}],
+    compound_upper_press:[{sr:"3x8-10",load:"Bodyweight or light DB (RPE 6)"},{sr:"3x8-10",load:"Moderate DB (RPE 7)"},{sr:"4x6-8",load:"Moderate-heavy DB (RPE 7-8)"}],
+    pull:[{sr:"2x12",load:"Light band or light DB"},{sr:"3x12",load:"Light-moderate band/DB"},{sr:"3x10",load:"Moderate band/DB"}],
+    bodyweight_upper:[{sr:"3x max comfortable (aim 8-12)",load:"Bodyweight"},{sr:"3x10-15",load:"Bodyweight"},{sr:"4x15-20",load:"Bodyweight (add tempo/deficit if easy)"}],
+    bodyweight_lower:[{sr:"2x10 per leg",load:"Bodyweight"},{sr:"3x10 per leg",load:"Add light DB"},{sr:"3x12 per leg",load:"Moderate DB"}],
+    glute_bridge:[{sr:"2x12",load:"Bodyweight"},{sr:"3x15",load:"Bodyweight or light band"},{sr:"3x15-20",load:"Add light band/DB"}],
+    scap:[{sr:"2x10 slow reps",load:"Bodyweight / no load"},{sr:"2x12",load:"Light band"},{sr:"3x12",load:"Light band"}],
+    dip:[{sr:"2x8-10",load:"Bodyweight, bench-assisted"},{sr:"3x10",load:"Bodyweight"},{sr:"3x12",load:"Bodyweight (feet elevated)"}],
+    isometric_core:[{sr:"2x20-30s",load:"Bodyweight"},{sr:"3x30s",load:"Bodyweight"},{sr:"3x45s",load:"Bodyweight"}],
+    dynamic_core:[{sr:"2x12-15",load:"Bodyweight"},{sr:"3x15",load:"Bodyweight"},{sr:"3x20",load:"Bodyweight"}],
+    leg_raise:[{sr:"2x10",load:"Bodyweight"},{sr:"3x12",load:"Bodyweight"},{sr:"3x15",load:"Bodyweight"}],
+    anti_rotation_core:[{sr:"2x10 per side",load:"Light band or bodyweight"},{sr:"3x10 per side",load:"Light band"},{sr:"3x12 per side",load:"Light-moderate band"}],
+    breathing_core:[{sr:"2x8-10 slow breaths",load:"Bodyweight (bracing only)"},{sr:"3x10",load:"Bodyweight (bracing only)"},{sr:"3x10-12",load:"Bodyweight (bracing only)"}],
+    seated_march:[{sr:"2x10 per side",load:"Bodyweight"},{sr:"2x12 per side",load:"Bodyweight"},{sr:"3x12 per side",load:"Bodyweight, add ankle weight if cleared"}],
+    cardio_interval_run:[{sr:"4x400m",load:"Moderate pace, 90s rest"},{sr:"5x400m",load:"Moderate-hard pace, 90s rest"},{sr:"6x400m",load:"Hard pace, 60s rest"}],
+    cardio_steady_run:[{sr:"20 min continuous",load:"Conversational pace"},{sr:"25 min continuous",load:"Moderate pace"},{sr:"30 min continuous",load:"Moderate-brisk pace"}],
+    hill_sprint:[{sr:"4x20s uphill",load:"Hard effort, walk-down recovery"},{sr:"6x20s uphill",load:"Hard effort, walk-down recovery"},{sr:"8x20s uphill",load:"Max effort, walk-down recovery"}],
+    jump_rope:[{sr:"3x1 min",load:"Moderate pace"},{sr:"4x1 min",load:"Moderate-fast pace"},{sr:"5x1 min",load:"Fast pace"}],
+    cardio_interval_bike:[{sr:"6x1min on/2min off",load:"Hard effort / easy spin"},{sr:"8x1min on/90s off",load:"Hard effort / easy spin"},{sr:"10x1min on/60s off",load:"Hard effort / easy spin"}],
+    cardio_steady_lowimpact:[{sr:"20 min continuous",load:"Easy-moderate resistance"},{sr:"25 min continuous",load:"Moderate resistance"},{sr:"30 min continuous",load:"Moderate resistance, add incline"}],
+    row_interval:[{sr:"5x250m",load:"Moderate pace, 90s rest"},{sr:"6x250m",load:"Moderate-hard pace, 75s rest"},{sr:"8x250m",load:"Hard pace, 60s rest"}],
+    pool:[{sr:"15-20 min continuous",load:"Easy effort"},{sr:"20-25 min continuous",load:"Moderate effort"},{sr:"25-30 min continuous",load:"Moderate effort"}],
+    arm_bike:[{sr:"10 min",load:"Easy effort"},{sr:"12-15 min",load:"Moderate effort"},{sr:"15-18 min",load:"Moderate effort"}],
+    cardio_steady_walk:[{sr:"15-20 min",load:"Comfortable effort"},{sr:"20-25 min",load:"Comfortable effort"},{sr:"20-30 min",load:"Comfortable effort — per OB clearance"}],
+    bike_easy:[{sr:"15-20 min",load:"Comfortable effort"},{sr:"20 min",load:"Comfortable effort"},{sr:"20-25 min",load:"Comfortable effort, per OB clearance"}],
+    mobility_dynamic:[{sr:"1 round, 5-8 reps/move",load:"Bodyweight"},{sr:"1 round, 8-10 reps/move",load:"Bodyweight"},{sr:"2 rounds, 8-10 reps/move",load:"Bodyweight"}],
+    mobility_static:[{sr:"2x30s per side",load:"Bodyweight"},{sr:"2x30-45s per side",load:"Bodyweight"},{sr:"3x30-45s per side",load:"Bodyweight"}],
+    mobility_joint:[{sr:"2x10 slow reps",load:"Bodyweight"},{sr:"2x12 slow reps",load:"Bodyweight"},{sr:"3x12 slow reps",load:"Bodyweight"}],
+    foam_roll:[{sr:"2 min per area",load:"Roller pressure, tolerable"},{sr:"2-3 min per area",load:"Roller pressure, tolerable"},{sr:"3 min per area",load:"Roller pressure, tolerable"}],
+    lat_pulldown:[{sr:"3x10",load:"Light-moderate machine weight"},{sr:"3x10",load:"Moderate machine weight"},{sr:"3x8",load:"Moderate-heavy machine weight"}],
+    stability_ball_curl:[{sr:"2x10",load:"Bodyweight"},{sr:"3x12",load:"Bodyweight"},{sr:"3x15",load:"Bodyweight"}],
+    mini_band_walk:[{sr:"2x10 steps ea. direction",load:"Light band"},{sr:"2x15 steps ea. direction",load:"Light-moderate band"},{sr:"3x15 steps ea. direction",load:"Moderate band"}],
+    hollow_body:[{sr:"2x15-20s hold",load:"Bodyweight"},{sr:"3x20-25s hold",load:"Bodyweight"},{sr:"3x30s hold",load:"Bodyweight"}],
+    bear_plank_taps:[{sr:"2x10 total",load:"Bodyweight"},{sr:"3x12 total",load:"Bodyweight"},{sr:"3x16 total",load:"Bodyweight"}],
+    alt_vup:[{sr:"2x10 total",load:"Bodyweight"},{sr:"3x12 total",load:"Bodyweight"},{sr:"3x16 total",load:"Bodyweight"}],
+    frog_jump:[{sr:"2x8",load:"Bodyweight, land soft"},{sr:"3x10",load:"Bodyweight, land soft"},{sr:"3x12",load:"Bodyweight, land soft"}],
+    split_squat:[{sr:"2x10 ea. leg",load:"Bodyweight"},{sr:"3x12 ea. leg",load:"Add light DB"},{sr:"3x15 ea. leg",load:"Moderate DB"}],
+    step_up:[{sr:"2x8 ea. leg",load:"Bodyweight"},{sr:"3x10 ea. leg",load:"Light DB"},{sr:"3x12 ea. leg",load:"Moderate DB"}],
+    suitcase_carry:[{sr:"2x20yd ea. side",load:"Light-moderate DB/KB"},{sr:"3x20yd ea. side",load:"Moderate DB/KB"},{sr:"3x30yd ea. side",load:"Moderate-heavy DB/KB"}],
+    farmers_carry:[{sr:"2x20yd",load:"Light-moderate DB/KB, ea. hand"},{sr:"3x20yd",load:"Moderate DB/KB, ea. hand"},{sr:"3x30yd",load:"Moderate-heavy DB/KB, ea. hand"}],
+    thruster:[{sr:"3x8",load:"Light DB, RPE 6"},{sr:"3x10",load:"Moderate DB, RPE 7"},{sr:"4x10",load:"Moderate DB, RPE 7-8"}],
+    medball_clean_press:[{sr:"3x6",load:"Light MB, controlled"},{sr:"3x8",load:"Light-moderate MB"},{sr:"4x8",load:"Moderate MB"}],
+    medball_throw:[{sr:"2x8 ea. side",load:"Light MB"},{sr:"3x10 ea. side",load:"Light-moderate MB"},{sr:"3x12 ea. side",load:"Moderate MB"}],
+    run_in_place:[{sr:"3x30s",load:"Moderate pace"},{sr:"4x30s",load:"Moderate-fast pace"},{sr:"4x45s",load:"Fast pace"}],
+    side_hop:[{sr:"2x10 ea. side",load:"Bodyweight"},{sr:"3x12 ea. side",load:"Bodyweight"},{sr:"3x15 ea. side",load:"Bodyweight"}],
+    shuttle_run:[{sr:"4x 20yd shuttles",load:"Moderate pace, 60s rest"},{sr:"6x 20yd shuttles",load:"Moderate-hard pace, 45s rest"},{sr:"8x 20yd shuttles",load:"Hard pace, 45s rest"}],
+    suicide_run:[{sr:"3 rounds",load:"Moderate pace, full recovery"},{sr:"4 rounds",load:"Moderate-hard pace, 90s recovery"},{sr:"5 rounds",load:"Hard pace, 60s recovery"}],
+    stair_sprint:[{sr:"4x1 flight",load:"Moderate pace, walk-down recovery"},{sr:"6x1 flight",load:"Moderate-hard pace, walk-down recovery"},{sr:"8x1 flight",load:"Hard pace, walk-down recovery"}],
+    fartlek:[{sr:"15 min continuous",load:"Varied pace by feel"},{sr:"20 min continuous",load:"Varied pace by feel"},{sr:"25 min continuous",load:"Varied pace by feel"}],
+    lsd_run:[{sr:"25 min continuous",load:"55-75% MHR, conversational"},{sr:"35 min continuous",load:"55-75% MHR, conversational"},{sr:"45 min continuous",load:"55-75% MHR, conversational"}],
+    sprint_starts:[{sr:"4x15yd",load:"Max effort, full recovery"},{sr:"6x15yd",load:"Max effort, full recovery"},{sr:"8x15yd",load:"Max effort, full recovery"}],
+    skierg_interval:[{sr:"6x250m",load:"Moderate pace, 90s rest"},{sr:"8x250m",load:"Moderate-hard pace, 75s rest"},{sr:"10x250m",load:"Hard pace, 60s rest"}],
+    assault_bike_interval:[{sr:"6x20 cal",load:"Hard effort / easy spin"},{sr:"8x20 cal",load:"Hard effort / easy spin"},{sr:"10x20 cal",load:"Hard effort / easy spin"}],
+    echo_bike_interval:[{sr:"6x15 cal",load:"Hard effort / easy spin"},{sr:"8x15 cal",load:"Hard effort / easy spin"},{sr:"10x15 cal",load:"Hard effort / easy spin"}],
+    stair_climber_steady:[{sr:"15 min continuous",load:"Easy-moderate pace/level"},{sr:"20 min continuous",load:"Moderate pace/level"},{sr:"25 min continuous",load:"Moderate pace/level, add incline"}],
+    battle_ropes:[{sr:"4x20s",load:"Moderate effort"},{sr:"5x20s",load:"Moderate-hard effort"},{sr:"6x30s",load:"Hard effort"}],
+    barbell_compound:[{sr:"3x8",load:"Light-moderate barbell, RPE 6-7"},{sr:"4x6",load:"Moderate barbell, RPE 7-8"},{sr:"5x5",load:"Moderate-heavy barbell, RPE 8"}],
+    hinge_pattern:[{sr:"3x8",load:"Light-moderate barbell/DB, RPE 6-7"},{sr:"4x6",load:"Moderate barbell/DB, RPE 7-8"},{sr:"5x5",load:"Moderate-heavy barbell/DB, RPE 8"}],
+    kb_swing:[{sr:"3x12",load:"Light-moderate KB, RPE 6-7"},{sr:"3x15",load:"Moderate KB, RPE 7"},{sr:"4x15",load:"Moderate-heavy KB, RPE 7-8"}],
+    pullup:[{sr:"3x3-5 (band-assist as needed)",load:"Bodyweight"},{sr:"3x5-8",load:"Bodyweight, light assist if needed"},{sr:"4x6-10",load:"Bodyweight"}],
+    inverted_row:[{sr:"3x8-10",load:"Bodyweight, feet on ground"},{sr:"3x10-12",load:"Bodyweight"},{sr:"4x12-15",load:"Bodyweight, feet elevated"}],
+    isolation_light:[{sr:"2x12",load:"Light DB"},{sr:"3x12",load:"Light-moderate DB"},{sr:"3x15",load:"Moderate DB"}],
+    hip_thrust:[{sr:"3x10",load:"Bodyweight or light barbell/band"},{sr:"3x12",load:"Light-moderate barbell/band"},{sr:"4x12",load:"Moderate barbell/band"}],
+    sled_work:[{sr:"3x20yd",load:"Light-moderate sled load"},{sr:"3x30yd",load:"Moderate sled load"},{sr:"4x30yd",load:"Moderate-heavy sled load"}],
+    sandbag_clean:[{sr:"3x8",load:"Light-moderate sandbag"},{sr:"3x10",load:"Moderate sandbag"},{sr:"4x10",load:"Moderate-heavy sandbag"}],
+    tire_flip:[{sr:"3x6",load:"Light-moderate tire"},{sr:"3x8",load:"Moderate tire"},{sr:"4x8",load:"Moderate-heavy tire"}],
+    wall_ball:[{sr:"3x10",load:"Light MB"},{sr:"3x12",load:"Light-moderate MB"},{sr:"4x15",load:"Moderate MB"}],
+    calf_raise_loaded:[{sr:"3x12",load:"Bodyweight"},{sr:"3x15",load:"Add light DB"},{sr:"4x15",load:"Moderate DB"}],
+    leg_machine:[{sr:"3x10",load:"Light-moderate machine weight"},{sr:"3x10",load:"Moderate machine weight"},{sr:"4x8",load:"Moderate-heavy machine weight"}],
+    ab_wheel:[{sr:"2x6-8",load:"Bodyweight, knees on ground"},{sr:"3x8-10",load:"Bodyweight"},{sr:"3x10-12",load:"Bodyweight, full extension"}],
+    mountain_climbers:[{sr:"3x20s",load:"Moderate pace"},{sr:"3x30s",load:"Moderate-fast pace"},{sr:"4x30s",load:"Fast pace"}],
+    russian_twist:[{sr:"2x16 total",load:"Bodyweight or light MB"},{sr:"3x20 total",load:"Light MB"},{sr:"3x24 total",load:"Light-moderate MB"}],
+    woodchopper:[{sr:"2x10 ea. side",load:"Light band/cable"},{sr:"3x10 ea. side",load:"Light-moderate band/cable"},{sr:"3x12 ea. side",load:"Moderate band/cable"}],
+    cable_crunch:[{sr:"3x12",load:"Light-moderate cable weight"},{sr:"3x15",load:"Moderate cable weight"},{sr:"3x20",load:"Moderate cable weight"}],
+    toes_to_bar:[{sr:"2x5 (knee raise regression)",load:"Bodyweight"},{sr:"3x6-8",load:"Bodyweight"},{sr:"3x8-10",load:"Bodyweight"}],
+    superman:[{sr:"2x10",load:"Bodyweight"},{sr:"3x12",load:"Bodyweight"},{sr:"3x15",load:"Bodyweight, add top hold"}]
+  };
+  function rx(kind, phaseIdx){
+    // Ability level (1/2/3) shifts within the same phase-progression array,
+    // mirroring the Warfighter's Fitness Playbook 2.0 Level 1/2/3 rep scaling
+    // (Level 1: 8-12 reps, Level 2: 10-15 reps, Level 3: 15-20 reps for bodyweight work).
+    const offset = ability - 2; // Level 2 = baseline, matches original phase progression
+    const p = Math.min(Math.max(phaseIdx + offset, 0), RX[kind].length-1);
+    return RX[kind][p];
+  }
+
+  // ---- Master exercise library (Warfighter's Fitness Playbook 2.0, Appendix B) ----
+  // Each entry: category (cardio/strength/core/mobility), focus tag per the Playbook's
+  // LE/UE/Core convention, and "avoids" — restriction keys that exclude it from selection.
+  const MASTER_LIBRARY = [
+    // Cardio — standard
+    {name:"400m Interval Repeats", kind:"cardio_interval_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Tempo Run", kind:"cardio_steady_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Hill Sprints", kind:"hill_sprint", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Jump Rope Conditioning", kind:"jump_rope", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Run in Place", kind:"run_in_place", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Side Hops", kind:"side_hop", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Shuttle Runs", kind:"shuttle_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Suicide / Line Drills", kind:"suicide_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Stair Sprints", kind:"stair_sprint", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Fartlek Run", kind:"fartlek", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Long Slow Distance Run", kind:"lsd_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Sprint Starts", kind:"sprint_starts", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    // Cardio — low impact / alternate modality
+    {name:"Biking — Intervals", kind:"cardio_interval_bike", focus:"LE, Low Impact", category:"cardio_alt", avoids:["preg"]},
+    {name:"Elliptical — Steady State", kind:"cardio_steady_lowimpact", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:["preg"]},
+    {name:"Rowing — Intervals", kind:"row_interval", focus:"UE/LE/Core, Low Impact", category:"cardio_alt", avoids:["preg","core"]},
+    {name:"Pool Walk / Swim", kind:"pool", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:[]},
+    {name:"Arm Bike Conditioning", kind:"arm_bike", focus:"UE, Low Impact", category:"cardio_alt", avoids:["upper","preg"]},
+    {name:"SkiErg Intervals", kind:"skierg_interval", focus:"UE/Core, Low Impact", category:"cardio_alt", avoids:["upper","preg"]},
+    {name:"Assault Bike Intervals", kind:"assault_bike_interval", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:["preg"]},
+    {name:"Echo Bike Intervals", kind:"echo_bike_interval", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:["preg"]},
+    {name:"Stair Climber — Steady State", kind:"stair_climber_steady", focus:"LE, Low Impact", category:"cardio_alt", avoids:["lower","preg"]},
+    {name:"Battle Ropes Conditioning", kind:"battle_ropes", focus:"UE/Core, Low Impact", category:"cardio_alt", avoids:["upper","preg"]},
+
+    // Strength — upper
+    {name:"Push-Up", kind:"bodyweight_upper", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Hand Release (HR) Push-Up", kind:"bodyweight_upper", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Dumbbell Chest Press", kind:"compound_upper_press", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Dumbbell Shoulder Press", kind:"compound_upper_press", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Renegade Row", kind:"pull", focus:"UE/Core", category:"strength", avoids:["upper","core","preg"]},
+    {name:"Bench Triceps Dip", kind:"dip", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Lat Pull-Down", kind:"lat_pulldown", focus:"UE/Core", category:"strength", avoids:["upper"]},
+    {name:"Rope Face Pull", kind:"pull", focus:"UE/Core", category:"strength", avoids:["upper"]},
+    {name:"Seated Band Row", kind:"pull", focus:"UE", category:"strength", avoids:[]},
+    {name:"Wall Slide / Scapular Retraction", kind:"scap", focus:"UE", category:"strength", avoids:[]},
+    {name:"Seated DB Bicep Curl (light, non-weight-bearing)", kind:"pull", focus:"UE", category:"strength", avoids:[]},
+    {name:"Seated DB Triceps Extension (light, non-weight-bearing)", kind:"pull", focus:"UE", category:"strength", avoids:[]},
+    // Strength — lower / full body
+    {name:"Goblet Squat", kind:"compound_lower", focus:"UE/LE/Core", category:"strength", avoids:["lower"]},
+    {name:"Dumbbell Alternating Lunge", kind:"bodyweight_lower", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Split Squat", kind:"split_squat", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Step Up to Hip Flexion", kind:"step_up", focus:"LE/Core", category:"strength", avoids:["lower"]},
+    {name:"Glute Bridge", kind:"glute_bridge", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Frog Jump", kind:"frog_jump", focus:"LE", category:"strength", avoids:["lower","run","preg"]},
+    {name:"Farmer's Carry", kind:"farmers_carry", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower"]},
+    {name:"Suitcase Carry", kind:"suitcase_carry", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower"]},
+    {name:"Mini-Band Monster Walk", kind:"mini_band_walk", focus:"LE/Core", category:"strength", avoids:["lower"]},
+    {name:"Dumbbell Thrusters", kind:"thruster", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"MedBall Clean and Press", kind:"medball_clean_press", focus:"UE/LE", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Barbell Back Squat", kind:"barbell_compound", focus:"LE/Core", category:"strength", avoids:["lower","preg"]},
+    {name:"Barbell Front Squat", kind:"barbell_compound", focus:"LE/Core", category:"strength", avoids:["lower","preg"]},
+    {name:"Trap Bar Deadlift", kind:"hinge_pattern", focus:"LE/Core", category:"strength", avoids:["lower","preg"]},
+    {name:"Romanian Deadlift", kind:"hinge_pattern", focus:"LE/Core", category:"strength", avoids:["lower","preg"]},
+    {name:"Kettlebell Swing", kind:"kb_swing", focus:"LE/Core", category:"strength", avoids:["lower","preg"]},
+    {name:"Kettlebell Clean", kind:"kb_swing", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Push Press", kind:"compound_upper_press", focus:"UE/LE", category:"strength", avoids:["upper","lower"]},
+    {name:"Pull-Up", kind:"pullup", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Chin-Up", kind:"pullup", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Inverted Row", kind:"inverted_row", focus:"UE/Core", category:"strength", avoids:["upper"]},
+    {name:"Cable Row", kind:"pull", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Lateral Raise", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Bulgarian Split Squat", kind:"split_squat", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Hip Thrust", kind:"hip_thrust", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Sled Push", kind:"sled_work", focus:"UE/LE", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Sled Pull", kind:"sled_work", focus:"UE/LE", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Battle Ropes Waves", kind:"battle_ropes", focus:"UE/Core", category:"strength", avoids:["upper"]},
+    {name:"Sandbag Carry", kind:"farmers_carry", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower"]},
+    {name:"Sandbag Clean", kind:"sandbag_clean", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Tire Flip", kind:"tire_flip", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Wall Ball Shots", kind:"wall_ball", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Box Jump", kind:"frog_jump", focus:"LE", category:"strength", avoids:["lower","run","preg"]},
+    {name:"Broad Jump", kind:"frog_jump", focus:"LE", category:"strength", avoids:["lower","run","preg"]},
+    {name:"Calf Raise", kind:"calf_raise_loaded", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Leg Press (machine)", kind:"leg_machine", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Leg Extension (machine)", kind:"leg_machine", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Hamstring Curl (machine)", kind:"leg_machine", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Hammer Curl", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Overhead Triceps Extension", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Lateral Band Walk", kind:"mini_band_walk", focus:"LE/Core", category:"strength", avoids:["lower"]},
+
+    // Core — standard
+    {name:"Sit-Up", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Cross-Legged Reverse Crunch", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Alternating V-Up", kind:"alt_vup", focus:"UE/LE/Core", category:"core", avoids:["core","standing"]},
+    {name:"Flutter Kicks", kind:"leg_raise", focus:"LE/Core", category:"core", avoids:["core","standing"]},
+    {name:"Forearm Plank Hold", kind:"isometric_core", focus:"UE/Core", category:"core", avoids:["upper","standing"]},
+    {name:"Side Plank", kind:"isometric_core", focus:"UE/Core", category:"core", avoids:["upper","standing"]},
+    {name:"Hollow Body Hold", kind:"hollow_body", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Bear Stance Plank Taps", kind:"bear_plank_taps", focus:"UE/LE/Core", category:"core", avoids:["upper","standing"]},
+    {name:"Rotational MedBall Throw", kind:"medball_throw", focus:"UE/LE/Core", category:"core", avoids:["upper","core","preg"]},
+    {name:"Stability Ball Leg Curl", kind:"stability_ball_curl", focus:"LE/Core", category:"core", avoids:[]},
+    {name:"Russian Twist", kind:"russian_twist", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Mountain Climbers", kind:"mountain_climbers", focus:"UE/LE/Core", category:"core", avoids:["upper","core","standing"]},
+    {name:"Ab Wheel Rollout", kind:"ab_wheel", focus:"UE/Core", category:"core", avoids:["upper","core","standing"]},
+    {name:"Cable Woodchopper", kind:"woodchopper", focus:"Core", category:"core", avoids:["core"]},
+    {name:"Cable Crunch", kind:"cable_crunch", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Toes to Bar", kind:"toes_to_bar", focus:"UE/Core", category:"core", avoids:["upper","core","standing"]},
+    {name:"Superman", kind:"superman", focus:"Core", category:"core", avoids:["standing"]},
+    {name:"Reverse Crunch", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Bicycle Crunch", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
+    // Core — restriction-safe
+    {name:"Diaphragmatic Breathing Brace", kind:"breathing_core", focus:"Core", category:"core_safe", avoids:[]},
+    {name:"Bird-Dog", kind:"anti_rotation_core", focus:"UE/LE/Core", category:"core_safe", avoids:[]},
+    {name:"Deadbug", kind:"anti_rotation_core", focus:"UE/LE/Core", category:"core_safe", avoids:[]},
+    {name:"Band Pallof Press", kind:"anti_rotation_core", focus:"Core", category:"core_safe", avoids:["upper"]},
+    {name:"Seated March Core Activation", kind:"seated_march", focus:"LE/Core", category:"core_safe", avoids:[]},
+    {name:"Standing Pallof Press", kind:"anti_rotation_core", focus:"Core", category:"core_safe", avoids:["upper"]},
+    {name:"Suitcase Hold (isometric)", kind:"isometric_core", focus:"UE/Core", category:"core_safe", avoids:["upper"]},
+    {name:"Half-Kneeling Chop", kind:"woodchopper", focus:"Core", category:"core_safe", avoids:[]},
+
+    // Mobility
+    {name:"Dynamic Warm-Up Flow", kind:"mobility_dynamic", focus:"UE/LE", category:"mobility", avoids:["lower"]},
+    {name:"Hip Flexor Stretch", kind:"mobility_static", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"90/90 Stretch", kind:"mobility_joint", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Figure 4 Stretch", kind:"mobility_static", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Pigeon Stretch", kind:"mobility_static", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Quad Stretch", kind:"mobility_static", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Hamstring Stretch", kind:"mobility_static", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Foam Rolling (quads/calves/lats)", kind:"foam_roll", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Thoracic Spine Rotations", kind:"mobility_joint", focus:"Core", category:"mobility", avoids:[]},
+    {name:"Cat-Cow", kind:"mobility_joint", focus:"Core", category:"mobility", avoids:[]},
+    {name:"World's Greatest Stretch", kind:"mobility_dynamic", focus:"UE/LE/Core", category:"mobility", avoids:["lower"]},
+    {name:"Doorway Chest Stretch", kind:"mobility_static", focus:"UE", category:"mobility", avoids:[]},
+    {name:"Band Shoulder Dislocates", kind:"mobility_joint", focus:"UE", category:"mobility", avoids:["upper"]},
+    {name:"Hip Circles", kind:"mobility_joint", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Walking Knee Hug", kind:"mobility_dynamic", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Ankle Circles", kind:"mobility_joint", focus:"LE", category:"mobility_lowersafe", avoids:[]},
+    {name:"Seated Hamstring Stretch", kind:"mobility_static", focus:"LE", category:"mobility_lowersafe", avoids:[]},
+    {name:"Chest Stretch", kind:"mobility_static", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Shoulder 90-Degree Rotation", kind:"mobility_joint", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Upper Body Mobility Flow", kind:"mobility_dynamic", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Cobra / Upward Dog", kind:"mobility_joint", focus:"Core", category:"mobility_lowersafe", avoids:["core"]},
+    {name:"Seated Spinal Twist", kind:"mobility_static", focus:"Core", category:"mobility_lowersafe", avoids:[]},
+    {name:"Standing Overhead Reach", kind:"mobility_static", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Neck Rolls", kind:"mobility_joint", focus:"UE", category:"mobility_lowersafe", avoids:[]},
+    {name:"Wrist Circles", kind:"mobility_joint", focus:"UE", category:"mobility_lowersafe", avoids:[]}
+  ];
+
+  // Curated pregnancy cardio list — kept separate from filter logic for OB-safety review, not auto-derived
+  const CARDIO_PREG = [
+    {name:"Brisk Walk", kind:"cardio_steady_walk", focus:"LE, Low Impact"},
+    {name:"Biking (Easy)", kind:"bike_easy", focus:"LE, Low Impact"},
+    {name:"Water Walking / Swim", kind:"pool", focus:"UE/LE, Low Impact"},
+    {name:"Prenatal Mobility Flow", kind:"mobility_dynamic", focus:"UE/LE/Core"},
+    {name:"Recumbent Bike (Easy)", kind:"bike_easy", focus:"LE, Low Impact"},
+    {name:"Prenatal Yoga Flow", kind:"mobility_dynamic", focus:"UE/LE/Core"}
+  ];
+
+  function libraryPool(categories){
+    return MASTER_LIBRARY.filter(e =>
+      categories.includes(e.category) && !e.avoids.some(a => R[a])
+    );
+  }
+
+  // Rotate the selection window by phase so different weeks pull different exercises
+  // from the same filtered library, instead of repeating the identical 3-5 every phase.
+  function selectFromPool(pool, phaseIdx, count){
+    count = count || 5;
+    if(pool.length <= count) return pool;
+    const start = (phaseIdx * 2) % pool.length;
+    const sel = [];
+    for(let i=0;i<count;i++){ sel.push(pool[(start+i) % pool.length]); }
+    return sel;
+  }
+
+  function pickPool(kind){
+    if(kind==="cardio"){
+      if(R.preg) return CARDIO_PREG;
+      return (R.run || R.lower) ? libraryPool(["cardio_alt"]) : libraryPool(["cardio","cardio_alt"]);
+    }
+    if(kind==="strength"){ return libraryPool(["strength"]); }
+    if(kind==="core"){ return (R.core||R.standing) ? libraryPool(["core_safe"]) : libraryPool(["core","core_safe"]); }
+    if(kind==="mobility"){ return R.lower ? libraryPool(["mobility_lowersafe"]) : libraryPool(["mobility","mobility_lowersafe"]); }
+  }
+
+  function exTable(pool, phaseIdx, scale){
+    const rows = pool.map(ex=>{
+      const p = rx(ex.kind, phaseIdx);
+      const load = scale ? p.load + " — reduced volume (~70%)" : p.load;
+      return `<tr><td class="exname">${ex.name}<span class="focustag">${ex.focus||''}</span></td><td class="exsr">${p.sr}</td><td class="exload">${load}</td></tr>`;
+    }).join("");
+    return `<table class="exlist"><thead><tr><th>Exercise</th><th>Sets x Reps</th><th>Recommended Load</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }
+
+  const dayNotes = {
+    cardio: R.preg ? "Follow OB/profile guidance exactly — this is general framing only, not a prescription." :
+            R.run ? "Impact-free only — confirm approved alternate assessment component with UFPM." :
+            R.lower ? "Impact-free modality selected to protect the restricted joint." : "",
+    strength: (R.upper && R.lower) ? "Both upper and lower body restricted — kept to seated, pain-free-range work only. Escalate to medical provider for a fuller program." :
+              R.upper ? "No push-up loading — coordinate progression with medical provider before reintroducing." :
+              R.lower ? "No loaded squat/lunge patterns — upper-body focus to protect the restricted joint." : "",
+    core: (R.core||R.standing) ? "No sit-ups, crunches, or sustained plank until profile clears." : "",
+    mobility: R.lower ? "Keep load off the restricted joint — coordinate with any PT-prescribed corrective work." : ""
+  };
+
+  const dayTitles = {
+    cardio: R.preg ? "Cardio — Low Impact (OB-Cleared)" : (R.run || R.lower) ? "Cardio — Alternate Modality" : "Cardio — Run Development",
+    strength: (R.upper && R.lower) ? "Strength — Seated / Pain-Free Range Only" :
+              R.upper ? "Strength — Lower Body & Core-Safe Upper" :
+              R.lower ? "Strength — Upper Body Focus" : "Strength — Push-Up Progression",
+    core: (R.core||R.standing) ? "Core — Restriction-Safe" : "Core — Endurance Work",
+    mobility: "Mobility & Recovery"
+  };
+
+  const phases = [];
+  if(timeline>=8){
+    phases.push({ name:"Phase 1 — Foundation", weeks: timeline>=12 ? "Weeks 1–3" : "Weeks 1–2" });
+    phases.push({ name:"Phase 2 — Build", weeks: timeline>=12 ? "Weeks 4–8" : "Weeks 3–5" });
+    phases.push({ name: objective==="retest" ? "Phase 3 — Peak for Reassessment" : "Phase 3 — Progress & Sustain", weeks: timeline>=12 ? "Weeks 9–12" : "Weeks 6–8" });
+  } else {
+    phases.push({name:"Phase 1 — Foundation", weeks:"Weeks 1–2"});
+    phases.push({name:"Phase 2 — Build & Sustain", weeks:"Weeks 3–6"});
+  }
+
+  const phaseHTML = phases.map((p, idx) => {
+    const cardioSel = selectFromPool(pickPool("cardio"), idx, 5);
+    const strengthSel = selectFromPool(pickPool("strength"), idx, 5);
+    const coreSel = selectFromPool(pickPool("core"), idx, 5);
+    const mobilitySel = selectFromPool(pickPool("mobility"), idx, 5);
+    return `
+    <div class="phase">
+      <div class="phase-head"><span class="name">${p.name}</span><span class="weeks">${p.weeks}</span></div>
+      <div class="phase-body">
+        <div class="day">
+          <div class="dname">Day 1 · ${dayTitles.cardio}</div>
+          ${dayNotes.cardio?`<div class="dnote">${dayNotes.cardio}</div>`:""}
+          ${exTable(cardioSel, idx, false)}
+        </div>
+        <div class="day">
+          <div class="dname">Day 2 · ${dayTitles.strength}</div>
+          ${dayNotes.strength?`<div class="dnote">${dayNotes.strength}</div>`:""}
+          ${exTable(strengthSel, idx, false)}
+        </div>
+        <div class="day">
+          <div class="dname">Day 3 · ${dayTitles.core}</div>
+          ${dayNotes.core?`<div class="dnote">${dayNotes.core}</div>`:""}
+          ${exTable(coreSel, idx, false)}
+        </div>
+        <div class="day">
+          <div class="dname">Day 4 · ${dayTitles.mobility}</div>
+          ${dayNotes.mobility?`<div class="dnote">${dayNotes.mobility}</div>`:""}
+          ${exTable(mobilitySel, idx, false)}
+        </div>
+        <div class="day">
+          <div class="dname">Day 5 · Repeat, Reduced Volume</div>
+          <div class="ddesc">Cardio and strength work repeated at lighter volume. Rest or active recovery remaining days.</div>
+          ${exTable(cardioSel.slice(0,2).concat(strengthSel.slice(0,2)), idx, true)}
+        </div>
+      </div>
+    </div>
+  `;
+  }).join("");
+
+  const restrictionList = Object.entries(R).filter(([k,v])=>v).map(([k])=>({
+    run:"No running / high-impact cardio", upper:"No upper-body weight-bearing", core:"No core flexion / trunk loading",
+    lower:"Lower-body / joint restriction", preg:"Pregnancy profile", standing:"No prolonged standing / static hold"
+  }[k]));
+
+  const matrixHTML = matrixRows.map(r=>`
+    <tr>
+      <td class="comp-name">${r.name}</td>
+      <td><span class="stamp ${r.exempt?'exempt':'tested'}">${r.exempt?'EXEMPT':'TESTED'}</span></td>
+      <td>${r.note}</td>
+    </tr>
+  `).join("");
+
+  const today = new Date();
+  const docId = `FD-${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}-${Math.floor(Math.random()*900+100)}`;
+
+  document.getElementById('docwrap').innerHTML = `
+    <div class="paper">
+      <div class="doc-head">
+        <div>
+          <div class="title">Fitness Directive</div>
+        </div>
+        <div class="doc-id">
+          DOC ${docId}<br>
+          GENERATED ${today.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}<br>
+          REF DAFMAN 36-2905 / Playbook 2.0
+        </div>
+      </div>
+
+      <div class="memo-line"><b>OBJECTIVE:</b> ${objLabel}</div>
+      <div class="memo-line"><b>ABILITY LEVEL:</b> Level ${ability} (per Warfighter's Fitness Playbook 2.0 tiering)</div>
+      <div class="memo-line"><b>BLOCK LENGTH:</b> ${timeline} weeks</div>
+      ${notes ? `<div class="memo-line"><b>PROFILE NOTES:</b> ${notes}</div>` : ""}
+
+      <div class="profile-strip">
+        <div class="cell"><div class="k">Gender</div><div class="v">${gender==='male'?'Male':'Female'}</div></div>
+        <div class="cell"><div class="k">Age</div><div class="v">${age}</div></div>
+        <div class="cell"><div class="k">Height</div><div class="v">${Math.floor(height/12)}'${height%12}"</div></div>
+        <div class="cell"><div class="k">Weight</div><div class="v">${weight} lb</div></div>
+        <div class="cell"><div class="k">Ability</div><div class="v">L${ability}</div></div>
+      </div>
+
+      <h4 class="section-h">Component Status Matrix</h4>
+      <table class="matrix">
+        <thead><tr><th>Component</th><th>Status</th><th>Basis</th></tr></thead>
+        <tbody>${matrixHTML}</tbody>
+      </table>
+
+      ${restrictionList.length ? `
+      <div class="notes-box">
+        <b>Documented restrictions applied to this directive:</b>
+        <ul>${restrictionList.map(r=>`<li>${r}</li>`).join("")}</ul>
+      </div>` : ""}
+
+      <h4 class="section-h">Training Directive — ${timeline}-Week Block</h4>
+      ${phaseHTML}
+
+      <h4 class="section-h">Programming Notes</h4>
+      <div class="notes-box">
+        <ul>
+          <li>Progress volume or intensity by roughly 5-10% per week, per FITT/progressive overload principles — hold or regress if the member reports pain, not just fatigue, in the restricted area.</li>
+          <li>Form Over Speed and Intensity (FOSI): master the movement pattern before adding load or pace.</li>
+          <li>Any component marked EXEMPT is not tested and is awarded maximum points for that component per current scoring rules — training still targets it for the member's overall readiness, not for test score.</li>
+          <li>Reassess the restriction at each profile renewal date; this directive should be regenerated if the AF Form 469 changes.</li>
+          <li>Allow 2-4 weeks to acclimatize to heat or altitude before pushing intensity; scale back duration and intensity for the first 5-7 days in a new environment. Stop and seek medical attention at any sign of chest pain, dizziness, abnormal heartbeat, or other exercise warning signs.</li>
+          ${R.preg ? "<li>Pregnancy programming here is intentionally general — defer to OB and profile guidance for all specifics, especially load and heart-rate limits by trimester.</li>" : ""}
+        </ul>
+      </div>
+
+      <div class="footer-note">
+        Exercise focus tags (LE / UE / Core) and ability-level rep scaling (Level 1: 8-12 reps, Level 2: 10-15, Level 3: 15-20 for bodyweight work) follow the Warfighter's Fitness Playbook 2.0 (Feb 2026). Recommended loads are effort-based (RPE) or bodyweight, not fixed poundages, since no 1RM or baseline strength test is collected here — scale to the member's actual capacity and progress from there. This directive is a training-programming aid generated from PFL-entered inputs; it is not an official myFitness record, does not calculate PFA/HPA scores, and does not substitute for guidance from the servicing medical treatment facility, HAWC, or UFPM. Fitness standards were revised under the Sep 30 2025 and Dec 18 2025 Secretary of War memoranda — confirm current component and scoring rules before use.
+      </div>
+    </div>
+    <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+  `;
+}
+</script>
+
+</body>
+</html>
