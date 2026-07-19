@@ -326,6 +326,7 @@
   }
   .stamp.exempt{color:var(--stamp-red);border-color:var(--stamp-red);}
   .stamp.tested{color:var(--stamp-green);border-color:var(--stamp-green);}
+  .stamp.modality{color:var(--amber);border-color:var(--amber);}
 
   /* phase cards */
   .phase{
@@ -400,6 +401,52 @@
   }
   .exlist td.exsr{width:24%;color:var(--ink);}
   .exlist td.exload{color:var(--ink-soft);}
+  .swap-btn{
+    background:transparent;
+    border:1px solid var(--ink-soft);
+    color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    padding:3px 7px;
+    border-radius:2px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .swap-btn:hover{border-color:var(--amber);color:var(--amber);}
+  .exlist th.swapcol, .exlist td.swapcol{width:1%;text-align:right;}
+  .eqgrid{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;}
+  .eqgrid .chk{margin-bottom:6px;}
+  .roster-btn{
+    width:100%;
+    background:transparent;
+    border:1px solid var(--panel-line);
+    color:#9FA8B5;
+    padding:11px;
+    font-family:'IBM Plex Sans Condensed',sans-serif;
+    font-weight:700;
+    font-size:12.5px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    cursor:pointer;
+    border-radius:2px;
+  }
+  .roster-btn:hover{border-color:var(--amber);color:var(--amber-bright);}
+  .roster-section{margin-top:20px;padding-top:16px;border-top:1px solid var(--panel-line);}
+  .roster-table{width:100%;border-collapse:collapse;margin-top:6px;}
+  .roster-table th{
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:0.05em;
+    text-transform:uppercase;color:var(--ink-soft);padding:6px 8px;border-bottom:1px solid rgba(32,36,31,0.3);
+  }
+  .roster-table td{padding:8px;font-size:12px;border-bottom:1px solid rgba(32,36,31,0.15);vertical-align:middle;}
+  .roster-table .view-btn{
+    background:var(--amber);color:#1B1F26;border:none;padding:6px 10px;font-family:'IBM Plex Mono',monospace;
+    font-size:10.5px;font-weight:700;text-transform:uppercase;cursor:pointer;border-radius:2px;
+  }
+  .roster-directive{margin-top:14px;padding-top:14px;border-top:2px dashed rgba(32,36,31,0.3);}
+  .roster-note{
+    background:rgba(200,121,31,0.08);border-left:3px solid var(--amber);padding:10px 12px;
+    font-size:11.5px;line-height:1.5;margin-bottom:12px;color:var(--ink);
+  }
 
   .notes-box{
     background:rgba(200,121,31,0.08);
@@ -421,6 +468,64 @@
     line-height:1.6;
   }
 
+  /* ---- Tab nav ---- */
+  .tabbar{
+    display:flex;
+    gap:2px;
+    padding:0 28px;
+    background:var(--panel);
+    border-bottom:1px solid var(--panel-line);
+  }
+  .tabbtn{
+    background:transparent;
+    border:none;
+    border-bottom:2px solid transparent;
+    color:#8891A0;
+    font-family:'IBM Plex Sans Condensed',sans-serif;
+    font-weight:700;
+    font-size:12.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    padding:12px 16px;
+    cursor:pointer;
+  }
+  .tabbtn:hover{color:var(--off-white);}
+  .tabbtn.active{color:var(--amber-bright);border-bottom-color:var(--amber);}
+
+  /* ---- Glossary ---- */
+  .glossary-wrap{
+    padding:36px 44px;
+    max-width:900px;
+    margin:0 auto;
+  }
+  .glossary-wrap .paper{max-width:100%;}
+  .gloss-table{width:100%;border-collapse:collapse;margin-top:10px;}
+  .gloss-table th{
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:0.06em;
+    text-transform:uppercase;color:var(--ink-soft);padding:7px 10px;border-bottom:1px solid rgba(32,36,31,0.3);
+  }
+  .gloss-table td{padding:8px 10px;font-size:13px;border-bottom:1px solid rgba(32,36,31,0.12);vertical-align:top;}
+  .gloss-table td.term{font-family:'IBM Plex Mono',monospace;font-weight:700;white-space:nowrap;}
+  .gloss-table td.src{font-size:10.5px;color:var(--ink-soft);white-space:nowrap;}
+  .gloss-cat{
+    font-family:'IBM Plex Sans Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.04em;
+    text-transform:uppercase;margin:22px 0 4px;padding-bottom:5px;border-bottom:1px solid rgba(32,36,31,0.25);
+  }
+  .gloss-cat:first-child{margin-top:0;}
+  .flag-ok{color:var(--stamp-green);font-weight:700;}
+  .flag-warn{color:var(--amber);font-weight:700;}
+  .flag-overdue{color:var(--stamp-red);font-weight:700;}
+  .checklist{list-style:none;margin:0;padding:0;}
+  .checklist li{padding:5px 0 5px 22px;position:relative;font-size:12.5px;border-bottom:1px dotted rgba(32,36,31,0.15);}
+  .checklist li:last-child{border-bottom:none;}
+  .checklist li::before{content:"☐";position:absolute;left:0;top:5px;color:var(--ink-soft);}
+  .checklist .cite{color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:10px;margin-left:6px;}
+  .admin-btn{
+    background:var(--amber);color:#1B1F26;border:none;padding:9px 14px;font-family:'IBM Plex Sans Condensed',sans-serif;
+    font-weight:700;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-right:8px;
+  }
+  .admin-btn.secondary{background:transparent;border:1px solid var(--ink-soft);color:var(--ink-soft);}
+
   .print-btn{
     display:block;
     max-width:820px;
@@ -439,17 +544,19 @@
   .print-btn:hover{border-color:var(--amber);color:var(--amber-bright);}
 
   @media print{
+    .no-print, .swap-btn, th.swapcol, td.swapcol{display:none !important;}
     *{
       -webkit-print-color-adjust:exact !important;
       print-color-adjust:exact !important;
       color-adjust:exact !important;
     }
-    .intake, .topbar, .print-btn{display:none;}
+    .intake, .topbar, .tabbar, .print-btn{display:none;}
     .doc-wrap{padding:0;background:#fff;}
     .paper{box-shadow:none;max-width:100%;}
     body{background:#fff;}
     .stamp{transform:none;}
     .matrix tr, .day, .phase, .profile-strip, .notes-box{page-break-inside:avoid;break-inside:avoid;}
+    .roster-table tr{page-break-inside:avoid;break-inside:avoid;}
   }
 </style>
 </head>
@@ -460,12 +567,29 @@
   <div class="refs">REF: AFMAN36-2905 (24 Mar 2026) · Warfighter's Fitness Playbook 2.0 · UNOFFICIAL PLANNING AID</div>
 </div>
 
+<div class="tabbar">
+  <button type="button" class="tabbtn" id="tab-admin" onclick="showTab('admin')">Administrative</button>
+  <button type="button" class="tabbtn active" id="tab-builder" onclick="showTab('builder')">Directive Builder</button>
+  <button type="button" class="tabbtn" id="tab-glossary" onclick="showTab('glossary')">Acronym Glossary</button>
+</div>
+
+<div id="view-builder">
 <div class="layout">
   <div class="intake">
     <h2>Member Profile Intake</h2>
     <div class="sub">Enter no names or personal identifiers — profile-only</div>
 
     <form id="intakeForm" onsubmit="generate(); return false;">
+    <div class="row2">
+      <div class="field">
+        <label for="m_fname">First Name (demo label only)</label>
+        <input type="text" id="m_fname" placeholder="e.g. Jane — not a real member">
+      </div>
+      <div class="field">
+        <label for="m_lname">Last Name (demo label only)</label>
+        <input type="text" id="m_lname" placeholder="e.g. Doe — not a real member">
+      </div>
+    </div>
     <div class="field">
       <label for="gender">Gender</label>
       <select id="gender">
@@ -520,36 +644,76 @@
     </div>
 
     <fieldset>
-      <legend>Documented Restrictions</legend>
-      <div class="chk">
-        <input type="checkbox" id="r_run">
-        <label for="r_run"><span class="lbl">No running / high-impact cardio</span><span class="desc">Profile restricts running or repetitive impact loading</span></label>
+      <legend>Component Exemption Status</legend>
+      <div class="field">
+        <label for="cardio_type">Cardiorespiratory</label>
+        <select id="cardio_type">
+          <option value="none">Not restricted — test normally</option>
+          <option value="modality">Exercise Modality Exemption (excused from 2.0-mi run, cleared for HAMR — no PFRA Hold)</option>
+          <option value="component">Component Exemption (excused from cardio entirely — PFRA Hold)</option>
+        </select>
       </div>
-      <div class="chk">
-        <input type="checkbox" id="r_upper">
-        <label for="r_upper"><span class="lbl">No upper-body weight-bearing</span><span class="desc">Push-ups / hand-release push-ups restricted</span></label>
+      <div class="field">
+        <label for="strength_type">Muscular Strength</label>
+        <select id="strength_type">
+          <option value="none">Not restricted — test normally</option>
+          <option value="modality">Exercise Modality Exemption (excused from push-up, cleared for HRPU — no PFRA Hold)</option>
+          <option value="component">Component Exemption (excused from strength entirely — PFRA Hold)</option>
+        </select>
       </div>
-      <div class="chk">
-        <input type="checkbox" id="r_core">
-        <label for="r_core"><span class="lbl">No core flexion / trunk loading</span><span class="desc">Sit-ups, crunches, or weighted core work restricted</span></label>
+      <div class="field">
+        <label for="core_type">Core Endurance</label>
+        <select id="core_type">
+          <option value="none">Not restricted — test normally</option>
+          <option value="modality">Exercise Modality Exemption (excused from sit-up, cleared for CLRC/Plank — no PFRA Hold)</option>
+          <option value="component">Component Exemption (excused from core entirely — PFRA Hold)</option>
+        </select>
       </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Other Restrictions</legend>
       <div class="chk">
         <input type="checkbox" id="r_lower">
         <label for="r_lower"><span class="lbl">Lower-body / joint restriction</span><span class="desc">Knee, hip, ankle, or back limitation affecting standing or loading</span></label>
       </div>
       <div class="chk">
         <input type="checkbox" id="r_preg">
-        <label for="r_preg"><span class="lbl">Pregnancy profile</span><span class="desc">Program follows OB/profile guidance only</span></label>
+        <label for="r_preg"><span class="lbl">Pregnancy profile</span><span class="desc">Prohibited from PFRA — composite exemption per para 4.1.4</span></label>
       </div>
       <div class="chk">
         <input type="checkbox" id="r_standing">
-        <label for="r_standing"><span class="lbl">No prolonged standing / static hold</span><span class="desc">Plank or extended isometric positions restricted</span></label>
+        <label for="r_standing"><span class="lbl">No prolonged standing / static hold</span><span class="desc">Timed forearm plank restricted, on top of any core status above</span></label>
       </div>
     </fieldset>
 
-    <div class="field">
-      <label for="expiry">AF Form 469 Expiration Date (optional)</label>
-      <input type="date" id="expiry">
+    <fieldset>
+      <legend>Equipment Available</legend>
+      <div class="eqgrid">
+        <div class="chk"><input type="checkbox" id="eq_barbell" checked><label for="eq_barbell"><span class="lbl">Barbell/Plates</span></label></div>
+        <div class="chk"><input type="checkbox" id="eq_dumbbell" checked><label for="eq_dumbbell"><span class="lbl">Dumbbells</span></label></div>
+        <div class="chk"><input type="checkbox" id="eq_kettlebell" checked><label for="eq_kettlebell"><span class="lbl">Kettlebells</span></label></div>
+        <div class="chk"><input type="checkbox" id="eq_machine" checked><label for="eq_machine"><span class="lbl">Machines/Cables</span></label></div>
+        <div class="chk"><input type="checkbox" id="eq_band" checked><label for="eq_band"><span class="lbl">Bands</span></label></div>
+        <div class="chk"><input type="checkbox" id="eq_medball" checked><label for="eq_medball"><span class="lbl">Med Balls</span></label></div>
+        <div class="chk"><input type="checkbox" id="eq_sandbag" checked><label for="eq_sandbag"><span class="lbl">Sandbags</span></label></div>
+        <div class="chk"><input type="checkbox" id="eq_sled" checked><label for="eq_sled"><span class="lbl">Sled/Tire</span></label></div>
+        <div class="chk"><input type="checkbox" id="eq_cardio" checked><label for="eq_cardio"><span class="lbl">Cardio Machines</span></label></div>
+        <div class="chk"><input type="checkbox" id="eq_pool" checked><label for="eq_pool"><span class="lbl">Pool Access</span></label></div>
+        <div class="chk"><input type="checkbox" id="eq_battleropes" checked><label for="eq_battleropes"><span class="lbl">Battle Ropes</span></label></div>
+      </div>
+      <div class="sub" style="margin-top:6px;">Bodyweight-only exercises are always included. Unchecking a category removes exercises needing it — the tool falls back to broader options if a day would otherwise come up short.</div>
+    </fieldset>
+
+    <div class="row2">
+      <div class="field">
+        <label for="expiry">AF Form 469 Expiration (optional)</label>
+        <input type="date" id="expiry">
+      </div>
+      <div class="field">
+        <label for="hold_start">Date Placed on PFRA Hold (optional)</label>
+        <input type="date" id="hold_start">
+      </div>
     </div>
 
     <div class="field">
@@ -558,10 +722,18 @@
     </div>
 
     <button type="submit" class="genbtn">Generate Fitness Directive</button>
+    <button type="button" class="roster-btn" style="margin-top:8px;" onclick="addFormMemberToRoster()">Add This Profile to Roster (Demo)</button>
     </form>
 
+    <div class="roster-section">
+      <label style="display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:#9FA8B5;margin-bottom:6px;">Roster Preview (Demo)</label>
+      <div class="sub" style="margin-bottom:10px;">Generates randomized, synthetic member profiles — not real data — to preview what a multi-member roster view could look like.</div>
+      <button type="button" class="roster-btn" onclick="generateRoster()">Reset: Generate Randomized Roster (6 synthetic members)</button>
+      <button type="button" class="roster-btn" style="margin-top:8px;" onclick="clearRoster()">Clear Roster</button>
+    </div>
+
     <div class="disclaimer">
-      This tool builds training programming around restrictions a medical authority has already documented — it does not diagnose, clear, or determine medical necessity. It does not calculate official PFA/HPA scores; use myFitness / the current DAF Form 469 for that. Standards changed under the Sep–Dec 2025 Secretary of War memos, so verify current component rules with your UFPM before finalizing any plan. Keep member-identifying details out of this tool.
+      This tool builds training programming around restrictions a medical authority has already documented — it does not diagnose, clear, or determine medical necessity. It does not calculate official PFRA scores; use myFitness / the current AF Form 469 for that. Verify current component rules with your UFPM before finalizing any plan. The First/Last Name fields above are demo labels only — use a fake name for presentations, never a real member's name. Nothing typed into this tool is stored or transmitted anywhere; it exists only in this browser tab.
     </div>
   </div>
 
@@ -573,8 +745,182 @@
     </div>
   </div>
 </div>
+</div>
+
+<div id="view-glossary" style="display:none;">
+  <div class="glossary-wrap">
+    <div class="paper">
+      <div class="doc-head">
+        <div><div class="title">Acronym Glossary</div></div>
+        <div class="doc-id">REF AFMAN36-2905 / Playbook 2.0<br>TOOL-SPECIFIC + SOURCE TERMS</div>
+      </div>
+      <div class="footer-note" style="margin-top:0;padding-top:0;border-top:none;">
+        Every term below is used somewhere in this tool's output. Terms sourced from AFMAN36-2905 or the Warfighter's Fitness Playbook 2.0 are marked accordingly; a few are general fitness-industry shorthand or specific to this tool.
+      </div>
+
+      <div class="gloss-cat">Program &amp; Assessment</div>
+      <table class="gloss-table">
+        <thead><tr><th>Term</th><th>Meaning</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td class="term">PFRP</td><td>Physical Fitness Readiness Program — the overall AF fitness program this manual governs</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">PFRA</td><td>Physical Fitness Readiness Assessment — the official fitness test (replaces the older informal term "PFA")</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">AFP</td><td>Adaptive Fitness Program — unit-led training required for any member on PFRA Hold</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">PFA</td><td>Physical Fitness Assessment — older/informal name still used colloquially; the current official term is PFRA</td><td class="src">Legacy usage</td></tr>
+          <tr><td class="term">WHtR</td><td>Waist-to-Height Ratio — the body composition measurement method (replaced BMI)</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">HAMR</td><td>High Aerobic Multi-shuttle Run (20-meter) — alternate cardio test to the 2.0-mile run</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">CLRC</td><td>Cross-Legged Reverse Crunch — one of the three authorized core endurance test exercises</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">HRPU</td><td>Hand Release Push-Up — the 2-minute alternate to the 1-minute push-up test</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">HR</td><td>Hand Release, as in "HR Push-Up" (not to be confused with heart rate)</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">MHR</td><td>Max Heart Rate — used for cardio intensity zones</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">LIMFAC</td><td>Limiting Factor — shorthand used on AF Form 469 for a specific physical restriction</td><td class="src">AF usage</td></tr>
+          <tr><td class="term">AMRO</td><td>Airman Medical Readiness Optimization (Board) — reviews members on PFRA Hold for a year or more for a retention/referral recommendation</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">ARC</td><td>Air Reserve Component (Guard/Reserve) — follows a 12-month assessment cycle where Regular AF follows 6 months</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">BMI</td><td>Body Mass Index — the older body composition metric; current standard is WHtR, not BMI</td><td class="src">Legacy usage</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gloss-cat">Roles &amp; Facilities</div>
+      <table class="gloss-table">
+        <thead><tr><th>Term</th><th>Meaning</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td class="term">PFL</td><td>Peer Fitness Leader — this tool's primary intended user</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">UFPM</td><td>Unit Fitness Program Manager — administers the program at the unit level</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">HAWC</td><td>Health and Wellness Center</td><td class="src">AF usage</td></tr>
+          <tr><td class="term">OB</td><td>Obstetrician (OB/GYN) — referenced for pregnancy-profile programming guidance</td><td class="src">General medical</td></tr>
+          <tr><td class="term">MFL</td><td>Master Fitness Leader — oversees UFPM/PFL training and adaptive fitness programming at the installation level</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">FIM</td><td>Fitness Information Manager — provides UFPM training at the installation level</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">FAC</td><td>Fitness Assessment Cell — the installation-level cell that administers official PFRAs</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">UFAC</td><td>Unit Fitness Assessment Cell — the unit-level counterpart to the installation FAC</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">GSU</td><td>Geographically Separated Unit — referenced for climate-waiver authority alongside Wing/Detachment commanders</td><td class="src">AFMAN36-2905</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gloss-cat">Programming &amp; Exercise Shorthand</div>
+      <table class="gloss-table">
+        <thead><tr><th>Term</th><th>Meaning</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td class="term">LE</td><td>Lower Extremity — exercise focus tag</td><td class="src">Playbook 2.0</td></tr>
+          <tr><td class="term">UE</td><td>Upper Extremity — exercise focus tag</td><td class="src">Playbook 2.0</td></tr>
+          <tr><td class="term">RPE</td><td>Rate of Perceived Exertion — 1-10 effort scale used for load recommendations instead of fixed weights</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">FITT</td><td>Frequency, Intensity, Time, Type — the basic training-variable framework</td><td class="src">Playbook 2.0</td></tr>
+          <tr><td class="term">FOSI</td><td>Form Over Speed and Intensity — master the movement before adding load or pace</td><td class="src">Playbook 2.0</td></tr>
+          <tr><td class="term">DB</td><td>Dumbbell</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">KB</td><td>Kettlebell</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">MB</td><td>Medicine Ball / Med Ball</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">RDL</td><td>Romanian Deadlift</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">RX</td><td>"Prescription" — fitness-industry shorthand for a sets/reps/load recommendation; also this tool's internal name for its prescription lookup table</td><td class="src">This tool</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gloss-cat">Program Objectives &amp; Status</div>
+      <table class="gloss-table">
+        <thead><tr><th>Term</th><th>Meaning</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td class="term">FIP</td><td>Fitness Improvement Program — one of this tool's selectable training objectives</td><td class="src">AF usage</td></tr>
+          <tr><td class="term">EXEMPT</td><td>Component Exemption — member is excused from that entire test component; triggers PFRA Hold</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">MODALITY</td><td>Exercise Modality Exemption — excused from one specific test exercise, cleared for a named alternate within the same component; no PFRA Hold</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">TESTED</td><td>Component is not exempt — member is assessed normally</td><td class="src">This tool</td></tr>
+          <tr><td class="term">HOLD / READY</td><td>PFRA Hold (not authorized to test) vs. Ready (authorized on normal cycle) — shown in the roster status column</td><td class="src">AFMAN36-2905</td></tr>
+        </tbody>
+      </table>
+
+      <div class="gloss-cat">Administrative</div>
+      <table class="gloss-table">
+        <thead><tr><th>Term</th><th>Meaning</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td class="term">AF</td><td>Air Force</td><td class="src">—</td></tr>
+          <tr><td class="term">AFMAN</td><td>Air Force Manual, e.g. AFMAN36-2905 — the current governing publication for this program</td><td class="src">—</td></tr>
+          <tr><td class="term">DAFMAN</td><td>Department of the Air Force Manual — the prior designation for the same publication (superseded by AFMAN naming)</td><td class="src">—</td></tr>
+          <tr><td class="term">PII</td><td>Personally Identifiable Information — this tool is designed to avoid collecting or storing it</td><td class="src">—</td></tr>
+          <tr><td class="term">PDF</td><td>Portable Document Format — used for the printed/exported directive</td><td class="src">—</td></tr>
+          <tr><td class="term">DAFI</td><td>Department of the Air Force Instruction, e.g. DAFI 48-151 — a separate publication from AFMAN36-2905; source for specific heat/thermal-stress thresholds this tool does not include</td><td class="src">—</td></tr>
+          <tr><td class="term">WBGT</td><td>Wet Bulb Globe Temperature — the heat-category measurement referenced for exercise safety; specific thresholds are not verified in this tool (see Administrative tab)</td><td class="src">—</td></tr>
+          <tr><td class="term">AQI</td><td>Air Quality Index — PFRAs should be suspended above AQI 100 per para 4.4.2</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">CSV</td><td>Comma-Separated Values — the file format used by the Administrative tab's roster export</td><td class="src">This tool</td></tr>
+        </tbody>
+      </table>
+
+      <div class="footer-note">
+        This glossary reflects terms as used in this tool as of the "content last verified" date shown on generated directives. If AFMAN36-2905 or the Playbook revise their terminology, this list should be reviewed alongside the rest of the tool.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="view-admin" style="display:none;">
+  <div class="glossary-wrap" id="admin-content"></div>
+</div>
 
 <script>
+function showTab(tab){
+  document.getElementById('view-builder').style.display = tab==='builder' ? '' : 'none';
+  document.getElementById('view-glossary').style.display = tab==='glossary' ? '' : 'none';
+  document.getElementById('view-admin').style.display = tab==='admin' ? '' : 'none';
+  document.getElementById('tab-builder').classList.toggle('active', tab==='builder');
+  document.getElementById('tab-glossary').classList.toggle('active', tab==='glossary');
+  document.getElementById('tab-admin').classList.toggle('active', tab==='admin');
+  if(tab==='admin') renderAdminTab();
+}
+
+// ---- Shared date math (AFMAN36-2905, 24 Mar 2026, para 3.10.9 / 4.3) ----
+// Used by both the single-member directive and the Administrative roster tracker,
+// so the two never disagree on the same calculation.
+function computeReconditioning(expiryRaw, onPfraHold){
+  if(!onPfraHold) return { text:"", dueDate:null };
+  if(!expiryRaw) return { text:"Enter the AF Form 469 expiration date to calculate the earliest next-PFRA-due month (para 3.10.9).", dueDate:null };
+  const exp = new Date(expiryRaw + "T00:00:00");
+  const recond = new Date(exp);
+  recond.setDate(recond.getDate()+1);
+  recond.setMonth(recond.getMonth()+1);
+  return {
+    text: `Next PFRA due month: ${recond.toLocaleDateString('en-US',{year:'numeric',month:'long'})} (one calendar month after AF Form 469 expiration, per para 3.10.9)`,
+    dueDate: recond
+  };
+}
+
+// Para 4.3: UFPM identifies members on PFRA Hold for 1 year or more for AMRO Board referral.
+function computeAmroFlag(holdStartRaw){
+  if(!holdStartRaw) return { days:null, flagged:false };
+  const start = new Date(holdStartRaw + "T00:00:00");
+  const days = Math.floor((new Date() - start) / 86400000);
+  return { days: days, flagged: days >= 365 };
+}
+
+// Builds a plain-language action checklist per member, citing the specific
+// AFMAN36-2905 paragraph behind each item.
+function buildChecklist(m){
+  const items = [];
+  if(m.preg){
+    items.push({t:"Confirm pregnancy status documented — composite exemption, member prohibited from PFRA", c:"para 4.1.4"});
+    items.push({t:"Do not schedule for testing while pregnant", c:"para 4.1.4"});
+    items.push({t:"Encourage continued physical activity per OB/profile guidance", c:"para 4.1.4"});
+    items.push({t:"Post-pregnancy PFRA due 13th month after delivery (pregnancy ≥20 weeks) — confirm delivery date when known", c:"para 4.1.4"});
+    return items;
+  }
+  const anyComponent = m.cardioType==='component' || m.strengthType==='component' || m.coreType==='component' || m.standing;
+  const anyModality = m.cardioType==='modality' || m.strengthType==='modality' || m.coreType==='modality';
+  if(anyComponent){
+    items.push({t:"Confirm AF Form 469 lists the component exemption(s) and expiration date", c:"para 4.1.8.1"});
+    items.push({t:"Place member on PFRA Hold — not authorized for official testing", c:"para 3.10.6 / 4.1.2"});
+    items.push({t:"Enroll member in unit-led Adaptive Fitness Program for duration of profile", c:"para 4.1.2"});
+    items.push({t:"Confirm WHtR still required unless also exempt on AF Form 469", c:"para 4.1.1"});
+    items.push({t:"Set next PFRA due date to the month after the Reconditioning Period ends", c:"para 3.10.9"});
+  }
+  if(anyModality){
+    items.push({t:"Confirm AF Form 469 specifies the modality exemption and the cleared alternate exercise", c:"para 4.1.3"});
+    items.push({t:"No PFRA Hold required — member stays on the normal assessment cycle", c:"para 3.10.7"});
+    items.push({t:"Ensure member is assessed on the alternate exercise/modality at next PFRA", c:"para 3.10.7"});
+  }
+  const amro = computeAmroFlag(m.holdStartRaw);
+  if(amro.flagged){
+    items.push({t:`On PFRA Hold ${amro.days} days (≥1 year) — notify commander for AMRO Board referral`, c:"para 4.2 / 4.3"});
+  }
+  if(items.length===0){
+    items.push({t:"No exemption on file — standard assessment cycle applies (6 months Ready, 12 months ARC)", c:"para 3.10.1 / 3.10.2"});
+  }
+  return items;
+}
+
 function clamp(n, min, max){ return Math.min(Math.max(n, min), max); }
 
 function escapeHtml(str){
@@ -583,25 +929,33 @@ function escapeHtml(str){
   return div.innerHTML;
 }
 
-function generate(){
-  const gender = document.getElementById('gender').value;
-  const age = clamp(parseInt(document.getElementById('age').value)||28, 17, 65);
-  const height = clamp(parseInt(document.getElementById('height').value)||68, 48, 84);
-  const weight = clamp(parseInt(document.getElementById('weight').value)||170, 80, 400);
-  const timeline = parseInt(document.getElementById('timeline').value)||8;
-  const objective = document.getElementById('objective').value;
-  const ability = parseInt(document.getElementById('ability').value)||2;
-  const notes = escapeHtml(document.getElementById('notes').value.trim());
-  const expiryRaw = document.getElementById('expiry').value;
+function buildDirective(params){
+  const instanceId = params.instanceId || 'main';
+  const gender = params.gender;
+  const age = clamp(params.age||28, 17, 65);
+  const height = clamp(params.height||68, 48, 84);
+  const weight = clamp(params.weight||170, 80, 400);
+  const timeline = params.timeline||8;
+  const objective = params.objective;
+  const ability = params.ability||2;
+  const notes = escapeHtml(params.notesRaw||"");
+  const expiryRaw = params.expiryRaw||"";
+  const cardioType = params.cardioType||"none";
+  const strengthType = params.strengthType||"none";
+  const coreType = params.coreType||"none";
+  const equip = params.equip||{};
 
   const R = {
-    run: document.getElementById('r_run').checked,
-    upper: document.getElementById('r_upper').checked,
-    core: document.getElementById('r_core').checked,
-    lower: document.getElementById('r_lower').checked,
-    preg: document.getElementById('r_preg').checked,
-    standing: document.getElementById('r_standing').checked
+    run: cardioType==="component",
+    upper: strengthType==="component",
+    core: coreType==="component",
+    lower: !!params.lower,
+    preg: !!params.preg,
+    standing: !!params.standing
   };
+  const cardioModality = cardioType==="modality";
+  const strengthModality = strengthType==="modality";
+  const coreModality = coreType==="modality";
 
   const objLabel = {
     general:"General Conditioning / Maintenance",
@@ -611,49 +965,57 @@ function generate(){
   }[objective];
 
   // ---- PFRA Hold / Reconditioning Period (AFMAN36-2905, 24 Mar 2026, para 3.10.6 / 3.10.9 / 4.1.2) ----
-  // Any component or composite medical exemption places the member on PFRA Hold, not authorized
-  // to test, and requires enrollment in a unit-led Adaptive Fitness Program (AFP) for the profile's
-  // duration. Next PFRA due date is one calendar month after the restriction expires.
+  // Component/composite medical exemptions place the member on PFRA Hold, not authorized to test.
+  // Exercise Modality Exemptions (para 3.10.7) do NOT trigger PFRA Hold — member stays Ready and
+  // tests the alternate exercise within the same component on the normal cycle.
   const onPfraHold = R.run || R.upper || R.core || R.standing || R.preg;
-  let reconditioningText = "";
-  if(onPfraHold){
-    if(expiryRaw){
-      const exp = new Date(expiryRaw + "T00:00:00");
-      const recond = new Date(exp);
-      recond.setDate(recond.getDate()+1);
-      recond.setMonth(recond.getMonth()+1);
-      reconditioningText = `Next PFRA due month: ${recond.toLocaleDateString('en-US',{year:'numeric',month:'long'})} (one calendar month after AF Form 469 expiration, per para 3.10.9)`;
-    } else {
-      reconditioningText = "Enter the AF Form 469 expiration date to calculate the earliest next-PFRA-due month (para 3.10.9).";
-    }
-  }
+  const recondInfo = computeReconditioning(expiryRaw, onPfraHold);
+  const reconditioningText = recondInfo.text;
 
-  // ---- Component matrix (AFMAN36-2905, 24 Mar 2026, para 3.1.2 / 3.7 / Table 4.1) ----
-  const cardioExempt = R.run || R.preg;
-  const strengthExempt = R.upper;
-  const coreExempt = R.core || R.standing;
+  // ---- Component matrix (AFMAN36-2905, 24 Mar 2026, para 3.1.2 / 3.7 / Table 3.3 / Table 4.1) ----
+  function componentStatus(type, forcedExempt){
+    if(forcedExempt) return "exempt";
+    if(type==="component") return "exempt";
+    if(type==="modality") return "modality";
+    return "tested";
+  }
+  const cardioStatus = componentStatus(cardioType, R.preg);
+  const strengthStatus = componentStatus(strengthType, R.preg);
+  const coreStatus = componentStatus(coreType, R.standing || R.preg);
   const bodyCompExempt = R.preg; // WHtR is required for all component/composite medical exemptions except pregnancy (para 4.1.1, 4.1.4)
+
+  const STATUS_LABEL = {exempt:"EXEMPT", modality:"MODALITY", tested:"TESTED"};
 
   const matrixRows = [
     {
       name:"Cardiorespiratory (50 pts)",
-      exempt: cardioExempt,
-      note: R.preg ? "Pregnancy — prohibited from PFRA (composite exemption, para 4.1.4)" : (R.run ? "Component-exempt per AF Form 469 — PFRA Hold applies" : "Tested — 2.0-mi run or 20m HAMR; 2km walk only if authorized on AF Form 469")
+      status: cardioStatus,
+      note: R.preg ? "Pregnancy — prohibited from PFRA (composite exemption, para 4.1.4)" :
+            cardioType==="component" ? "Component-exempt per AF Form 469 — PFRA Hold applies" :
+            cardioType==="modality" ? "Exercise Modality Exemption — excused from 2.0-mi run, cleared for 20m HAMR. Ready status maintained, no PFRA Hold (para 3.10.7)" :
+            "Tested — 2.0-mi run or 20m HAMR; 2km walk only if authorized on AF Form 469"
     },
     {
       name:"Body Composition (20 pts, no minimum)",
-      exempt: bodyCompExempt,
+      status: bodyCompExempt ? "exempt" : "tested",
       note: R.preg ? "Deferred with cardio per pregnancy composite exemption" : "WHtR required for all component/composite medical exemptions — verify current AF Form 469 (para 4.1.1)"
     },
     {
       name:"Muscular Strength (15 pts)",
-      exempt: strengthExempt,
-      note: R.upper ? "Component-exempt per AF Form 469 — PFRA Hold applies" : "Tested — 1-min push-up or 2-min HRPU"
+      status: strengthStatus,
+      note: R.preg ? "Pregnancy — prohibited from PFRA (composite exemption, para 4.1.4)" :
+            strengthType==="component" ? "Component-exempt per AF Form 469 — PFRA Hold applies" :
+            strengthType==="modality" ? "Exercise Modality Exemption — excused from push-up, cleared for 2-min HRPU. Ready status maintained, no PFRA Hold (para 3.10.7)" :
+            "Tested — 1-min push-up or 2-min HRPU"
     },
     {
       name:"Core Endurance (15 pts)",
-      exempt: coreExempt,
-      note: (R.core||R.standing) ? "Component-exempt per AF Form 469 — PFRA Hold applies" : "Tested — 1-min sit-up, 2-min CLRC, or timed forearm plank"
+      status: coreStatus,
+      note: R.preg ? "Pregnancy — prohibited from PFRA (composite exemption, para 4.1.4)" :
+            R.standing && coreType!=="component" ? "No prolonged static hold — excludes timed forearm plank; sit-up/CLRC options remain per core status" :
+            coreType==="component" ? "Component-exempt per AF Form 469 — PFRA Hold applies" :
+            coreType==="modality" ? "Exercise Modality Exemption — excused from sit-up, cleared for CLRC or timed plank. Ready status maintained, no PFRA Hold (para 3.10.7)" :
+            "Tested — 1-min sit-up, 2-min CLRC, or timed forearm plank"
     }
   ];
 
@@ -1069,10 +1431,48 @@ function generate(){
     {name:"Aqua Prenatal Class", kind:"pool", focus:"UE/LE, Low Impact"}
   ];
 
+  // ---- Equipment inference ----
+  // Kind-based defaults for equipment that isn't obvious from the exercise name.
+  const KIND_EQUIP = {
+    cardio_interval_bike:"cardio_machine", cardio_steady_lowimpact:"cardio_machine", skierg_interval:"cardio_machine",
+    assault_bike_interval:"cardio_machine", echo_bike_interval:"cardio_machine", stair_climber_steady:"cardio_machine",
+    bike_easy:"cardio_machine", arm_bike:"cardio_machine", pool:"pool", battle_ropes:"battle_ropes",
+    barbell_compound:"barbell", hinge_pattern:"barbell", kb_swing:"kettlebell", sled_work:"sled",
+    sandbag_clean:"sandbag", tire_flip:"tire", wall_ball:"medball", medball_clean_press:"medball", medball_throw:"medball",
+    lat_pulldown:"machine", leg_machine:"machine", mini_band_walk:"band",
+    farmers_carry:"dumbbell", suitcase_carry:"dumbbell", thruster:"dumbbell"
+  };
+  function inferEquipment(ex){
+    const n = ex.name.toLowerCase();
+    if(n.includes("barbell")||n.includes("trap bar")) return "barbell";
+    if(n.includes("dumbbell")||n.includes(" db ")||n.startsWith("db ")) return "dumbbell";
+    if(n.includes("kettlebell")) return "kettlebell";
+    if(n.includes("cable")||n.includes("machine")||n.includes("lat pull")||n.includes("leg press")||n.includes("leg extension")||n.includes("hamstring curl (machine)")||n.includes("pec deck")||n.includes("smith")||n.includes("hack squat")) return "machine";
+    if(n.includes("band")) return "band";
+    if(n.includes("med ball")||n.includes("medball")||n.includes("wall ball")) return "medball";
+    if(n.includes("sandbag")) return "sandbag";
+    if(n.includes("sled")) return "sled";
+    if(n.includes("tire")) return "tire";
+    if(n.includes("battle rope")) return "battle_ropes";
+    if(n.includes("pool")||n.includes("water")||n.includes("swim")||n.includes("aqua")) return "pool";
+    return KIND_EQUIP[ex.kind] || "bodyweight";
+  }
+  function equipmentAllowed(ex){
+    const cat = inferEquipment(ex);
+    if(cat==="bodyweight") return true;
+    const catKeyMap = {cardio_machine:"cardio", battle_ropes:"battleropes", tire:"sled"};
+    const key = "eq_"+(catKeyMap[cat] || cat);
+    return equip[key] !== false; // default true if not specified
+  }
+
   function libraryPool(categories){
-    return MASTER_LIBRARY.filter(e =>
+    const base = MASTER_LIBRARY.filter(e =>
       categories.includes(e.category) && !e.avoids.some(a => R[a])
     );
+    const equipFiltered = base.filter(equipmentAllowed);
+    // Graceful fallback: if the equipment filter leaves too few options, ignore it for this call
+    // rather than showing a sparse or empty day.
+    return equipFiltered.length >= 3 ? equipFiltered : base;
   }
 
   // Rotate the selection window by phase so different weeks pull different exercises
@@ -1089,39 +1489,53 @@ function generate(){
   function pickPool(kind){
     if(kind==="cardio"){
       if(R.preg) return CARDIO_PREG;
-      return (R.run || R.lower) ? libraryPool(["cardio_alt"]) : libraryPool(["cardio","cardio_alt"]);
+      if(R.run || R.lower) return libraryPool(["cardio_alt"]);
+      if(cardioModality) return libraryPool(["cardio"]); // still running/shuttle-based — cleared for HAMR
+      return libraryPool(["cardio","cardio_alt"]);
     }
     if(kind==="strength"){ return libraryPool(["strength"]); }
     if(kind==="core"){ return (R.core||R.standing) ? libraryPool(["core_safe"]) : libraryPool(["core","core_safe"]); }
     if(kind==="mobility"){ return R.lower ? libraryPool(["mobility_lowersafe"]) : libraryPool(["mobility","mobility_lowersafe"]); }
   }
 
-  function exTable(pool, phaseIdx, scale){
-    const rows = pool.map(ex=>{
+  function exTable(shownList, phaseIdx, scale, dayKey, fullPool){
+    const candidatePool = fullPool || shownList;
+    const rows = shownList.map((ex,i)=>{
       const p = rx(ex.kind, phaseIdx);
       const load = scale ? p.load + " — reduced volume (~70%)" : p.load;
-      return `<tr><td class="exname">${ex.name}<span class="focustag">${ex.focus||''}</span></td><td class="exsr">${p.sr}</td><td class="exload">${load}</td></tr>`;
+      const rowId = `${dayKey}-${i}`;
+      const swapBtn = dayKey ? `<td class="swapcol no-print"><button type="button" class="swap-btn" onclick="swapExercise('${dayKey}',${i})">⟳ Swap</button></td>` : "";
+      return `<tr><td class="exname" id="exname-${rowId}">${ex.name}<span class="focustag">${ex.focus||''}</span></td><td class="exsr" id="exsr-${rowId}">${p.sr}</td><td class="exload" id="exload-${rowId}">${load}</td>${swapBtn}</tr>`;
     }).join("");
-    return `<table class="exlist"><thead><tr><th>Exercise</th><th>Sets x Reps</th><th>Recommended Load</th></tr></thead><tbody>${rows}</tbody></table>`;
+    if(dayKey){
+      window.__swap = window.__swap || {};
+      window.__swap[dayKey] = { pool: candidatePool.slice(), shown: shownList.slice(), phaseIdx: phaseIdx, scale: !!scale };
+    }
+    const swapHead = dayKey ? `<th class="swapcol no-print"></th>` : "";
+    return `<table class="exlist"><thead><tr><th>Exercise</th><th>Sets x Reps</th><th>Recommended Load</th>${swapHead}</tr></thead><tbody>${rows}</tbody></table>`;
   }
 
   const dayNotes = {
     cardio: R.preg ? "Follow OB/profile guidance exactly — this is general framing only, not a prescription." :
             R.run ? "Impact-free training toward whatever cardio modality is authorized on the AF Form 469 (HAMR, or 2km walk only if specifically stated — the walk is not a default alternate)." :
+            cardioModality ? "Excused from the 2.0-mile run specifically, cleared for 20m HAMR — Exercise Modality Exemption, no PFRA Hold (para 3.10.7). Programming favors shuttle/interval work matching HAMR demands." :
             R.lower ? "Impact-free modality selected to protect the restricted joint." : "",
     strength: (R.upper && R.lower) ? "Both upper and lower body restricted — kept to seated, pain-free-range work only. Escalate to medical provider for a fuller program." :
               R.upper ? "No push-up loading — coordinate progression with medical provider before reintroducing." :
+              strengthModality ? "Excused from the timed push-up specifically, cleared for 2-min HRPU — Exercise Modality Exemption, no PFRA Hold (para 3.10.7). Full upper-body programming continues; HRPU pattern is prioritized." :
               R.lower ? "No loaded squat/lunge patterns — upper-body focus to protect the restricted joint." : "",
-    core: (R.core||R.standing) ? "No sit-ups, crunches, or sustained plank until profile clears." : "",
+    core: (R.core||R.standing) ? "No sit-ups, crunches, or sustained plank until profile clears." :
+          coreModality ? "Excused from the timed sit-up specifically, cleared for CLRC or timed plank — Exercise Modality Exemption, no PFRA Hold (para 3.10.7). Full core programming continues; CLRC/plank pattern is prioritized." : "",
     mobility: R.lower ? "Keep load off the restricted joint — coordinate with any PT-prescribed corrective work." : ""
   };
 
   const dayTitles = {
-    cardio: R.preg ? "Cardio — Low Impact (OB-Cleared)" : (R.run || R.lower) ? "Cardio — Alternate Modality" : "Cardio — Run Development",
+    cardio: R.preg ? "Cardio — Low Impact (OB-Cleared)" : cardioModality ? "Cardio — HAMR Preparation (Modality Exemption)" : (R.run || R.lower) ? "Cardio — Alternate Modality" : "Cardio — Run Development",
     strength: (R.upper && R.lower) ? "Strength — Seated / Pain-Free Range Only" :
               R.upper ? "Strength — Lower Body & Core-Safe Upper" :
+              strengthModality ? "Strength — HRPU Progression (Modality Exemption)" :
               R.lower ? "Strength — Upper Body Focus" : "Strength — Push-Up Progression",
-    core: (R.core||R.standing) ? "Core — Restriction-Safe" : "Core — Endurance Work",
+    core: (R.core||R.standing) ? "Core — Restriction-Safe" : coreModality ? "Core — CLRC/Plank Progression (Modality Exemption)" : "Core — Endurance Work",
     mobility: "Mobility & Recovery"
   };
 
@@ -1135,11 +1549,27 @@ function generate(){
     phases.push({name:"Phase 2 — Build & Sustain", weeks:"Weeks 3–6"});
   }
 
+  function prioritize(sel, pool, matchFn){
+    const found = pool.find(matchFn);
+    if(found && !sel.some(e=>e.name===found.name)){
+      return [found].concat(sel.slice(0, sel.length-1));
+    }
+    return sel;
+  }
+
   const phaseHTML = phases.map((p, idx) => {
-    const cardioSel = selectFromPool(pickPool("cardio"), idx, 5);
-    const strengthSel = selectFromPool(pickPool("strength"), idx, 5);
-    const coreSel = selectFromPool(pickPool("core"), idx, 5);
-    const mobilitySel = selectFromPool(pickPool("mobility"), idx, 5);
+    let cardioPool = pickPool("cardio");
+    let strengthPool = pickPool("strength");
+    let corePool = pickPool("core");
+    let mobilityPool = pickPool("mobility");
+    let cardioSel = selectFromPool(cardioPool, idx, 5);
+    let strengthSel = selectFromPool(strengthPool, idx, 5);
+    let coreSel = selectFromPool(corePool, idx, 5);
+    let mobilitySel = selectFromPool(mobilityPool, idx, 5);
+    if(cardioModality) cardioSel = prioritize(cardioSel, cardioPool, e=>e.name.includes("HAMR")||e.name.includes("Shuttle")||e.name.includes("Ladder"));
+    if(strengthModality) strengthSel = prioritize(strengthSel, strengthPool, e=>e.name.includes("Hand Release"));
+    if(coreModality) coreSel = prioritize(coreSel, corePool, e=>e.name.includes("Cross-Legged Reverse Crunch"));
+    const k = (d)=>`${instanceId}-p${idx}-${d}`;
     return `
     <div class="phase">
       <div class="phase-head"><span class="name">${p.name}</span><span class="weeks">${p.weeks}</span></div>
@@ -1147,54 +1577,63 @@ function generate(){
         <div class="day">
           <div class="dname">Day 1 · ${dayTitles.cardio}</div>
           ${dayNotes.cardio?`<div class="dnote">${dayNotes.cardio}</div>`:""}
-          ${exTable(cardioSel, idx, false)}
+          ${exTable(cardioSel, idx, false, k('cardio'), cardioPool)}
         </div>
         <div class="day">
           <div class="dname">Day 2 · ${dayTitles.strength}</div>
           ${dayNotes.strength?`<div class="dnote">${dayNotes.strength}</div>`:""}
-          ${exTable(strengthSel, idx, false)}
+          ${exTable(strengthSel, idx, false, k('strength'), strengthPool)}
         </div>
         <div class="day">
           <div class="dname">Day 3 · ${dayTitles.core}</div>
           ${dayNotes.core?`<div class="dnote">${dayNotes.core}</div>`:""}
-          ${exTable(coreSel, idx, false)}
+          ${exTable(coreSel, idx, false, k('core'), corePool)}
         </div>
         <div class="day">
           <div class="dname">Day 4 · ${dayTitles.mobility}</div>
           ${dayNotes.mobility?`<div class="dnote">${dayNotes.mobility}</div>`:""}
-          ${exTable(mobilitySel, idx, false)}
+          ${exTable(mobilitySel, idx, false, k('mobility'), mobilityPool)}
         </div>
         <div class="day">
           <div class="dname">Day 5 · Repeat, Reduced Volume</div>
           <div class="ddesc">Cardio and strength work repeated at lighter volume. Rest or active recovery remaining days.</div>
-          ${exTable(cardioSel.slice(0,2).concat(strengthSel.slice(0,2)), idx, true)}
+          ${exTable(cardioSel.slice(0,2).concat(strengthSel.slice(0,2)), idx, true, k('day5'), cardioPool.concat(strengthPool))}
         </div>
       </div>
     </div>
   `;
   }).join("");
 
-  const restrictionList = Object.entries(R).filter(([k,v])=>v).map(([k])=>({
-    run:"No running / high-impact cardio", upper:"No upper-body weight-bearing", core:"No core flexion / trunk loading",
-    lower:"Lower-body / joint restriction", preg:"Pregnancy profile", standing:"No prolonged standing / static hold"
-  }[k]));
+  const restrictionList = [];
+  if(cardioType==="modality") restrictionList.push("Cardio: Exercise Modality Exemption (excused from run, cleared HAMR)");
+  if(cardioType==="component") restrictionList.push("Cardio: Component Exemption (excused entirely)");
+  if(strengthType==="modality") restrictionList.push("Strength: Exercise Modality Exemption (excused from push-up, cleared HRPU)");
+  if(strengthType==="component") restrictionList.push("Strength: Component Exemption (excused entirely)");
+  if(coreType==="modality") restrictionList.push("Core: Exercise Modality Exemption (excused from sit-up, cleared CLRC/Plank)");
+  if(coreType==="component") restrictionList.push("Core: Component Exemption (excused entirely)");
+  if(R.lower) restrictionList.push("Lower-body / joint restriction");
+  if(R.preg) restrictionList.push("Pregnancy profile");
+  if(R.standing) restrictionList.push("No prolonged standing / static hold");
 
   const matrixHTML = matrixRows.map(r=>`
     <tr>
       <td class="comp-name">${r.name}</td>
-      <td><span class="stamp ${r.exempt?'exempt':'tested'}">${r.exempt?'EXEMPT':'TESTED'}</span></td>
+      <td><span class="stamp ${r.status}">${STATUS_LABEL[r.status]}</span></td>
       <td>${r.note}</td>
     </tr>
   `).join("");
 
   const today = new Date();
   const docId = `FD-${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}-${Math.floor(Math.random()*900+100)}`;
+  const LAST_VERIFIED = "AFMAN36-2905 verified current as of 24 Mar 2026 · Playbook 2.0 verified current as of Feb 2026 · content checked 19 Jul 2026";
+  const memberName = escapeHtml([params.firstName, params.lastName].filter(Boolean).join(' ').trim());
 
-  document.getElementById('docwrap').innerHTML = `
+  const html = `
     <div class="paper">
       <div class="doc-head">
         <div>
           <div class="title">Fitness Directive</div>
+          ${memberName ? `<div class="memo-line" style="margin-top:2px;"><b>MEMBER LABEL:</b> ${memberName} <span style="font-style:italic;color:var(--ink-soft);">(demo label — not verified identity)</span></div>` : ""}
         </div>
         <div class="doc-id">
           DOC ${docId}<br>
@@ -1220,7 +1659,7 @@ function generate(){
         <b>${onPfraHold ? 'PFRA HOLD — Adaptive Fitness Program (AFP)' : 'Not on PFRA Hold'}</b><br>
         ${onPfraHold
           ? `This member has one or more documented component exemptions and is on PFRA Hold — not authorized for official testing (AFMAN36-2905 para 3.10.6). This directive serves as unit-led Adaptive Fitness Program content for the duration of the profile (para 4.1.2). ${reconditioningText}`
-          : `No component-level restriction is checked, so this directive is standard PFRP training, not AFP content. If the member's AF Form 469 has a composite or component exemption, check the applicable restriction(s) above.`
+          : `No component exemption is set, so this directive is standard PFRP training, not AFP content. If the member's AF Form 469 has a composite, component, or modality exemption, set the applicable status above.`
         }
       </div>
 
@@ -1244,20 +1683,377 @@ function generate(){
         <ul>
           <li>Progress volume or intensity by roughly 5-10% per week, per FITT/progressive overload principles — hold or regress if the member reports pain, not just fatigue, in the restricted area.</li>
           <li>Form Over Speed and Intensity (FOSI): master the movement pattern before adding load or pace.</li>
-          <li>Any component marked EXEMPT is not tested and is awarded maximum points for that component per current scoring rules — training still targets it for the member's overall readiness, not for test score.</li>
+          <li>Any component marked EXEMPT is not tested and is awarded maximum points for that component per current scoring rules — training still targets it for the member's overall readiness, not for test score. Components marked MODALITY are still tested, just on the alternate exercise.</li>
           <li>Reassess the restriction at each profile renewal date; this directive should be regenerated if the AF Form 469 changes.</li>
           <li>Allow 2-4 weeks to acclimatize to heat or altitude before pushing intensity; scale back duration and intensity for the first 5-7 days in a new environment. Stop and seek medical attention at any sign of chest pain, dizziness, abnormal heartbeat, or other exercise warning signs.</li>
+          <li>Use the ⟳ Swap control next to any exercise to substitute another option from the same filtered pool — useful for equipment conflicts or member preference the checkboxes don't capture. Swap controls do not appear in print/PDF output.</li>
           ${R.preg ? "<li>Pregnancy programming here is intentionally general — defer to OB and profile guidance for all specifics, especially load and heart-rate limits by trimester.</li>" : ""}
         </ul>
       </div>
 
       <div class="footer-note">
-        Exercise focus tags (LE / UE / Core) and ability-level rep scaling (Level 1: 8-12 reps, Level 2: 10-15, Level 3: 15-20 for bodyweight work) follow the Warfighter's Fitness Playbook 2.0 (Feb 2026). Component scoring (Cardio 50 pts / Body Comp 20 pts / Strength 15 pts / Core 15 pts), PFRA Hold, and Adaptive Fitness Program logic follow AFMAN36-2905, 24 March 2026 (supersedes DAFMAN36-2905, 22 Apr 2022). Recommended loads are effort-based (RPE) or bodyweight, not fixed poundages, since no 1RM or baseline strength test is collected here — scale to the member's actual capacity and progress from there. This directive is a training-programming aid generated from PFL-entered inputs; it is not an official myFitness record, does not calculate PFA/HPA scores, and does not substitute for guidance from the servicing medical treatment facility, HAWC, or UFPM. The 2 kilometer walk is only an authorized cardio alternate if specifically stated on the member's AF Form 469 — it is not a default substitute for the run or HAMR.
+        Exercise focus tags (LE / UE / Core) and ability-level rep scaling (Level 1: 8-12 reps, Level 2: 10-15, Level 3: 15-20 for bodyweight work) follow the Warfighter's Fitness Playbook 2.0 (Feb 2026). Component scoring (Cardio 50 pts / Body Comp 20 pts / Strength 15 pts / Core 15 pts), PFRA Hold, Exercise Modality Exemption, and Adaptive Fitness Program logic follow AFMAN36-2905, 24 March 2026 (supersedes DAFMAN36-2905, 22 Apr 2022). Recommended loads are effort-based (RPE) or bodyweight, not fixed poundages, since no 1RM or baseline strength test is collected here — scale to the member's actual capacity and progress from there. Exercises are filtered by equipment selection with automatic fallback to broader options if a category would otherwise show fewer than 3 exercises. This directive is a training-programming aid generated from PFL-entered inputs; it is not an official myFitness record, does not calculate PFRA scores, and does not substitute for guidance from the servicing medical treatment facility, HAWC, or UFPM. The 2 kilometer walk is only an authorized cardio alternate if specifically stated on the member's AF Form 469 — it is not a default substitute for the run or HAMR.<br><br>${LAST_VERIFIED}
       </div>
     </div>
-    <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
+    <button class="print-btn no-print" onclick="window.print()">Print / Save as PDF</button>
+  `;
+  window.__rx = rx;
+  return html;
+}
+
+// ---- Swap: substitute a single exercise in place, from the same filtered pool ----
+function swapExercise(dayKey, i){
+  const state = window.__swap && window.__swap[dayKey];
+  if(!state) return;
+  const pool = state.pool;
+  if(pool.length < 2) return;
+  const current = state.shown[i];
+  let startIdx = pool.findIndex(e=>e.name===current.name);
+  if(startIdx===-1) startIdx = 0;
+  let next = null;
+  for(let step=1; step<=pool.length; step++){
+    const candidate = pool[(startIdx+step)%pool.length];
+    if(!state.shown.some(e=>e.name===candidate.name)){ next = candidate; break; }
+  }
+  if(!next) next = pool[(startIdx+1)%pool.length];
+  state.shown[i] = next;
+  const p = window.__rx(next.kind, state.phaseIdx);
+  const load = state.scale ? p.load + " — reduced volume (~70%)" : p.load;
+  const nameEl = document.getElementById(`exname-${dayKey}-${i}`);
+  const srEl = document.getElementById(`exsr-${dayKey}-${i}`);
+  const loadEl = document.getElementById(`exload-${dayKey}-${i}`);
+  if(nameEl) nameEl.innerHTML = `${next.name}<span class="focustag">${next.focus||''}</span>`;
+  if(srEl) srEl.textContent = p.sr;
+  if(loadEl) loadEl.textContent = load;
+}
+
+// ---- Collect params from the main intake form ----
+function collectParamsFromDOM(instanceId){
+  const equip = {};
+  ["eq_barbell","eq_dumbbell","eq_kettlebell","eq_machine","eq_band","eq_medball","eq_sandbag","eq_sled","eq_cardio","eq_pool","eq_battleropes"].forEach(id=>{
+    const el = document.getElementById(id);
+    equip[id] = el ? el.checked : true;
+  });
+  return {
+    instanceId: instanceId || 'main',
+    firstName: document.getElementById('m_fname').value.trim(),
+    lastName: document.getElementById('m_lname').value.trim(),
+    gender: document.getElementById('gender').value,
+    age: parseInt(document.getElementById('age').value)||28,
+    height: parseInt(document.getElementById('height').value)||68,
+    weight: parseInt(document.getElementById('weight').value)||170,
+    timeline: parseInt(document.getElementById('timeline').value)||8,
+    objective: document.getElementById('objective').value,
+    ability: parseInt(document.getElementById('ability').value)||2,
+    notesRaw: document.getElementById('notes').value.trim(),
+    expiryRaw: document.getElementById('expiry').value,
+    holdStartRaw: document.getElementById('hold_start').value,
+    cardioType: document.getElementById('cardio_type').value,
+    strengthType: document.getElementById('strength_type').value,
+    coreType: document.getElementById('core_type').value,
+    lower: document.getElementById('r_lower').checked,
+    preg: document.getElementById('r_preg').checked,
+    standing: document.getElementById('r_standing').checked,
+    equip: equip
+  };
+}
+
+function generate(){
+  const params = collectParamsFromDOM('main');
+  const html = buildDirective(params);
+  document.getElementById('docwrap').innerHTML = html;
+}
+
+function addFormMemberToRoster(){
+  window.__roster = window.__roster || [];
+  const params = collectParamsFromDOM('roster'+window.__roster.length);
+  window.__roster.push(params);
+  renderRoster();
+}
+
+// ---- Roster Preview (Demo): randomized synthetic profiles only, no real data ----
+function randomInt(min, max){ return min + Math.floor(Math.random()*(max-min+1)); }
+function randomDateOffset(daysAgoMin, daysAgoMax){
+  const d = new Date();
+  d.setDate(d.getDate() - randomInt(daysAgoMin, daysAgoMax));
+  return d.toISOString().slice(0,10);
+}
+function randomParams(instanceId){
+  const gender = Math.random()<0.5 ? 'male' : 'female';
+  const objectives = ['general','retest','rtd','fip'];
+  const cardioOpts = ['none','none','none','modality','component'];
+  const strengthOpts = ['none','none','none','modality','component'];
+  const coreOpts = ['none','none','none','modality','component'];
+  const preg = gender==='female' && Math.random()<0.12;
+  const equip = {};
+  ["eq_barbell","eq_dumbbell","eq_kettlebell","eq_machine","eq_band","eq_medball","eq_sandbag","eq_sled","eq_cardio","eq_pool","eq_battleropes"].forEach(id=>{ equip[id]=true; });
+  const cardioType = preg ? 'none' : cardioOpts[randomInt(0,4)];
+  const strengthType = preg ? 'none' : strengthOpts[randomInt(0,4)];
+  const coreType = preg ? 'none' : coreOpts[randomInt(0,4)];
+  const standing = !preg && Math.random()<0.1;
+  const onHold = preg || cardioType==='component' || strengthType==='component' || coreType==='component' || standing;
+  // For on-hold synthetic members, back-fill plausible dates so the admin
+  // tracker/AMRO demo has real variety — including some past the 1-year mark.
+  const holdStartRaw = onHold ? randomDateOffset(10, 420) : "";
+  const expiryRaw = onHold ? randomDateOffset(-60, 60) : "";
+  return {
+    instanceId: instanceId,
+    gender: gender,
+    age: randomInt(20, 45),
+    height: randomInt(60, 76),
+    weight: randomInt(130, 230),
+    timeline: [6,8,12][randomInt(0,2)],
+    objective: objectives[randomInt(0,3)],
+    ability: randomInt(1,3),
+    notesRaw: "",
+    expiryRaw: expiryRaw,
+    holdStartRaw: holdStartRaw,
+    cardioType: cardioType,
+    strengthType: strengthType,
+    coreType: coreType,
+    lower: !preg && Math.random()<0.15,
+    preg: preg,
+    standing: standing,
+    equip: equip
+  };
+}
+
+function toggleRosterDirective(n){
+  const el = document.getElementById('roster-directive-'+n);
+  const btn = document.getElementById('roster-viewbtn-'+n);
+  if(!el) return;
+  const show = el.style.display === 'none';
+  el.style.display = show ? 'block' : 'none';
+  if(btn) btn.textContent = show ? 'Hide Directive' : 'View Directive';
+}
+
+function removeMember(i){
+  window.__roster = window.__roster || [];
+  window.__roster.splice(i, 1);
+  // Keep both roster views in sync — but only refresh docwrap if it's already
+  // showing the roster (not a single-member directive someone's mid-review of).
+  const docwrap = document.getElementById('docwrap');
+  if(docwrap && docwrap.querySelector('.roster-table')){ renderRoster(); }
+  renderAdminTab();
+}
+
+function memberLabel(i, m){
+  const name = [m && m.firstName, m && m.lastName].filter(Boolean).join(' ').trim();
+  if(name) return escapeHtml(name);
+  return i < 26 ? 'Member ' + String.fromCharCode(65+i) : 'Member ' + String.fromCharCode(65+(i%26)) + Math.floor(i/26);
+}
+
+function renderRoster(){
+  window.__roster = window.__roster || [];
+  const members = window.__roster;
+  if(members.length === 0){
+    document.getElementById('docwrap').innerHTML = `
+      <div class="empty-state">
+        <div class="mark">⌁</div>
+        <h3>Roster is empty</h3>
+        <p>Use "Reset: Generate Randomized Roster" for 6 fully random synthetic members, or add members one at a time with specific fields pinned.</p>
+      </div>`;
+    return;
+  }
+  const rows = members.map((m,i)=>{
+    const R = { run: m.cardioType==='component', upper: m.strengthType==='component', core: m.coreType==='component', standing: m.standing, preg: m.preg };
+    const onHold = R.run || R.upper || R.core || R.standing || R.preg;
+    const restr = [];
+    if(m.cardioType!=='none') restr.push('Cardio:'+m.cardioType);
+    if(m.strengthType!=='none') restr.push('Strength:'+m.strengthType);
+    if(m.coreType!=='none') restr.push('Core:'+m.coreType);
+    if(m.lower) restr.push('Lower');
+    if(m.preg) restr.push('Pregnancy');
+    if(m.standing) restr.push('Standing');
+    m.instanceId = 'roster'+i;
+    const directiveHtml = buildDirective(m);
+    return `
+      <tr>
+        <td>${memberLabel(i, m)}</td>
+        <td>${m.gender==='male'?'M':'F'}</td>
+        <td>${m.age}</td>
+        <td>L${m.ability}</td>
+        <td>${onHold ? '<span class="stamp exempt">HOLD</span>' : '<span class="stamp tested">READY</span>'}</td>
+        <td>${restr.length ? restr.join(', ') : 'None'}</td>
+        <td><button type="button" class="view-btn" id="roster-viewbtn-${i}" onclick="toggleRosterDirective(${i})">View Directive</button> <button type="button" class="view-btn" style="background:var(--stamp-red);" onclick="removeMember(${i})">Remove</button></td>
+      </tr>
+      <tr><td colspan="7" style="padding:0;border-bottom:none;">
+        <div id="roster-directive-${i}" class="roster-directive" style="display:none;">${directiveHtml}</div>
+      </td></tr>
+    `;
+  }).join("");
+
+  document.getElementById('docwrap').innerHTML = `
+    <div class="paper">
+      <div class="doc-head">
+        <div><div class="title">Roster Preview — Demo</div></div>
+        <div class="doc-id">SYNTHETIC DATA ONLY<br>${members.length} PROFILE${members.length===1?'':'S'}</div>
+      </div>
+      <div class="roster-note">
+        <b>Demo only.</b> These are synthetic profiles — randomly generated, hand-built with specific fields pinned, or sent from the main intake form. Any name shown is a demo label the user typed in, not a verified identity — never use a real member's name here. Not connected to any actual roster or PII. This previews what a multi-member roster view could look like; a real version would need its own Privacy Impact Assessment and approved hosting before touching actual member data.
+      </div>
+      <table class="roster-table">
+        <thead><tr><th>Member</th><th>Sex</th><th>Age</th><th>Ability</th><th>Status</th><th>Exemptions</th><th></th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
   `;
 }
+
+function generateRoster(){
+  const N = 6;
+  window.__roster = [];
+  for(let i=0;i<N;i++){ window.__roster.push(randomParams('roster'+i)); }
+  renderRoster();
+}
+
+function clearRoster(){
+  window.__roster = [];
+  renderRoster();
+}
+
+function toggleChecklist(i){
+  const el = document.getElementById('admin-checklist-'+i);
+  if(!el) return;
+  el.style.display = el.style.display==='none' ? 'block' : 'none';
+}
+
+function toggleAdminDirective(i){
+  const el = document.getElementById('admin-directive-'+i);
+  const btn = document.getElementById('admin-viewbtn-'+i);
+  if(!el) return;
+  const show = el.style.display === 'none';
+  el.style.display = show ? 'block' : 'none';
+  if(btn) btn.textContent = show ? 'Hide Directive' : 'View Directive';
+}
+
+function exportRosterCSV(){
+  const members = window.__roster || [];
+  if(members.length===0){ return; }
+  const header = ["Member","Sex","Age","Ability","Status","Cardio","Strength","Core","Lower","Pregnancy","Standing","AF Form 469 Expiration","PFRA Hold Start","Next PFRA Due","Days on Hold","AMRO Flag"];
+  const rows = members.map((m,i)=>{
+    const R = { run: m.cardioType==='component', upper: m.strengthType==='component', core: m.coreType==='component', standing: m.standing, preg: m.preg };
+    const onHold = R.run || R.upper || R.core || R.standing || R.preg;
+    const recond = computeReconditioning(m.expiryRaw, onHold);
+    const amro = computeAmroFlag(m.holdStartRaw);
+    const name = [m.firstName, m.lastName].filter(Boolean).join(' ') || memberLabel(i, m);
+    return [
+      name, m.gender==='male'?'M':'F', m.age, 'L'+m.ability, onHold?'HOLD':'READY',
+      m.cardioType, m.strengthType, m.coreType, m.lower?'Y':'N', m.preg?'Y':'N', m.standing?'Y':'N',
+      m.expiryRaw||'', m.holdStartRaw||'', recond.dueDate ? recond.dueDate.toLocaleDateString('en-US',{year:'numeric',month:'short'}) : '',
+      amro.days!==null ? amro.days : '', amro.flagged?'YES':'no'
+    ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(',');
+  });
+  const csv = [header.join(','), ...rows].join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'roster-summary.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function renderAdminTab(){
+  const members = window.__roster || [];
+
+  const trackerRows = members.map((m,i)=>{
+    const R = { run: m.cardioType==='component', upper: m.strengthType==='component', core: m.coreType==='component', standing: m.standing, preg: m.preg };
+    const onHold = R.run || R.upper || R.core || R.standing || R.preg;
+    const recond = computeReconditioning(m.expiryRaw, onHold);
+    const amro = computeAmroFlag(m.holdStartRaw);
+    const name = escapeHtml([m.firstName, m.lastName].filter(Boolean).join(' ')) || memberLabel(i, m);
+    const checklist = buildChecklist(m);
+    m.instanceId = 'admin'+i;
+    const directiveHtml = buildDirective(m);
+    let dueCell = onHold ? (recond.text ? recond.dueDate.toLocaleDateString('en-US',{year:'numeric',month:'short'}) : '<span class="flag-warn">Needs 469 expiration</span>') : 'Standard cycle';
+    let amroCell = amro.days===null ? '—' : amro.flagged ? `<span class="flag-overdue">${amro.days}d — REFER</span>` : (amro.days>=300 ? `<span class="flag-warn">${amro.days}d</span>` : `<span class="flag-ok">${amro.days}d</span>`);
+    return `
+      <tr>
+        <td>${name}</td>
+        <td>${onHold ? '<span class="stamp exempt">HOLD</span>' : '<span class="stamp tested">READY</span>'}</td>
+        <td>${dueCell}</td>
+        <td>${amroCell}</td>
+        <td>
+          <button type="button" class="view-btn" onclick="toggleChecklist(${i})">Checklist</button>
+          <button type="button" class="view-btn" id="admin-viewbtn-${i}" onclick="toggleAdminDirective(${i})">View Directive</button>
+          <button type="button" class="view-btn" style="background:var(--stamp-red);" onclick="removeMember(${i})">Remove</button>
+        </td>
+      </tr>
+      <tr><td colspan="5" style="padding:0;border-bottom:none;">
+        <div id="admin-checklist-${i}" style="display:none;padding:8px 4px 14px 4px;">
+          <ul class="checklist">${checklist.map(c=>`<li>${c.t}<span class="cite">(${c.c})</span></li>`).join("")}</ul>
+        </div>
+        <div id="admin-directive-${i}" class="roster-directive" style="display:none;">${directiveHtml}</div>
+      </td></tr>
+    `;
+  }).join("");
+
+  const rosterSection = members.length ? `
+    <div class="gloss-cat">Roster Tracker</div>
+    <div class="footer-note" style="margin-top:0;padding-top:0;border-top:none;">
+      Pulled live from whatever is currently in Roster Preview. AMRO flag uses "Date Placed on PFRA Hold" if entered per member; Next PFRA Due uses "AF Form 469 Expiration." Neither is required to generate a directive, but both are needed here for accurate tracking.
+    </div>
+    <table class="roster-table">
+      <thead><tr><th>Member</th><th>Status</th><th>Next PFRA Due</th><th>Days on Hold (AMRO ≥365)</th><th></th></tr></thead>
+      <tbody>${trackerRows}</tbody>
+    </table>
+    <div style="margin-top:14px;">
+      <button type="button" class="admin-btn no-print" onclick="exportRosterCSV()">Export Roster CSV</button>
+      <button type="button" class="admin-btn secondary no-print" onclick="window.print()">Print This Page</button>
+    </div>
+  ` : `
+    <div class="gloss-cat">Roster Tracker</div>
+    <p style="font-size:13px;color:var(--ink-soft);">No members in the roster yet. Add one from the Directive Builder tab (fill in the form, click "Add This Profile to Roster") or generate a randomized demo roster there first.</p>
+  `;
+
+  document.getElementById('admin-content').innerHTML = `
+    <div class="paper">
+      <div class="doc-head">
+        <div><div class="title">Administrative</div></div>
+        <div class="doc-id">REF AFMAN36-2905<br>PFL / MFL / UFPM REFERENCE</div>
+      </div>
+
+      ${rosterSection}
+
+      <div class="gloss-cat">Environmental &amp; Safety — Quick Reference</div>
+      <div class="notes-box">
+        <ul>
+          <li><b>Unique circumstances (para 4.4.2):</b> Commanders should suspend PFRAs for AQI &gt;100 (check <span style="font-family:'IBM Plex Mono',monospace;">airnow.gov</span>), wildfires, natural disasters, or pandemic conditions. New due months are established for members who were due during the suspension.</li>
+          <li><b>Climate waiver (para 4.4.1):</b> During continuous extreme climate conditions, Wing/GSU/Detachment commanders may waive the outdoor cardio component only — not body composition, strength, or core — if no adequate indoor facility exists. When active, members test the 20m HAMR indoors if a certified course is available.</li>
+          <li><b>Acclimatization (Playbook 2.0):</b> Allow 2-4 weeks to acclimatize to a new heat or altitude environment before pushing intensity; scale back duration/intensity for the first 5-7 days.</li>
+          <li><b>Warning signs:</b> Stop and seek medical attention immediately for chest pain, dizziness, abnormal heartbeat, or other exercise distress signals.</li>
+        </ul>
+        <div class="footer-note" style="margin-top:10px;padding-top:10px;">
+          This tool has not independently verified specific WBGT/heat-category temperature thresholds — those live in DAFI 48-151 and your installation safety office, not AFMAN36-2905 itself. Pull current flag conditions from your installation before an outdoor assessment rather than relying on any number here.
+        </div>
+      </div>
+
+      <div class="gloss-cat">Role Reference</div>
+      <div class="footer-note" style="margin-top:0;padding-top:0;border-top:none;">
+        Paragraph citations only — this tool has not verified the full responsibility text under each role (only the chapter/paragraph structure), so treat this as a pointer to where to look, not a substitute for reading it.
+      </div>
+      <table class="gloss-table">
+        <thead><tr><th>Role</th><th>Where to look</th></tr></thead>
+        <tbody>
+          <tr><td class="term">Installation Commander</td><td class="src">para 2.14</td></tr>
+          <tr><td class="term">Wing Commander (or equiv.)</td><td class="src">para 2.15</td></tr>
+          <tr><td class="term">Fitness Information Manager (FIM)</td><td class="src">para 2.20</td></tr>
+          <tr><td class="term">Master Fitness Leader (MFL)</td><td class="src">para 2.23</td></tr>
+          <tr><td class="term">Fitness Assessment Cell (FAC) Manager</td><td class="src">para 2.24</td></tr>
+          <tr><td class="term">Unit Commander/Director</td><td class="src">para 2.26</td></tr>
+          <tr><td class="term">Unit Fitness Assessment Cell (UFAC)</td><td class="src">para 2.27</td></tr>
+          <tr><td class="term">Unit Fitness Program Manager (UFPM)</td><td class="src">para 2.28</td></tr>
+          <tr><td class="term">Peer Fitness Leader (PFL)</td><td class="src">para 2.29</td></tr>
+          <tr><td class="term">Member</td><td class="src">para 2.30</td></tr>
+        </tbody>
+      </table>
+    </div>
+  `;
+}
+
 </script>
 
 </body>
