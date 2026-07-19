@@ -457,7 +457,7 @@
 
 <div class="topbar">
   <div class="brand"><b>Fitness Directive Builder</b> · PFL Programming Tool</div>
-  <div class="refs">REF: DAFMAN 36-2905 · Warfighter's Fitness Playbook 2.0 · UNOFFICIAL PLANNING AID</div>
+  <div class="refs">REF: AFMAN36-2905 (24 Mar 2026) · Warfighter's Fitness Playbook 2.0 · UNOFFICIAL PLANNING AID</div>
 </div>
 
 <div class="layout">
@@ -548,6 +548,11 @@
     </fieldset>
 
     <div class="field">
+      <label for="expiry">AF Form 469 Expiration Date (optional)</label>
+      <input type="date" id="expiry">
+    </div>
+
+    <div class="field">
       <label for="notes">Profile notes (from AF Form 469, optional)</label>
       <textarea id="notes" placeholder="e.g. LIMFAC: no running >10 min through 15 Sep; cleared for bike/elliptical"></textarea>
     </div>
@@ -587,6 +592,7 @@ function generate(){
   const objective = document.getElementById('objective').value;
   const ability = parseInt(document.getElementById('ability').value)||2;
   const notes = escapeHtml(document.getElementById('notes').value.trim());
+  const expiryRaw = document.getElementById('expiry').value;
 
   const R = {
     run: document.getElementById('r_run').checked,
@@ -604,32 +610,50 @@ function generate(){
     fip:"Fitness Improvement Program (FIP)"
   }[objective];
 
-  // ---- Component matrix ----
+  // ---- PFRA Hold / Reconditioning Period (AFMAN36-2905, 24 Mar 2026, para 3.10.6 / 3.10.9 / 4.1.2) ----
+  // Any component or composite medical exemption places the member on PFRA Hold, not authorized
+  // to test, and requires enrollment in a unit-led Adaptive Fitness Program (AFP) for the profile's
+  // duration. Next PFRA due date is one calendar month after the restriction expires.
+  const onPfraHold = R.run || R.upper || R.core || R.standing || R.preg;
+  let reconditioningText = "";
+  if(onPfraHold){
+    if(expiryRaw){
+      const exp = new Date(expiryRaw + "T00:00:00");
+      const recond = new Date(exp);
+      recond.setDate(recond.getDate()+1);
+      recond.setMonth(recond.getMonth()+1);
+      reconditioningText = `Next PFRA due month: ${recond.toLocaleDateString('en-US',{year:'numeric',month:'long'})} (one calendar month after AF Form 469 expiration, per para 3.10.9)`;
+    } else {
+      reconditioningText = "Enter the AF Form 469 expiration date to calculate the earliest next-PFRA-due month (para 3.10.9).";
+    }
+  }
+
+  // ---- Component matrix (AFMAN36-2905, 24 Mar 2026, para 3.1.2 / 3.7 / Table 4.1) ----
   const cardioExempt = R.run || R.preg;
   const strengthExempt = R.upper;
   const coreExempt = R.core || R.standing;
-  const bodyCompExempt = R.preg; // pregnancy profiles typically defer body comp alongside cardio
+  const bodyCompExempt = R.preg; // WHtR is required for all component/composite medical exemptions except pregnancy (para 4.1.1, 4.1.4)
 
   const matrixRows = [
     {
-      name:"Cardiorespiratory",
+      name:"Cardiorespiratory (50 pts)",
       exempt: cardioExempt,
-      note: R.preg ? "Pregnancy profile — deferred per OB/profile" : (R.run ? "Component-exempt per profile" : "Tested — program as normal")
+      note: R.preg ? "Pregnancy — prohibited from PFRA (composite exemption, para 4.1.4)" : (R.run ? "Component-exempt per AF Form 469 — PFRA Hold applies" : "Tested — 2.0-mi run or 20m HAMR; 2km walk only if authorized on AF Form 469")
     },
     {
-      name:"Body Composition",
+      name:"Body Composition (20 pts, no minimum)",
       exempt: bodyCompExempt,
-      note: R.preg ? "Deferred with cardio per pregnancy profile" : "Not typically exempted — verify current DAF Form 469"
+      note: R.preg ? "Deferred with cardio per pregnancy composite exemption" : "WHtR required for all component/composite medical exemptions — verify current AF Form 469 (para 4.1.1)"
     },
     {
-      name:"Muscular Strength",
+      name:"Muscular Strength (15 pts)",
       exempt: strengthExempt,
-      note: R.upper ? "Component-exempt per profile — max points awarded for this component" : "Tested — program as normal"
+      note: R.upper ? "Component-exempt per AF Form 469 — PFRA Hold applies" : "Tested — 1-min push-up or 2-min HRPU"
     },
     {
-      name:"Core Endurance",
+      name:"Core Endurance (15 pts)",
       exempt: coreExempt,
-      note: (R.core||R.standing) ? "Component-exempt per profile — max points awarded for this component" : "Tested — program as normal"
+      note: (R.core||R.standing) ? "Component-exempt per AF Form 469 — PFRA Hold applies" : "Tested — 1-min sit-up, 2-min CLRC, or timed forearm plank"
     }
   ];
 
@@ -739,6 +763,19 @@ function generate(){
     {name:"Fartlek Run", kind:"fartlek", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
     {name:"Long Slow Distance Run", kind:"lsd_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
     {name:"Sprint Starts", kind:"sprint_starts", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"800m Interval Repeats", kind:"cardio_interval_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Mile Repeats", kind:"cardio_steady_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Pyramid Intervals", kind:"cardio_interval_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Ladder Sprints", kind:"shuttle_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"High Knees", kind:"run_in_place", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Butt Kickers", kind:"run_in_place", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Bounding Drills", kind:"side_hop", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"40-Yard Sprints", kind:"sprint_starts", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Treadmill Intervals", kind:"cardio_interval_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Hill Repeats", kind:"hill_sprint", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Tempo Intervals", kind:"cardio_steady_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Negative Split Run", kind:"cardio_steady_run", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
+    {name:"Track Fartlek", kind:"fartlek", focus:"LE", category:"cardio", avoids:["run","lower","preg"]},
     // Cardio — low impact / alternate modality
     {name:"Biking — Intervals", kind:"cardio_interval_bike", focus:"LE, Low Impact", category:"cardio_alt", avoids:["preg"]},
     {name:"Elliptical — Steady State", kind:"cardio_steady_lowimpact", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:["preg"]},
@@ -750,6 +787,16 @@ function generate(){
     {name:"Echo Bike Intervals", kind:"echo_bike_interval", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:["preg"]},
     {name:"Stair Climber — Steady State", kind:"stair_climber_steady", focus:"LE, Low Impact", category:"cardio_alt", avoids:["lower","preg"]},
     {name:"Battle Ropes Conditioning", kind:"battle_ropes", focus:"UE/Core, Low Impact", category:"cardio_alt", avoids:["upper","preg"]},
+    {name:"Recumbent Bike — Steady State", kind:"cardio_steady_lowimpact", focus:"LE, Low Impact", category:"cardio_alt", avoids:["preg"]},
+    {name:"Spin Bike Intervals", kind:"cardio_interval_bike", focus:"LE, Low Impact", category:"cardio_alt", avoids:["preg"]},
+    {name:"Water Aerobics", kind:"pool", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:[]},
+    {name:"Deep Water Running", kind:"pool", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:[]},
+    {name:"Elliptical Intervals", kind:"cardio_interval_bike", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:["preg"]},
+    {name:"Versaclimber — Steady State", kind:"stair_climber_steady", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:["upper","lower","preg"]},
+    {name:"SkiErg — Steady State", kind:"cardio_steady_lowimpact", focus:"UE/Core, Low Impact", category:"cardio_alt", avoids:["upper","preg"]},
+    {name:"Handbike Conditioning", kind:"arm_bike", focus:"UE, Low Impact", category:"cardio_alt", avoids:["upper","preg"]},
+    {name:"Aqua Jogging", kind:"pool", focus:"UE/LE, Low Impact", category:"cardio_alt", avoids:[]},
+    {name:"Battle Ropes Intervals", kind:"battle_ropes", focus:"UE/Core, Low Impact", category:"cardio_alt", avoids:["upper","preg"]},
 
     // Strength — upper
     {name:"Push-Up", kind:"bodyweight_upper", focus:"UE", category:"strength", avoids:["upper"]},
@@ -806,6 +853,77 @@ function generate(){
     {name:"Hammer Curl", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
     {name:"Overhead Triceps Extension", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
     {name:"Lateral Band Walk", kind:"mini_band_walk", focus:"LE/Core", category:"strength", avoids:["lower"]},
+    {name:"Incline Dumbbell Press", kind:"compound_upper_press", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Decline Push-Up", kind:"bodyweight_upper", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Diamond Push-Up", kind:"bodyweight_upper", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Pike Push-Up", kind:"bodyweight_upper", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Arnold Press", kind:"compound_upper_press", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Landmine Press", kind:"compound_upper_press", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Single-Arm DB Press", kind:"compound_upper_press", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Machine Chest Press", kind:"compound_upper_press", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Cable Chest Fly", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Pec Deck Fly", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Close-Grip Bench Press", kind:"compound_upper_press", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Floor Press", kind:"compound_upper_press", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Barbell Bent-Over Row", kind:"pull", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"T-Bar Row", kind:"pull", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Single-Arm DB Row", kind:"pull", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Chest-Supported Row", kind:"pull", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Straight-Arm Pulldown", kind:"lat_pulldown", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Reverse Fly", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Band Pull-Apart", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Barbell Shrug", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Front Raise", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Rear Delt Fly", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Upright Row", kind:"pull", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Cuban Press", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Concentration Curl", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Preacher Curl", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Cable Curl", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Skull Crusher", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Cable Lateral Raise", kind:"isolation_light", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Zercher Squat", kind:"barbell_compound", focus:"LE/Core", category:"strength", avoids:["lower","preg"]},
+    {name:"Overhead Squat", kind:"barbell_compound", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Sumo Squat", kind:"compound_lower", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Box Squat", kind:"barbell_compound", focus:"LE", category:"strength", avoids:["lower","preg"]},
+    {name:"Pause Squat", kind:"barbell_compound", focus:"LE", category:"strength", avoids:["lower","preg"]},
+    {name:"Conventional Deadlift", kind:"hinge_pattern", focus:"LE/Core", category:"strength", avoids:["lower","preg"]},
+    {name:"Sumo Deadlift", kind:"hinge_pattern", focus:"LE/Core", category:"strength", avoids:["lower","preg"]},
+    {name:"Single-Leg RDL", kind:"hinge_pattern", focus:"LE/Core", category:"strength", avoids:["lower","preg"]},
+    {name:"Good Morning", kind:"hinge_pattern", focus:"LE/Core", category:"strength", avoids:["lower","preg"]},
+    {name:"Reverse Lunge", kind:"split_squat", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Curtsy Lunge", kind:"split_squat", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Lateral Lunge", kind:"split_squat", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Deficit Reverse Lunge", kind:"split_squat", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Cable Pull-Through", kind:"hip_thrust", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Banded Hip Abduction", kind:"mini_band_walk", focus:"LE/Core", category:"strength", avoids:["lower"]},
+    {name:"Clamshell", kind:"mini_band_walk", focus:"LE/Core", category:"strength", avoids:["lower"]},
+    {name:"Single-Leg Glute Bridge", kind:"glute_bridge", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Donkey Kick", kind:"glute_bridge", focus:"LE/Core", category:"strength", avoids:["lower"]},
+    {name:"Barbell Hip Thrust", kind:"hip_thrust", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Seated Calf Raise", kind:"calf_raise_loaded", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Standing Calf Press (machine)", kind:"leg_machine", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Turkish Get-Up", kind:"thruster", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Man Maker", kind:"thruster", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Devil Press", kind:"thruster", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Bear Crawl", kind:"mountain_climbers", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower"]},
+    {name:"Sled Drag", kind:"sled_work", focus:"UE/LE", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Kettlebell Snatch", kind:"kb_swing", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Kettlebell Clean and Jerk", kind:"kb_swing", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Power Clean (light)", kind:"barbell_compound", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Sandbag Over Shoulder", kind:"sandbag_clean", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower","preg"]},
+    {name:"Yoke Carry", kind:"farmers_carry", focus:"UE/LE/Core", category:"strength", avoids:["upper","lower"]},
+    {name:"Log Press", kind:"compound_upper_press", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Smith Machine Squat", kind:"leg_machine", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Assisted Pull-Up Machine", kind:"pullup", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Hack Squat (machine)", kind:"leg_machine", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Glute Ham Raise", kind:"stability_ball_curl", focus:"LE/Core", category:"strength", avoids:["lower"]},
+    {name:"Nordic Hamstring Curl", kind:"stability_ball_curl", focus:"LE/Core", category:"strength", avoids:["lower"]},
+    {name:"Cable Reverse Lunge", kind:"split_squat", focus:"LE", category:"strength", avoids:["lower"]},
+    {name:"Dumbbell Pullover", kind:"pull", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Landmine Row", kind:"pull", focus:"UE", category:"strength", avoids:["upper"]},
+    {name:"Weighted Step-Up", kind:"step_up", focus:"LE/Core", category:"strength", avoids:["lower"]},
+    {name:"Banded Pull-Through", kind:"hip_thrust", focus:"LE", category:"strength", avoids:["lower"]},
 
     // Core — standard
     {name:"Sit-Up", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
@@ -827,6 +945,31 @@ function generate(){
     {name:"Superman", kind:"superman", focus:"Core", category:"core", avoids:["standing"]},
     {name:"Reverse Crunch", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
     {name:"Bicycle Crunch", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Standing Cable Crunch", kind:"cable_crunch", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Weighted Sit-Up", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Decline Sit-Up", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"V-Sit Hold", kind:"hollow_body", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Dragon Flag (regression)", kind:"hollow_body", focus:"UE/Core", category:"core", avoids:["upper","core","standing"]},
+    {name:"Windshield Wipers", kind:"russian_twist", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Plank Up-Downs", kind:"bear_plank_taps", focus:"UE/Core", category:"core", avoids:["upper","standing"]},
+    {name:"Copenhagen Plank", kind:"isometric_core", focus:"LE/Core", category:"core", avoids:["lower","standing"]},
+    {name:"Side Plank Reach-Through", kind:"isometric_core", focus:"UE/Core", category:"core", avoids:["upper","standing"]},
+    {name:"Weighted Plank", kind:"isometric_core", focus:"UE/Core", category:"core", avoids:["upper","standing"]},
+    {name:"Med Ball Slam", kind:"medball_throw", focus:"UE/Core", category:"core", avoids:["upper","core","preg"]},
+    {name:"Landmine 180s", kind:"woodchopper", focus:"Core", category:"core", avoids:["core"]},
+    {name:"Cable Rotation", kind:"woodchopper", focus:"Core", category:"core", avoids:["core"]},
+    {name:"Kneeling Ab Wheel Rollout", kind:"ab_wheel", focus:"UE/Core", category:"core", avoids:["upper","core","standing"]},
+    {name:"Standing Ab Wheel Rollout", kind:"ab_wheel", focus:"UE/Core", category:"core", avoids:["upper","core","standing"]},
+    {name:"Sit-Up with Twist", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Jackknife Sit-Up", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Scissor Kicks", kind:"leg_raise", focus:"LE/Core", category:"core", avoids:["core","standing"]},
+    {name:"Hanging Leg Raise", kind:"leg_raise", focus:"UE/LE/Core", category:"core", avoids:["upper","core","standing"]},
+    {name:"Captain's Chair Knee Raise", kind:"leg_raise", focus:"UE/LE/Core", category:"core", avoids:["upper","core","standing"]},
+    {name:"Oblique Crunch", kind:"dynamic_core", focus:"Core", category:"core", avoids:["core","standing"]},
+    {name:"Star Plank", kind:"isometric_core", focus:"UE/LE/Core", category:"core", avoids:["upper","standing"]},
+    {name:"Renegade Row Plank Hold", kind:"isometric_core", focus:"UE/Core", category:"core", avoids:["upper","standing"]},
+    {name:"Bicycle Kicks", kind:"leg_raise", focus:"LE/Core", category:"core", avoids:["core","standing"]},
+    {name:"Reverse Plank", kind:"isometric_core", focus:"UE/LE/Core", category:"core", avoids:["upper","lower","standing"]},
     // Core — restriction-safe
     {name:"Diaphragmatic Breathing Brace", kind:"breathing_core", focus:"Core", category:"core_safe", avoids:[]},
     {name:"Bird-Dog", kind:"anti_rotation_core", focus:"UE/LE/Core", category:"core_safe", avoids:[]},
@@ -836,6 +979,18 @@ function generate(){
     {name:"Standing Pallof Press", kind:"anti_rotation_core", focus:"Core", category:"core_safe", avoids:["upper"]},
     {name:"Suitcase Hold (isometric)", kind:"isometric_core", focus:"UE/Core", category:"core_safe", avoids:["upper"]},
     {name:"Half-Kneeling Chop", kind:"woodchopper", focus:"Core", category:"core_safe", avoids:[]},
+    {name:"Standing March with Band", kind:"seated_march", focus:"LE/Core", category:"core_safe", avoids:[]},
+    {name:"Wall Sit with Arm Reach", kind:"breathing_core", focus:"UE/LE/Core", category:"core_safe", avoids:["lower"]},
+    {name:"Seated Torso Rotation (light)", kind:"woodchopper", focus:"Core", category:"core_safe", avoids:[]},
+    {name:"Standing Bird-Dog (single-leg reach)", kind:"anti_rotation_core", focus:"UE/LE/Core", category:"core_safe", avoids:["lower"]},
+    {name:"Glute Bridge March", kind:"glute_bridge", focus:"LE/Core", category:"core_safe", avoids:["lower"]},
+    {name:"Isometric Ab Brace (standing)", kind:"breathing_core", focus:"Core", category:"core_safe", avoids:[]},
+    {name:"Kneeling Pallof Press", kind:"anti_rotation_core", focus:"Core", category:"core_safe", avoids:["upper"]},
+    {name:"Half-Kneeling Anti-Rotation Hold", kind:"anti_rotation_core", focus:"Core", category:"core_safe", avoids:["lower"]},
+    {name:"Seated Knee-to-Chest", kind:"seated_march", focus:"LE/Core", category:"core_safe", avoids:[]},
+    {name:"Modified Deadbug (arms only)", kind:"breathing_core", focus:"UE/Core", category:"core_safe", avoids:["upper"]},
+    {name:"Modified Deadbug (legs only)", kind:"breathing_core", focus:"LE/Core", category:"core_safe", avoids:["lower"]},
+    {name:"Standing Core Brace with Overhead Reach", kind:"breathing_core", focus:"UE/Core", category:"core_safe", avoids:["upper"]},
 
     // Mobility
     {name:"Dynamic Warm-Up Flow", kind:"mobility_dynamic", focus:"UE/LE", category:"mobility", avoids:["lower"]},
@@ -853,6 +1008,26 @@ function generate(){
     {name:"Band Shoulder Dislocates", kind:"mobility_joint", focus:"UE", category:"mobility", avoids:["upper"]},
     {name:"Hip Circles", kind:"mobility_joint", focus:"LE", category:"mobility", avoids:["lower"]},
     {name:"Walking Knee Hug", kind:"mobility_dynamic", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Standing Quad Stretch", kind:"mobility_static", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Standing Hamstring Stretch", kind:"mobility_static", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Butterfly Stretch", kind:"mobility_static", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Seated Forward Fold", kind:"mobility_static", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Lying Spinal Twist", kind:"mobility_static", focus:"Core", category:"mobility", avoids:[]},
+    {name:"IT Band Foam Roll", kind:"foam_roll", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Upper Back Foam Roll", kind:"foam_roll", focus:"UE", category:"mobility", avoids:["upper"]},
+    {name:"Lat Foam Roll", kind:"foam_roll", focus:"UE", category:"mobility", avoids:["upper"]},
+    {name:"Ankle Dorsiflexion Mobilization", kind:"mobility_joint", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Wrist Circles (standing)", kind:"mobility_joint", focus:"UE", category:"mobility", avoids:[]},
+    {name:"Neck Rolls (standing)", kind:"mobility_joint", focus:"UE", category:"mobility", avoids:[]},
+    {name:"Arm Circles", kind:"mobility_dynamic", focus:"UE", category:"mobility", avoids:["upper"]},
+    {name:"Leg Swings (front-to-back)", kind:"mobility_dynamic", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Leg Swings (lateral)", kind:"mobility_dynamic", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Walking Lunge with Twist", kind:"mobility_dynamic", focus:"LE/Core", category:"mobility", avoids:["lower"]},
+    {name:"Spiderman Stretch", kind:"mobility_dynamic", focus:"LE", category:"mobility", avoids:["lower"]},
+    {name:"Inchworm Walkout", kind:"mobility_dynamic", focus:"UE/LE", category:"mobility", avoids:["upper","lower"]},
+    {name:"Scorpion Stretch", kind:"mobility_dynamic", focus:"Core", category:"mobility", avoids:[]},
+    {name:"Standing Side Bend", kind:"mobility_static", focus:"Core", category:"mobility", avoids:[]},
+    {name:"Shoulder Cross-Body Stretch", kind:"mobility_static", focus:"UE", category:"mobility", avoids:["upper"]},
     {name:"Ankle Circles", kind:"mobility_joint", focus:"LE", category:"mobility_lowersafe", avoids:[]},
     {name:"Seated Hamstring Stretch", kind:"mobility_static", focus:"LE", category:"mobility_lowersafe", avoids:[]},
     {name:"Chest Stretch", kind:"mobility_static", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
@@ -862,7 +1037,22 @@ function generate(){
     {name:"Seated Spinal Twist", kind:"mobility_static", focus:"Core", category:"mobility_lowersafe", avoids:[]},
     {name:"Standing Overhead Reach", kind:"mobility_static", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
     {name:"Neck Rolls", kind:"mobility_joint", focus:"UE", category:"mobility_lowersafe", avoids:[]},
-    {name:"Wrist Circles", kind:"mobility_joint", focus:"UE", category:"mobility_lowersafe", avoids:[]}
+    {name:"Wrist Circles", kind:"mobility_joint", focus:"UE", category:"mobility_lowersafe", avoids:[]},
+    {name:"Seated Figure 4 Stretch", kind:"mobility_static", focus:"LE", category:"mobility_lowersafe", avoids:[]},
+    {name:"Seated Quad Stretch", kind:"mobility_static", focus:"LE", category:"mobility_lowersafe", avoids:[]},
+    {name:"Seated Ankle Pumps", kind:"mobility_joint", focus:"LE", category:"mobility_lowersafe", avoids:[]},
+    {name:"Seated Toe Raises", kind:"mobility_joint", focus:"LE", category:"mobility_lowersafe", avoids:[]},
+    {name:"Shoulder Thumbs Rotation", kind:"mobility_joint", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Triceps Stretch (seated)", kind:"mobility_static", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Doorway Chest Stretch (seated)", kind:"mobility_static", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Seated Cat-Cow", kind:"mobility_joint", focus:"Core", category:"mobility_lowersafe", avoids:[]},
+    {name:"Seated Torso Twist", kind:"mobility_static", focus:"Core", category:"mobility_lowersafe", avoids:[]},
+    {name:"Child's Pose (supported)", kind:"mobility_static", focus:"UE/LE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Seated Neck Stretch", kind:"mobility_static", focus:"UE", category:"mobility_lowersafe", avoids:[]},
+    {name:"Wrist Flexor Stretch", kind:"mobility_static", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Wrist Extensor Stretch", kind:"mobility_static", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Seated Overhead Triceps Stretch", kind:"mobility_static", focus:"UE", category:"mobility_lowersafe", avoids:["upper"]},
+    {name:"Seated Shoulder Blade Squeeze", kind:"mobility_joint", focus:"UE", category:"mobility_lowersafe", avoids:[]}
   ];
 
   // Curated pregnancy cardio list — kept separate from filter logic for OB-safety review, not auto-derived
@@ -872,7 +1062,11 @@ function generate(){
     {name:"Water Walking / Swim", kind:"pool", focus:"UE/LE, Low Impact"},
     {name:"Prenatal Mobility Flow", kind:"mobility_dynamic", focus:"UE/LE/Core"},
     {name:"Recumbent Bike (Easy)", kind:"bike_easy", focus:"LE, Low Impact"},
-    {name:"Prenatal Yoga Flow", kind:"mobility_dynamic", focus:"UE/LE/Core"}
+    {name:"Prenatal Yoga Flow", kind:"mobility_dynamic", focus:"UE/LE/Core"},
+    {name:"Prenatal Pilates Flow", kind:"mobility_dynamic", focus:"UE/LE/Core"},
+    {name:"Stationary Elliptical (Easy)", kind:"bike_easy", focus:"UE/LE, Low Impact"},
+    {name:"Low-Intensity Treadmill Walk", kind:"cardio_steady_walk", focus:"LE, Low Impact"},
+    {name:"Aqua Prenatal Class", kind:"pool", focus:"UE/LE, Low Impact"}
   ];
 
   function libraryPool(categories){
@@ -913,7 +1107,7 @@ function generate(){
 
   const dayNotes = {
     cardio: R.preg ? "Follow OB/profile guidance exactly — this is general framing only, not a prescription." :
-            R.run ? "Impact-free only — confirm approved alternate assessment component with UFPM." :
+            R.run ? "Impact-free training toward whatever cardio modality is authorized on the AF Form 469 (HAMR, or 2km walk only if specifically stated — the walk is not a default alternate)." :
             R.lower ? "Impact-free modality selected to protect the restricted joint." : "",
     strength: (R.upper && R.lower) ? "Both upper and lower body restricted — kept to seated, pain-free-range work only. Escalate to medical provider for a fuller program." :
               R.upper ? "No push-up loading — coordinate progression with medical provider before reintroducing." :
@@ -1005,7 +1199,7 @@ function generate(){
         <div class="doc-id">
           DOC ${docId}<br>
           GENERATED ${today.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'})}<br>
-          REF DAFMAN 36-2905 / Playbook 2.0
+          REF AFMAN36-2905 (24 Mar 2026) / Playbook 2.0
         </div>
       </div>
 
@@ -1020,6 +1214,14 @@ function generate(){
         <div class="cell"><div class="k">Height</div><div class="v">${Math.floor(height/12)}'${height%12}"</div></div>
         <div class="cell"><div class="k">Weight</div><div class="v">${weight} lb</div></div>
         <div class="cell"><div class="k">Ability</div><div class="v">L${ability}</div></div>
+      </div>
+
+      <div class="notes-box" style="border-left-color:${onPfraHold ? 'var(--stamp-red)' : 'var(--stamp-green)'};">
+        <b>${onPfraHold ? 'PFRA HOLD — Adaptive Fitness Program (AFP)' : 'Not on PFRA Hold'}</b><br>
+        ${onPfraHold
+          ? `This member has one or more documented component exemptions and is on PFRA Hold — not authorized for official testing (AFMAN36-2905 para 3.10.6). This directive serves as unit-led Adaptive Fitness Program content for the duration of the profile (para 4.1.2). ${reconditioningText}`
+          : `No component-level restriction is checked, so this directive is standard PFRP training, not AFP content. If the member's AF Form 469 has a composite or component exemption, check the applicable restriction(s) above.`
+        }
       </div>
 
       <h4 class="section-h">Component Status Matrix</h4>
@@ -1050,7 +1252,7 @@ function generate(){
       </div>
 
       <div class="footer-note">
-        Exercise focus tags (LE / UE / Core) and ability-level rep scaling (Level 1: 8-12 reps, Level 2: 10-15, Level 3: 15-20 for bodyweight work) follow the Warfighter's Fitness Playbook 2.0 (Feb 2026). Recommended loads are effort-based (RPE) or bodyweight, not fixed poundages, since no 1RM or baseline strength test is collected here — scale to the member's actual capacity and progress from there. This directive is a training-programming aid generated from PFL-entered inputs; it is not an official myFitness record, does not calculate PFA/HPA scores, and does not substitute for guidance from the servicing medical treatment facility, HAWC, or UFPM. Fitness standards were revised under the Sep 30 2025 and Dec 18 2025 Secretary of War memoranda — confirm current component and scoring rules before use.
+        Exercise focus tags (LE / UE / Core) and ability-level rep scaling (Level 1: 8-12 reps, Level 2: 10-15, Level 3: 15-20 for bodyweight work) follow the Warfighter's Fitness Playbook 2.0 (Feb 2026). Component scoring (Cardio 50 pts / Body Comp 20 pts / Strength 15 pts / Core 15 pts), PFRA Hold, and Adaptive Fitness Program logic follow AFMAN36-2905, 24 March 2026 (supersedes DAFMAN36-2905, 22 Apr 2022). Recommended loads are effort-based (RPE) or bodyweight, not fixed poundages, since no 1RM or baseline strength test is collected here — scale to the member's actual capacity and progress from there. This directive is a training-programming aid generated from PFL-entered inputs; it is not an official myFitness record, does not calculate PFA/HPA scores, and does not substitute for guidance from the servicing medical treatment facility, HAWC, or UFPM. The 2 kilometer walk is only an authorized cardio alternate if specifically stated on the member's AF Form 469 — it is not a default substitute for the run or HAMR.
       </div>
     </div>
     <button class="print-btn" onclick="window.print()">Print / Save as PDF</button>
