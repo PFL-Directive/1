@@ -507,6 +507,8 @@
   .gloss-table td{padding:8px 10px;font-size:13px;border-bottom:1px solid rgba(32,36,31,0.12);vertical-align:top;}
   .gloss-table td.term{font-family:'IBM Plex Mono',monospace;font-weight:700;white-space:nowrap;}
   .gloss-table td.src{font-size:10.5px;color:var(--ink-soft);white-space:nowrap;}
+  .role-table td.term{white-space:normal;width:22%;}
+  .role-table td.src{width:8%;text-align:center;}
   .gloss-cat{
     font-family:'IBM Plex Sans Condensed',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.04em;
     text-transform:uppercase;margin:22px 0 4px;padding-bottom:5px;border-bottom:1px solid rgba(32,36,31,0.25);
@@ -859,11 +861,16 @@ function computeReconditioning(expiryRaw, onPfraHold){
 }
 
 // Para 4.3: UFPM identifies members on PFRA Hold for 1 year or more for AMRO Board referral.
-function computeAmroFlag(holdStartRaw){
-  if(!holdStartRaw) return { days:null, flagged:false };
+// Members with only a Modality Exemption are never placed on Hold, so they don't qualify
+// (per 4.3's own note). Pregnancy is explicitly excluded from AMRO review even though it
+// is a Hold status (para 2.26.11: "Note: Excludes pregnancy").
+function computeAmroFlag(holdStartRaw, onHold, isPregnant){
+  if(!holdStartRaw) return { days:null, flagged:false, exempt:false };
   const start = new Date(holdStartRaw + "T00:00:00");
   const days = Math.floor((new Date() - start) / 86400000);
-  return { days: days, flagged: days >= 365 };
+  if(!onHold) return { days: days, flagged:false, exempt:true, reason:"not on PFRA Hold (modality exemption)" };
+  if(isPregnant) return { days: days, flagged:false, exempt:true, reason:"pregnancy is excluded from AMRO review" };
+  return { days: days, flagged: days >= 365, exempt:false };
 }
 
 // Builds a plain-language action checklist per member, citing the specific
@@ -891,7 +898,7 @@ function buildChecklist(m){
     items.push({t:"No PFRA Hold required — member stays on the normal assessment cycle", c:"para 3.10.7"});
     items.push({t:"Ensure member is assessed on the alternate exercise/modality at next PFRA", c:"para 3.10.7"});
   }
-  const amro = computeAmroFlag(m.holdStartRaw);
+  const amro = computeAmroFlag(m.holdStartRaw, anyComponent, false);
   if(amro.flagged){
     items.push({t:`On PFRA Hold ${amro.days} days (≥1 year) — notify commander for AMRO Board referral`, c:"para 4.2 / 4.3"});
   }
@@ -2002,13 +2009,13 @@ function exportRosterCSV(){
     const R = { run: m.cardioType==='component', upper: m.strengthType==='component', core: m.coreType==='component', standing: m.standing, preg: m.preg };
     const onHold = R.run || R.upper || R.core || R.standing || R.preg;
     const recond = computeReconditioning(m.expiryRaw, onHold);
-    const amro = computeAmroFlag(m.holdStartRaw);
+    const amro = computeAmroFlag(m.holdStartRaw, onHold, m.preg);
     const name = [m.firstName, m.lastName].filter(Boolean).join(' ') || memberLabel(i, m);
     return [
       name, m.gender==='male'?'M':'F', m.age, 'L'+m.ability, onHold?'HOLD':'READY',
       m.cardioType, m.strengthType, m.coreType, m.lower?'Y':'N', m.preg?'Y':'N', m.standing?'Y':'N',
       m.expiryRaw||'', m.holdStartRaw||'', recond.dueDate ? recond.dueDate.toLocaleDateString('en-US',{year:'numeric',month:'short'}) : '',
-      amro.days!==null ? amro.days : '', amro.flagged?'YES':'no'
+      amro.days!==null ? amro.days : '', amro.exempt ? 'N/A' : (amro.flagged?'YES':'no')
     ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(',');
   });
   const csv = [header.join(','), ...rows].join('\n');
@@ -2030,13 +2037,13 @@ function renderAdminTab(){
     const R = { run: m.cardioType==='component', upper: m.strengthType==='component', core: m.coreType==='component', standing: m.standing, preg: m.preg };
     const onHold = R.run || R.upper || R.core || R.standing || R.preg;
     const recond = computeReconditioning(m.expiryRaw, onHold);
-    const amro = computeAmroFlag(m.holdStartRaw);
+    const amro = computeAmroFlag(m.holdStartRaw, onHold, m.preg);
     const name = escapeHtml([m.firstName, m.lastName].filter(Boolean).join(' ')) || memberLabel(i, m);
     const checklist = buildChecklist(m);
     m.instanceId = 'admin'+i;
     const directiveHtml = buildDirective(m);
-    let dueCell = onHold ? (recond.text ? recond.dueDate.toLocaleDateString('en-US',{year:'numeric',month:'short'}) : '<span class="flag-warn">Needs 469 expiration</span>') : 'Standard cycle';
-    let amroCell = amro.days===null ? '—' : amro.flagged ? `<span class="flag-overdue">${amro.days}d — REFER</span>` : (amro.days>=300 ? `<span class="flag-warn">${amro.days}d</span>` : `<span class="flag-ok">${amro.days}d</span>`);
+    let dueCell = onHold ? (recond.dueDate ? recond.dueDate.toLocaleDateString('en-US',{year:'numeric',month:'short'}) : '<span class="flag-warn">Needs 469 expiration</span>') : 'Standard cycle';
+    let amroCell = amro.days===null ? '—' : amro.exempt ? `<span class="flag-ok">N/A</span>` : amro.flagged ? `<span class="flag-overdue">${amro.days}d — REFER</span>` : (amro.days>=300 ? `<span class="flag-warn">${amro.days}d</span>` : `<span class="flag-ok">${amro.days}d</span>`);
     return `
       <tr>
         <td>${name}</td>
@@ -2100,23 +2107,26 @@ function renderAdminTab(){
 
       <div class="gloss-cat">Role Reference</div>
       <div class="footer-note" style="margin-top:0;padding-top:0;border-top:none;">
-        Paragraph citations only — this tool has not verified the full responsibility text under each role (only the chapter/paragraph structure), so treat this as a pointer to where to look, not a substitute for reading it.
+        Condensed from the actual Chapter 2 body text (verified, not just paragraph headings). Each summary trims a longer list of duties down to what's most relevant at the unit level — read the cited paragraph directly for the complete, authoritative text before treating anything here as final.
       </div>
-      <table class="gloss-table">
-        <thead><tr><th>Role</th><th>Where to look</th></tr></thead>
+      <table class="gloss-table role-table">
+        <thead><tr><th>Role</th><th>Summary</th><th>Para</th></tr></thead>
         <tbody>
-          <tr><td class="term">Installation Commander</td><td class="src">para 2.14</td></tr>
-          <tr><td class="term">Wing Commander (or equiv.)</td><td class="src">para 2.15</td></tr>
-          <tr><td class="term">Fitness Information Manager (FIM)</td><td class="src">para 2.20</td></tr>
-          <tr><td class="term">Master Fitness Leader (MFL)</td><td class="src">para 2.23</td></tr>
-          <tr><td class="term">Fitness Assessment Cell (FAC) Manager</td><td class="src">para 2.24</td></tr>
-          <tr><td class="term">Unit Commander/Director</td><td class="src">para 2.26</td></tr>
-          <tr><td class="term">Unit Fitness Assessment Cell (UFAC)</td><td class="src">para 2.27</td></tr>
-          <tr><td class="term">Unit Fitness Program Manager (UFPM)</td><td class="src">para 2.28</td></tr>
-          <tr><td class="term">Peer Fitness Leader (PFL)</td><td class="src">para 2.29</td></tr>
-          <tr><td class="term">Member</td><td class="src">para 2.30</td></tr>
+          <tr><td class="term">Installation Commander</td><td>Oversees the installation PFRP, decides whether the installation conducts mass unit testing, approves and certifies cardiorespiratory assessment courses/tracks, and resources the FSS/FAC.</td><td class="src">2.14</td></tr>
+          <tr><td class="term">Wing Commander (or equiv.)</td><td>Sets local duty-day physical conditioning policy, oversees the PFRA appeals process, and decides whether the wing conducts unit testing.</td><td class="src">2.15</td></tr>
+          <tr><td class="term">Fitness Information Manager (FIM)</td><td>Appointed by the FSS Commander; manages myFitness system access and provisions FAC/UFAC/UFPM/Commander accounts.</td><td class="src">2.20</td></tr>
+          <tr><td class="term">Master Fitness Leader (MFL)</td><td>Installation-level exercise-science specialist; designs and reports the comprehensive fitness, adaptive, and reconditioning programs; must maintain a PFRA above 85.</td><td class="src">2.23</td></tr>
+          <tr><td class="term">Fitness Assessment Cell (FAC) Manager</td><td>Oversees the installation FAC, trains UFACs/UFPMs/PFRA Administrators/PFLs, and ensures PFRA scores are entered into myFitness within 5 duty days.</td><td class="src">2.24</td></tr>
+          <tr><td class="term">Unit Commander/Director</td><td>Appoints the UFPM, establishes the unit's PFRP, enrolls medically exempt members into an AFP, reviews anyone on PFRA Hold \u22651 year for AMRO Board referral, and makes retention/discharge recommendations.</td><td class="src">2.26</td></tr>
+          <tr><td class="term">Unit Fitness Assessment Cell (UFAC)</td><td>Administers PFRAs for the unit and enters scores into myFitness within 5 duty days.</td><td class="src">2.27</td></tr>
+          <tr><td class="term">Unit Fitness Program Manager (UFPM)</td><td>Validates each member's AF Form 469 and screening questionnaire, sets PFRA due dates, enrolls members on PFRA Hold into a mandatory AFP, and notifies the commander at the 1-year Hold mark.</td><td class="src">2.28</td></tr>
+          <tr><td class="term">Peer Fitness Leader (PFL)</td><td>Leads unit physical conditioning and reports to the UFPM; must maintain a PFRA of 80+ or the appointment is voided for 30 days.</td><td class="src">2.29</td></tr>
+          <tr><td class="term">Member</td><td>Responsible for their own year-round fitness, seeking medical evaluation when a condition may affect the PFRA, and managing their own scheduling.</td><td class="src">2.30</td></tr>
         </tbody>
       </table>
+      <div class="footer-note">
+        Role text verified against AFMAN36-2905 (24 Mar 2026) Chapter 2 body text as of 20 Jul 2026.
+      </div>
     </div>
   `;
 }

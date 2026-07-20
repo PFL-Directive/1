@@ -58,16 +58,21 @@ per day, with exercises, sets x reps, and recommended load).
 Reads live from whatever's currently in the roster.
 
 - **Roster tracker** — status (HOLD/READY), Next PFRA Due, and an AMRO Board
-  referral flag (para 4.3's 1-year-on-hold threshold), color-coded.
+  referral flag (para 4.3's 1-year-on-hold threshold), color-coded. Correctly
+  excludes Exercise Modality Exemptions (never on Hold) and pregnancy (excluded
+  per para 2.26.11) from the referral flag, even if a hold-start date is entered.
 - **Per-member action checklist** — real, checkable checkboxes, auto-built from
   that member's exemption status, each item citing the specific AFMAN paragraph
   behind it.
 - **View Directive / Remove** per roster member.
 - **CSV export** and **print** of the roster summary.
-- **Environmental & Safety** and **Role** quick-reference sections — deliberately
-  limited to what's actually been verified against the source documents (e.g. no
-  invented WBGT/heat-category thresholds, no fabricated role-responsibility text
-  beyond what's been confirmed).
+- **Environmental & Safety** reference — deliberately limited to what's actually
+  been verified against the source documents (no invented WBGT/heat-category
+  thresholds; those are left to DAFI 48-151 and the installation safety office).
+- **Role Reference** — condensed summaries for the 10 roles most relevant at the
+  unit level (Installation Commander through Member), pulled from the actual
+  verified Chapter 2 body text, not just paragraph headings. Each row still cites
+  its source paragraph for the full, authoritative version.
 
 ### Acronym Glossary
 47 terms used throughout the tool's own output, sorted alphabetically, each
@@ -154,3 +159,14 @@ sequence, not a timeline.
     Glossary), roster save/load to a JSON file, an objective/exemption
     consistency check, interactive checklist checkboxes, and alphabetizing the
     glossary.
+14. **Verified Role Reference.** Replaced the Administrative tab's
+    citation-only Role Reference table with condensed summaries pulled from the
+    actual AFMAN36-2905 Chapter 2 body text (previously only the paragraph
+    headings had been read, not the responsibility text itself).
+15. **AMRO exclusion fix and crash fix.** The AMRO Board referral flag now
+    correctly excludes members with only an Exercise Modality Exemption (never
+    on PFRA Hold, so not eligible per para 4.3) and pregnancy (explicitly
+    excluded per para 2.26.11), instead of flagging any member with a hold-start
+    date regardless of status. Also fixed a crash in the Administrative tracker
+    when a "date placed on hold" was entered without an AF Form 469 expiration
+    date — it now shows a prompt instead of throwing an error.
