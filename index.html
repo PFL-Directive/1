@@ -613,6 +613,7 @@
           <option value="8">8-week block</option>
           <option value="12">12-week block</option>
           <option value="6">6-week block (short)</option>
+          <option value="4">4-week block (very short)</option>
         </select>
       </div>
     </div>
@@ -1567,8 +1568,8 @@ function buildDirective(params){
     phases.push({ name:"Phase 2 — Build", weeks: timeline>=12 ? "Weeks 4–8" : "Weeks 3–5" });
     phases.push({ name: objective==="retest" ? "Phase 3 — Peak for Reassessment" : "Phase 3 — Progress & Sustain", weeks: timeline>=12 ? "Weeks 9–12" : "Weeks 6–8" });
   } else {
-    phases.push({name:"Phase 1 — Foundation", weeks:"Weeks 1–2"});
-    phases.push({name:"Phase 2 — Build & Sustain", weeks:"Weeks 3–6"});
+    phases.push({name:"Phase 1 — Foundation", weeks: timeline>=4 ? "Weeks 1–2" : "Week 1"});
+    phases.push({name:"Phase 2 — Build & Sustain", weeks: timeline>=4 ? `Weeks 3–${timeline}` : `Week ${timeline}`});
   }
 
   function prioritize(sel, pool, matchFn){
@@ -1836,7 +1837,7 @@ function randomParams(instanceId){
     age: randomInt(20, 45),
     height: randomInt(60, 76),
     weight: randomInt(130, 230),
-    timeline: [6,8,12][randomInt(0,2)],
+    timeline: [4,6,8,12][randomInt(0,3)],
     objective: objectives[randomInt(0,3)],
     ability: randomInt(1,3),
     notesRaw: "",
@@ -1993,7 +1994,7 @@ function normalizeMember(raw, i){
     age: clamp(parseInt(raw.age)||28, 17, 65),
     height: clamp(parseInt(raw.height)||68, 48, 84),
     weight: clamp(parseInt(raw.weight)||170, 80, 400),
-    timeline: [6,8,12].includes(parseInt(raw.timeline)) ? parseInt(raw.timeline) : 8,
+    timeline: [4,6,8,12].includes(parseInt(raw.timeline)) ? parseInt(raw.timeline) : 8,
     objective: ['general','retest','rtd','fip'].includes(raw.objective) ? raw.objective : 'general',
     ability: [1,2,3].includes(parseInt(raw.ability)) ? parseInt(raw.ability) : 2,
     notesRaw: typeof raw.notesRaw === 'string' ? raw.notesRaw.slice(0,500) : '',
