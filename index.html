@@ -1099,6 +1099,14 @@ function buildDirective(params){
     // Ability level (1/2/3) shifts within the same phase-progression array,
     // mirroring the Warfighter's Fitness Playbook 2.0 Level 1/2/3 rep scaling
     // (Level 1: 8-12 reps, Level 2: 10-15 reps, Level 3: 15-20 reps for bodyweight work).
+    if(!RX[kind]){
+      // A typo'd or missing "kind" on an exercise entry would otherwise crash the
+      // whole page the moment that exercise gets rotated into a displayed pool.
+      // Degrade to a safe generic prescription instead, and warn loudly in the
+      // console so whoever added the entry can find and fix it.
+      console.error('MISSING RX ENTRY for kind: "'+kind+'" — this exercise needs fixing. Falling back to a generic prescription.');
+      return { sr:"3x10", load:"Bodyweight or light load — verify prescription (see console)" };
+    }
     const offset = ability - 2; // Level 2 = baseline, matches original phase progression
     const p = Math.min(Math.max(phaseIdx + offset, 0), RX[kind].length-1);
     return RX[kind][p];
@@ -1427,6 +1435,24 @@ function buildDirective(params){
     {name:"Aqua Prenatal Class", kind:"pool", focus:"UE/LE, Low Impact"}
   ];
 
+  // ---- Data integrity check (runs on every generation — cheap at this scale) ----
+  // Catches a typo'd or missing "kind" on any exercise entry before it can crash
+  // the page for an end user (only when that specific exercise gets rotated into
+  // view). Anyone hand-editing the exercise library should see this immediately
+  // rather than discover it via an intermittent, hard-to-reproduce crash.
+  function validateLibraryData(){
+    const problems = [];
+    const seen = {};
+    [...MASTER_LIBRARY, ...CARDIO_PREG].forEach(ex=>{
+      if(!RX[ex.kind]) problems.push(`"${ex.name}" uses undefined kind "${ex.kind}"`);
+      const dupKey = (ex.category||'cardio_preg')+'::'+ex.name;
+      if(seen[dupKey]) problems.push(`Duplicate name "${ex.name}" within the same category`);
+      seen[dupKey] = true;
+    });
+    return problems;
+  }
+  const libraryProblems = validateLibraryData();
+
   // ---- Equipment inference ----
   // Kind-based defaults for equipment that isn't obvious from the exercise name.
   const KIND_EQUIP = {
@@ -1625,6 +1651,12 @@ function buildDirective(params){
   const memberName = escapeHtml([params.firstName, params.lastName].filter(Boolean).join(' ').trim());
 
   const html = `
+    ${libraryProblems.length ? `
+    <div class="paper" style="border:3px solid var(--stamp-red);margin-bottom:14px;">
+      <b style="color:var(--stamp-red);font-family:'IBM Plex Sans Condensed',sans-serif;font-size:15px;">⚠ EXERCISE LIBRARY DATA ERROR — FIX BEFORE USE</b>
+      <p style="font-size:12.5px;margin-top:8px;">One or more exercises in the library have bad data and were skipped or replaced with a generic fallback. Fix these before relying on this tool:</p>
+      <ul style="font-size:12px;">${libraryProblems.map(p=>`<li>${escapeHtml(p)}</li>`).join("")}</ul>
+    </div>` : ""}
     <div class="paper">
       <div class="doc-head">
         <div>

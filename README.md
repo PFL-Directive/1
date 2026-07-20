@@ -170,3 +170,10 @@ sequence, not a timeline.
     date regardless of status. Also fixed a crash in the Administrative tracker
     when a "date placed on hold" was entered without an AF Form 469 expiration
     date — it now shows a prompt instead of throwing an error.
+16. **Hardened the exercise database against future edits.** A typo'd or
+    missing exercise-prescription reference previously crashed the entire page
+    the moment that specific exercise got rotated into view — intermittent and
+    hard to reproduce. Now: a bad reference falls back to a generic prescription
+    instead of throwing, and a loud warning banner appears directly in the
+    generated directive naming the exact problem, so a data-entry mistake is
+    caught immediately instead of surfacing as a mystery crash later.
