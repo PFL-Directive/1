@@ -516,10 +516,12 @@
   .flag-warn{color:var(--amber);font-weight:700;}
   .flag-overdue{color:var(--stamp-red);font-weight:700;}
   .checklist{list-style:none;margin:0;padding:0;}
-  .checklist li{padding:5px 0 5px 22px;position:relative;font-size:12.5px;border-bottom:1px dotted rgba(32,36,31,0.15);}
+  .checklist li{padding:5px 0;border-bottom:1px dotted rgba(32,36,31,0.15);}
   .checklist li:last-child{border-bottom:none;}
-  .checklist li::before{content:"☐";position:absolute;left:0;top:5px;color:var(--ink-soft);}
-  .checklist .cite{color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:10px;margin-left:6px;}
+  .checklist label{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;cursor:pointer;}
+  .checklist input[type=checkbox]{margin-top:2px;flex:none;width:14px;height:14px;accent-color:var(--amber);cursor:pointer;}
+  .checklist label.done{color:var(--ink-soft);text-decoration:line-through;}
+  .checklist .cite{color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;font-size:10px;margin-left:6px;text-decoration:none;}
   .admin-btn{
     background:var(--amber);color:#1B1F26;border:none;padding:9px 14px;font-family:'IBM Plex Sans Condensed',sans-serif;
     font-weight:700;font-size:12px;letter-spacing:0.04em;text-transform:uppercase;cursor:pointer;border-radius:2px;margin-right:8px;
@@ -730,6 +732,13 @@
       <div class="sub" style="margin-bottom:10px;">Generates randomized, synthetic member profiles — not real data — to preview what a multi-member roster view could look like.</div>
       <button type="button" class="roster-btn" onclick="generateRoster()">Reset: Generate Randomized Roster (6 synthetic members)</button>
       <button type="button" class="roster-btn" style="margin-top:8px;" onclick="clearRoster()">Clear Roster</button>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px dashed var(--panel-line);">
+        <div class="sub" style="margin-bottom:8px;">Save the current roster to a file, or load one back in — nothing here is stored automatically, so this is the only way to keep a roster between sessions.</div>
+        <button type="button" class="roster-btn" onclick="exportRosterJSON()">Export Roster to File</button>
+        <button type="button" class="roster-btn" style="margin-top:8px;" onclick="document.getElementById('roster-import-file').click()">Import Roster from File</button>
+        <input type="file" id="roster-import-file" accept=".json,application/json" style="display:none;" onchange="importRosterJSON(event)">
+        <div id="roster-import-status" class="sub" style="margin-top:6px;"></div>
+      </div>
     </div>
 
     <div class="disclaimer">
@@ -752,91 +761,62 @@
     <div class="paper">
       <div class="doc-head">
         <div><div class="title">Acronym Glossary</div></div>
-        <div class="doc-id">REF AFMAN36-2905 / Playbook 2.0<br>TOOL-SPECIFIC + SOURCE TERMS</div>
+        <div class="doc-id">REF AFMAN36-2905 / Playbook 2.0<br>47 TERMS, A-Z</div>
       </div>
       <div class="footer-note" style="margin-top:0;padding-top:0;border-top:none;">
-        Every term below is used somewhere in this tool's output. Terms sourced from AFMAN36-2905 or the Warfighter's Fitness Playbook 2.0 are marked accordingly; a few are general fitness-industry shorthand or specific to this tool.
+        Every term below is used somewhere in this tool's output, sorted alphabetically. Terms sourced from AFMAN36-2905 or the Warfighter's Fitness Playbook 2.0 are marked accordingly; a few are general fitness-industry shorthand or specific to this tool.
       </div>
 
-      <div class="gloss-cat">Program &amp; Assessment</div>
-      <table class="gloss-table">
-        <thead><tr><th>Term</th><th>Meaning</th><th>Source</th></tr></thead>
-        <tbody>
-          <tr><td class="term">PFRP</td><td>Physical Fitness Readiness Program — the overall AF fitness program this manual governs</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">PFRA</td><td>Physical Fitness Readiness Assessment — the official fitness test (replaces the older informal term "PFA")</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">AFP</td><td>Adaptive Fitness Program — unit-led training required for any member on PFRA Hold</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">PFA</td><td>Physical Fitness Assessment — older/informal name still used colloquially; the current official term is PFRA</td><td class="src">Legacy usage</td></tr>
-          <tr><td class="term">WHtR</td><td>Waist-to-Height Ratio — the body composition measurement method (replaced BMI)</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">HAMR</td><td>High Aerobic Multi-shuttle Run (20-meter) — alternate cardio test to the 2.0-mile run</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">CLRC</td><td>Cross-Legged Reverse Crunch — one of the three authorized core endurance test exercises</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">HRPU</td><td>Hand Release Push-Up — the 2-minute alternate to the 1-minute push-up test</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">HR</td><td>Hand Release, as in "HR Push-Up" (not to be confused with heart rate)</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">MHR</td><td>Max Heart Rate — used for cardio intensity zones</td><td class="src">General fitness</td></tr>
-          <tr><td class="term">LIMFAC</td><td>Limiting Factor — shorthand used on AF Form 469 for a specific physical restriction</td><td class="src">AF usage</td></tr>
-          <tr><td class="term">AMRO</td><td>Airman Medical Readiness Optimization (Board) — reviews members on PFRA Hold for a year or more for a retention/referral recommendation</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">ARC</td><td>Air Reserve Component (Guard/Reserve) — follows a 12-month assessment cycle where Regular AF follows 6 months</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">BMI</td><td>Body Mass Index — the older body composition metric; current standard is WHtR, not BMI</td><td class="src">Legacy usage</td></tr>
-        </tbody>
-      </table>
-
-      <div class="gloss-cat">Roles &amp; Facilities</div>
-      <table class="gloss-table">
-        <thead><tr><th>Term</th><th>Meaning</th><th>Source</th></tr></thead>
-        <tbody>
-          <tr><td class="term">PFL</td><td>Peer Fitness Leader — this tool's primary intended user</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">UFPM</td><td>Unit Fitness Program Manager — administers the program at the unit level</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">HAWC</td><td>Health and Wellness Center</td><td class="src">AF usage</td></tr>
-          <tr><td class="term">OB</td><td>Obstetrician (OB/GYN) — referenced for pregnancy-profile programming guidance</td><td class="src">General medical</td></tr>
-          <tr><td class="term">MFL</td><td>Master Fitness Leader — oversees UFPM/PFL training and adaptive fitness programming at the installation level</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">FIM</td><td>Fitness Information Manager — provides UFPM training at the installation level</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">FAC</td><td>Fitness Assessment Cell — the installation-level cell that administers official PFRAs</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">UFAC</td><td>Unit Fitness Assessment Cell — the unit-level counterpart to the installation FAC</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">GSU</td><td>Geographically Separated Unit — referenced for climate-waiver authority alongside Wing/Detachment commanders</td><td class="src">AFMAN36-2905</td></tr>
-        </tbody>
-      </table>
-
-      <div class="gloss-cat">Programming &amp; Exercise Shorthand</div>
-      <table class="gloss-table">
-        <thead><tr><th>Term</th><th>Meaning</th><th>Source</th></tr></thead>
-        <tbody>
-          <tr><td class="term">LE</td><td>Lower Extremity — exercise focus tag</td><td class="src">Playbook 2.0</td></tr>
-          <tr><td class="term">UE</td><td>Upper Extremity — exercise focus tag</td><td class="src">Playbook 2.0</td></tr>
-          <tr><td class="term">RPE</td><td>Rate of Perceived Exertion — 1-10 effort scale used for load recommendations instead of fixed weights</td><td class="src">General fitness</td></tr>
-          <tr><td class="term">FITT</td><td>Frequency, Intensity, Time, Type — the basic training-variable framework</td><td class="src">Playbook 2.0</td></tr>
-          <tr><td class="term">FOSI</td><td>Form Over Speed and Intensity — master the movement before adding load or pace</td><td class="src">Playbook 2.0</td></tr>
-          <tr><td class="term">DB</td><td>Dumbbell</td><td class="src">General fitness</td></tr>
-          <tr><td class="term">KB</td><td>Kettlebell</td><td class="src">General fitness</td></tr>
-          <tr><td class="term">MB</td><td>Medicine Ball / Med Ball</td><td class="src">General fitness</td></tr>
-          <tr><td class="term">RDL</td><td>Romanian Deadlift</td><td class="src">General fitness</td></tr>
-          <tr><td class="term">RX</td><td>"Prescription" — fitness-industry shorthand for a sets/reps/load recommendation; also this tool's internal name for its prescription lookup table</td><td class="src">This tool</td></tr>
-        </tbody>
-      </table>
-
-      <div class="gloss-cat">Program Objectives &amp; Status</div>
-      <table class="gloss-table">
-        <thead><tr><th>Term</th><th>Meaning</th><th>Source</th></tr></thead>
-        <tbody>
-          <tr><td class="term">FIP</td><td>Fitness Improvement Program — one of this tool's selectable training objectives</td><td class="src">AF usage</td></tr>
-          <tr><td class="term">EXEMPT</td><td>Component Exemption — member is excused from that entire test component; triggers PFRA Hold</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">MODALITY</td><td>Exercise Modality Exemption — excused from one specific test exercise, cleared for a named alternate within the same component; no PFRA Hold</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">TESTED</td><td>Component is not exempt — member is assessed normally</td><td class="src">This tool</td></tr>
-          <tr><td class="term">HOLD / READY</td><td>PFRA Hold (not authorized to test) vs. Ready (authorized on normal cycle) — shown in the roster status column</td><td class="src">AFMAN36-2905</td></tr>
-        </tbody>
-      </table>
-
-      <div class="gloss-cat">Administrative</div>
       <table class="gloss-table">
         <thead><tr><th>Term</th><th>Meaning</th><th>Source</th></tr></thead>
         <tbody>
           <tr><td class="term">AF</td><td>Air Force</td><td class="src">—</td></tr>
           <tr><td class="term">AFMAN</td><td>Air Force Manual, e.g. AFMAN36-2905 — the current governing publication for this program</td><td class="src">—</td></tr>
-          <tr><td class="term">DAFMAN</td><td>Department of the Air Force Manual — the prior designation for the same publication (superseded by AFMAN naming)</td><td class="src">—</td></tr>
-          <tr><td class="term">PII</td><td>Personally Identifiable Information — this tool is designed to avoid collecting or storing it</td><td class="src">—</td></tr>
-          <tr><td class="term">PDF</td><td>Portable Document Format — used for the printed/exported directive</td><td class="src">—</td></tr>
-          <tr><td class="term">DAFI</td><td>Department of the Air Force Instruction, e.g. DAFI 48-151 — a separate publication from AFMAN36-2905; source for specific heat/thermal-stress thresholds this tool does not include</td><td class="src">—</td></tr>
-          <tr><td class="term">WBGT</td><td>Wet Bulb Globe Temperature — the heat-category measurement referenced for exercise safety; specific thresholds are not verified in this tool (see Administrative tab)</td><td class="src">—</td></tr>
+          <tr><td class="term">AFP</td><td>Adaptive Fitness Program — unit-led training required for any member on PFRA Hold</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">AMRO</td><td>Airman Medical Readiness Optimization (Board) — reviews members on PFRA Hold for a year or more for a retention/referral recommendation</td><td class="src">AFMAN36-2905</td></tr>
           <tr><td class="term">AQI</td><td>Air Quality Index — PFRAs should be suspended above AQI 100 per para 4.4.2</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">ARC</td><td>Air Reserve Component (Guard/Reserve) — follows a 12-month assessment cycle where Regular AF follows 6 months</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">BMI</td><td>Body Mass Index — the older body composition metric; current standard is WHtR, not BMI</td><td class="src">Legacy usage</td></tr>
+          <tr><td class="term">CLRC</td><td>Cross-Legged Reverse Crunch — one of the three authorized core endurance test exercises</td><td class="src">AFMAN36-2905</td></tr>
           <tr><td class="term">CSV</td><td>Comma-Separated Values — the file format used by the Administrative tab's roster export</td><td class="src">This tool</td></tr>
+          <tr><td class="term">DAFI</td><td>Department of the Air Force Instruction, e.g. DAFI 48-151 — a separate publication from AFMAN36-2905; source for specific heat/thermal-stress thresholds this tool does not include</td><td class="src">—</td></tr>
+          <tr><td class="term">DAFMAN</td><td>Department of the Air Force Manual — the prior designation for the same publication (superseded by AFMAN naming)</td><td class="src">—</td></tr>
+          <tr><td class="term">DB</td><td>Dumbbell</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">EXEMPT</td><td>Component Exemption — member is excused from that entire test component; triggers PFRA Hold</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">FAC</td><td>Fitness Assessment Cell — the installation-level cell that administers official PFRAs</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">FIM</td><td>Fitness Information Manager — provides UFPM training at the installation level</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">FIP</td><td>Fitness Improvement Program — one of this tool's selectable training objectives</td><td class="src">AF usage</td></tr>
+          <tr><td class="term">FITT</td><td>Frequency, Intensity, Time, Type — the basic training-variable framework</td><td class="src">Playbook 2.0</td></tr>
+          <tr><td class="term">FOSI</td><td>Form Over Speed and Intensity — master the movement before adding load or pace</td><td class="src">Playbook 2.0</td></tr>
+          <tr><td class="term">GSU</td><td>Geographically Separated Unit — referenced for climate-waiver authority alongside Wing/Detachment commanders</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">HAMR</td><td>High Aerobic Multi-shuttle Run (20-meter) — alternate cardio test to the 2.0-mile run</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">HAWC</td><td>Health and Wellness Center</td><td class="src">AF usage</td></tr>
+          <tr><td class="term">HOLD / READY</td><td>PFRA Hold (not authorized to test) vs. Ready (authorized on normal cycle) — shown in the roster status column</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">HR</td><td>Hand Release, as in "HR Push-Up" (not to be confused with heart rate)</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">HRPU</td><td>Hand Release Push-Up — the 2-minute alternate to the 1-minute push-up test</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">KB</td><td>Kettlebell</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">LE</td><td>Lower Extremity — exercise focus tag</td><td class="src">Playbook 2.0</td></tr>
+          <tr><td class="term">LIMFAC</td><td>Limiting Factor — shorthand used on AF Form 469 for a specific physical restriction</td><td class="src">AF usage</td></tr>
+          <tr><td class="term">MB</td><td>Medicine Ball / Med Ball</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">MFL</td><td>Master Fitness Leader — oversees UFPM/PFL training and adaptive fitness programming at the installation level</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">MHR</td><td>Max Heart Rate — used for cardio intensity zones</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">MODALITY</td><td>Exercise Modality Exemption — excused from one specific test exercise, cleared for a named alternate within the same component; no PFRA Hold</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">OB</td><td>Obstetrician (OB/GYN) — referenced for pregnancy-profile programming guidance</td><td class="src">General medical</td></tr>
+          <tr><td class="term">PDF</td><td>Portable Document Format — used for the printed/exported directive</td><td class="src">—</td></tr>
+          <tr><td class="term">PFA</td><td>Physical Fitness Assessment — older/informal name still used colloquially; the current official term is PFRA</td><td class="src">Legacy usage</td></tr>
+          <tr><td class="term">PFL</td><td>Peer Fitness Leader — this tool's primary intended user</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">PFRA</td><td>Physical Fitness Readiness Assessment — the official fitness test (replaces the older informal term "PFA")</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">PFRP</td><td>Physical Fitness Readiness Program — the overall AF fitness program this manual governs</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">PII</td><td>Personally Identifiable Information — this tool is designed to avoid collecting or storing it</td><td class="src">—</td></tr>
+          <tr><td class="term">RDL</td><td>Romanian Deadlift</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">RPE</td><td>Rate of Perceived Exertion — 1-10 effort scale used for load recommendations instead of fixed weights</td><td class="src">General fitness</td></tr>
+          <tr><td class="term">RX</td><td>"Prescription" — fitness-industry shorthand for a sets/reps/load recommendation; also this tool's internal name for its prescription lookup table</td><td class="src">This tool</td></tr>
+          <tr><td class="term">TESTED</td><td>Component is not exempt — member is assessed normally</td><td class="src">This tool</td></tr>
+          <tr><td class="term">UE</td><td>Upper Extremity — exercise focus tag</td><td class="src">Playbook 2.0</td></tr>
+          <tr><td class="term">UFAC</td><td>Unit Fitness Assessment Cell — the unit-level counterpart to the installation FAC</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">UFPM</td><td>Unit Fitness Program Manager — administers the program at the unit level</td><td class="src">AFMAN36-2905</td></tr>
+          <tr><td class="term">WBGT</td><td>Wet Bulb Globe Temperature — the heat-category measurement referenced for exercise safety; specific thresholds are not verified in this tool (see Administrative tab)</td><td class="src">—</td></tr>
+          <tr><td class="term">WHtR</td><td>Waist-to-Height Ratio — the body composition measurement method (replaced BMI)</td><td class="src">AFMAN36-2905</td></tr>
         </tbody>
       </table>
 
@@ -971,6 +951,15 @@ function buildDirective(params){
   const onPfraHold = R.run || R.upper || R.core || R.standing || R.preg;
   const recondInfo = computeReconditioning(expiryRaw, onPfraHold);
   const reconditioningText = recondInfo.text;
+
+  // ---- Objective/exemption consistency check ----
+  // "Preparing for reassessment" implies an upcoming official PFRA, which a
+  // member on PFRA Hold isn't authorized to take. Flag the mismatch rather
+  // than silently generating a directive built around a contradiction.
+  let objectiveWarning = "";
+  if(objective==="retest" && onPfraHold){
+    objectiveWarning = `This member is on PFRA Hold and not authorized to test — "Preparing for Reassessment" doesn't apply until the hold lifts. Consider "General Conditioning / Maintenance" or "Return-to-Duty Progression" instead, or leave this set until the restriction clears.`;
+  }
 
   // ---- Component matrix (AFMAN36-2905, 24 Mar 2026, para 3.1.2 / 3.7 / Table 3.3 / Table 4.1) ----
   function componentStatus(type, forcedExempt){
@@ -1663,6 +1652,12 @@ function buildDirective(params){
         }
       </div>
 
+      ${objectiveWarning ? `
+      <div class="notes-box" style="border-left-color:var(--amber);">
+        <b>⚠ Objective/Status Mismatch</b><br>
+        ${objectiveWarning}
+      </div>` : ""}
+
       <h4 class="section-h">Component Status Matrix</h4>
       <table class="matrix">
         <thead><tr><th>Component</th><th>Status</th><th>Basis</th></tr></thead>
@@ -1927,6 +1922,78 @@ function toggleAdminDirective(i){
   if(btn) btn.textContent = show ? 'Hide Directive' : 'View Directive';
 }
 
+// ---- Roster save/load (JSON file, client-side only — no server round trip) ----
+function exportRosterJSON(){
+  const members = window.__roster || [];
+  const json = JSON.stringify(members, null, 2);
+  const blob = new Blob([json], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'roster.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+// Fills in any missing/invalid fields with safe defaults so a hand-edited or
+// partial JSON file can't crash rendering — never trust an imported file's shape.
+function normalizeMember(raw, i){
+  raw = raw && typeof raw === 'object' ? raw : {};
+  const equip = {};
+  ["eq_barbell","eq_dumbbell","eq_kettlebell","eq_machine","eq_band","eq_medball","eq_sandbag","eq_sled","eq_cardio","eq_pool","eq_battleropes"].forEach(id=>{
+    equip[id] = raw.equip && typeof raw.equip[id] !== 'undefined' ? !!raw.equip[id] : true;
+  });
+  const validType = v => ['none','modality','component'].includes(v) ? v : 'none';
+  return {
+    instanceId: 'roster'+i,
+    firstName: typeof raw.firstName === 'string' ? raw.firstName.slice(0,60) : '',
+    lastName: typeof raw.lastName === 'string' ? raw.lastName.slice(0,60) : '',
+    gender: raw.gender==='female' ? 'female' : 'male',
+    age: clamp(parseInt(raw.age)||28, 17, 65),
+    height: clamp(parseInt(raw.height)||68, 48, 84),
+    weight: clamp(parseInt(raw.weight)||170, 80, 400),
+    timeline: [6,8,12].includes(parseInt(raw.timeline)) ? parseInt(raw.timeline) : 8,
+    objective: ['general','retest','rtd','fip'].includes(raw.objective) ? raw.objective : 'general',
+    ability: [1,2,3].includes(parseInt(raw.ability)) ? parseInt(raw.ability) : 2,
+    notesRaw: typeof raw.notesRaw === 'string' ? raw.notesRaw.slice(0,500) : '',
+    expiryRaw: typeof raw.expiryRaw === 'string' ? raw.expiryRaw : '',
+    holdStartRaw: typeof raw.holdStartRaw === 'string' ? raw.holdStartRaw : '',
+    cardioType: validType(raw.cardioType),
+    strengthType: validType(raw.strengthType),
+    coreType: validType(raw.coreType),
+    lower: !!raw.lower,
+    preg: !!raw.preg,
+    standing: !!raw.standing,
+    equip: equip
+  };
+}
+
+function importRosterJSON(event){
+  const file = event.target.files && event.target.files[0];
+  const statusEl = document.getElementById('roster-import-status');
+  if(!file){ return; }
+  const reader = new FileReader();
+  reader.onload = function(e){
+    try{
+      const parsed = JSON.parse(e.target.result);
+      if(!Array.isArray(parsed)) throw new Error('File does not contain a roster array');
+      window.__roster = parsed.map((m,i)=>normalizeMember(m,i));
+      renderRoster();
+      renderAdminTab();
+      if(statusEl){ statusEl.textContent = `Loaded ${window.__roster.length} member(s) from file.`; statusEl.style.color = 'var(--stamp-green)'; }
+    } catch(err){
+      if(statusEl){ statusEl.textContent = 'Could not load that file — not a valid roster export. Nothing was changed.'; statusEl.style.color = 'var(--stamp-red)'; }
+    }
+    event.target.value = ''; // allow re-importing the same filename later
+  };
+  reader.onerror = function(){
+    if(statusEl){ statusEl.textContent = 'Could not read that file.'; statusEl.style.color = 'var(--stamp-red)'; }
+  };
+  reader.readAsText(file);
+}
+
 function exportRosterCSV(){
   const members = window.__roster || [];
   if(members.length===0){ return; }
@@ -1984,7 +2051,7 @@ function renderAdminTab(){
       </tr>
       <tr><td colspan="5" style="padding:0;border-bottom:none;">
         <div id="admin-checklist-${i}" style="display:none;padding:8px 4px 14px 4px;">
-          <ul class="checklist">${checklist.map(c=>`<li>${c.t}<span class="cite">(${c.c})</span></li>`).join("")}</ul>
+          <ul class="checklist">${checklist.map(c=>`<li><label onchange="this.classList.toggle('done', this.querySelector('input').checked)"><input type="checkbox"><span>${c.t}<span class="cite">(${c.c})</span></span></label></li>`).join("")}</ul>
         </div>
         <div id="admin-directive-${i}" class="roster-directive" style="display:none;">${directiveHtml}</div>
       </td></tr>
