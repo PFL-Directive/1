@@ -177,3 +177,9 @@ sequence, not a timeline.
     instead of throwing, and a loud warning banner appears directly in the
     generated directive naming the exact problem, so a data-entry mistake is
     caught immediately instead of surfacing as a mystery crash later.
+17. **Gender/pregnancy consistency check.** Setting Gender to Male while the
+    Pregnancy restriction is checked previously generated a directive with
+    correct pregnancy programming but a silently mismatched profile header, with
+    no indication anything was off. Now flagged with a visible warning — the
+    entered Gender value is never silently overridden, since this is real
+    member-entry data, not randomized demo data.

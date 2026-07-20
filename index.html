@@ -969,6 +969,15 @@ function buildDirective(params){
     objectiveWarning = `This member is on PFRA Hold and not authorized to test — "Preparing for Reassessment" doesn't apply until the hold lifts. Consider "General Conditioning / Maintenance" or "Return-to-Duty Progression" instead, or leave this set until the restriction clears.`;
   }
 
+  // ---- Gender/pregnancy consistency check ----
+  // Deliberately flags rather than silently overriding the entered Gender —
+  // this is a real intake field for a real member, not randomized demo data,
+  // so the tool shouldn't quietly change what a PFL actually typed in.
+  let genderWarning = "";
+  if(R.preg && gender==="male"){
+    genderWarning = `Gender is set to Male but the Pregnancy restriction is checked. Pregnancy programming (all four components exempt) is still applied correctly below regardless of this field, but double-check the Gender selection is correct for this member.`;
+  }
+
   // ---- Component matrix (AFMAN36-2905, 24 Mar 2026, para 3.1.2 / 3.7 / Table 3.3 / Table 4.1) ----
   function componentStatus(type, forcedExempt){
     if(forcedExempt) return "exempt";
@@ -1696,6 +1705,12 @@ function buildDirective(params){
       <div class="notes-box" style="border-left-color:var(--amber);">
         <b>⚠ Objective/Status Mismatch</b><br>
         ${objectiveWarning}
+      </div>` : ""}
+
+      ${genderWarning ? `
+      <div class="notes-box" style="border-left-color:var(--amber);">
+        <b>⚠ Gender/Pregnancy Mismatch</b><br>
+        ${genderWarning}
       </div>` : ""}
 
       <h4 class="section-h">Component Status Matrix</h4>
