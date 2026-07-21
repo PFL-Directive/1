@@ -183,3 +183,18 @@ sequence, not a timeline.
     no indication anything was off. Now flagged with a visible warning — the
     entered Gender value is never silently overridden, since this is real
     member-entry data, not randomized demo data.
+
+
+ **The following data will be edited for clarity:
+    REMOVE - "Any component marked EXEMPT is not tested and is awarded maximum points for that component per current scoring rules — training still targets it        for the member's overall readiness, not for test score. Components marked MODALITY are still tested, just on the alternate exercise."
+    CHANGE - ACRONYM GLOSSAY to GLOSSARY
+    CHANGE - "OTHER STATUS to OTHER EXEMPTIONS"
+    CHANGE - Make PFRA Failure its own section 
+    CHANGE - Remove and Replace the "AUS Pursuit" Cardio exercise
+    CHANGE - Give more space for Supervisor and Assigned PFL Signatures / Align the spaces on top of one another "Supervisor over PFL". Add verbiage to show          supervisor acknowledges reciept of plan
+    POTENTIAL CHANGE - Ask for members baseline in fitness based on AFPT Testing "PU/SU/CARDIO", utilize scores to influenece amount of work needed per exercises
+    POTENTIAL ADDITION - Add signature space for member signature acknoledging reciept of plan
+    POTENTIAL ADDITION - References used in developing the tool
+    POTENTIAL ADDITION - Link external workout plans to specific plans such as "Gains Lab Document"
+   
+      
