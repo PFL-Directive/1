@@ -415,6 +415,12 @@
   .swap-btn:hover{border-color:var(--amber);color:var(--amber);}
   .exlist th.swapcol, .exlist td.swapcol{width:1%;text-align:right;}
   .eqgrid{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;}
+  .restr-block{border:1px solid var(--panel-line);border-radius:2px;padding:10px 12px;margin-bottom:10px;}
+  .restr-block:last-child{margin-bottom:0;}
+  .restr-head{
+    font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;
+    color:var(--amber-bright);margin-bottom:6px;
+  }
   .eqgrid .chk{margin-bottom:6px;}
   .roster-btn{
     width:100%;
@@ -629,66 +635,114 @@
       </div>
     </div>
 
+    <div class="row2">
+      <div class="field">
+        <label for="waist">Waist Measurement (in, optional)</label>
+        <input type="number" id="waist" min="20" max="70" step="0.5" placeholder="e.g. 34">
+      </div>
+      <div class="field">
+        <label for="whtr_date">Last WHtR Check Date</label>
+        <input type="date" id="whtr_date">
+      </div>
+    </div>
+
+    <div class="row2">
+      <div class="field">
+        <label for="sprint_2mile">Most Recent 2.0-Mile PFRA Time (mm:ss)</label>
+        <input type="text" id="sprint_2mile" placeholder="e.g. 16:00" pattern="[0-9]{1,2}:[0-9]{2}">
+      </div>
+      <div class="field">
+        <label for="sprint_1600m_reassess">1-Mile Reassessment Time (mm:ss, optional)</label>
+        <input type="text" id="sprint_1600m_reassess" placeholder="Enter after wk 4-5 reassessment" pattern="[0-9]{1,2}:[0-9]{2}">
+      </div>
+    </div>
+
     <div class="field">
       <label for="objective">Primary Objective</label>
       <select id="objective">
         <option value="general">General conditioning / maintain</option>
         <option value="retest">Preparing for reassessment</option>
         <option value="rtd">Return-to-duty progression</option>
-        <option value="fip">Fitness Improvement Program (FIP)</option>
+        <option value="fip">Fitness Reconditioning Program (FRP)</option>
       </select>
     </div>
 
     <div class="field">
-      <label for="ability">Current Ability Level</label>
+      <label for="ability">Current Ability Level (PFRA Score Band)</label>
       <select id="ability">
-        <option value="1">Level 1 — PFA &lt;80 or not completed, 2-mi 18:00+, HAMR &lt;60</option>
-        <option value="2" selected>Level 2 — PFA 80–89.9, 2-mi 16:00–18:00, HAMR 60–79</option>
-        <option value="3">Level 3 — PFA 90+, 2-mi &lt;16:00, HAMR 80+</option>
+        <option value="1">Level 1 — PFRA score &lt;75</option>
+        <option value="2" selected>Level 2 — PFRA score 75–90</option>
+        <option value="3">Level 3 — PFRA score 90+</option>
       </select>
+      <div class="sub" style="margin-top:4px;">Drives rep scaling on every exercise, plus Long Slow Run distance targets.</div>
     </div>
 
     <fieldset>
-      <legend>Component Exemption Status</legend>
-      <div class="field">
-        <label for="cardio_type">Cardiorespiratory</label>
+      <legend>Documented Restrictions</legend>
+
+      <div class="restr-block">
+        <div class="restr-head">Cardiorespiratory</div>
         <select id="cardio_type">
           <option value="none">Not restricted — test normally</option>
           <option value="modality">Exercise Modality Exemption (excused from 2.0-mi run, cleared for HAMR — no PFRA Hold)</option>
           <option value="component">Component Exemption (excused from cardio entirely — PFRA Hold)</option>
         </select>
       </div>
-      <div class="field">
-        <label for="strength_type">Muscular Strength</label>
+
+      <div class="restr-block">
+        <div class="restr-head">Upper Extremity (Muscular Strength)</div>
         <select id="strength_type">
           <option value="none">Not restricted — test normally</option>
           <option value="modality">Exercise Modality Exemption (excused from push-up, cleared for HRPU — no PFRA Hold)</option>
           <option value="component">Component Exemption (excused from strength entirely — PFRA Hold)</option>
         </select>
       </div>
-      <div class="field">
-        <label for="core_type">Core Endurance</label>
+
+      <div class="restr-block">
+        <div class="restr-head">Core Endurance</div>
         <select id="core_type">
           <option value="none">Not restricted — test normally</option>
           <option value="modality">Exercise Modality Exemption (excused from sit-up, cleared for CLRC/Plank — no PFRA Hold)</option>
           <option value="component">Component Exemption (excused from core entirely — PFRA Hold)</option>
         </select>
       </div>
+
+      <div class="restr-block">
+        <div class="restr-head">Lower Extremity</div>
+        <div class="sub" style="margin-bottom:6px;">Not an official PFRA test component — does not affect PFRA Hold or the Component Status Matrix, only training programming below.</div>
+        <select id="lower_type">
+          <option value="none">Not restricted</option>
+          <option value="partial">Restricted — avoid loaded lower-body work and high-impact cardio</option>
+          <option value="full">Fully Restricted — avoid all lower-body-loading exercise, including leg-driven cardio and lower-body mobility work</option>
+        </select>
+      </div>
     </fieldset>
 
     <fieldset>
-      <legend>Other Restrictions</legend>
-      <div class="chk">
-        <input type="checkbox" id="r_lower">
-        <label for="r_lower"><span class="lbl">Lower-body / joint restriction</span><span class="desc">Knee, hip, ankle, or back limitation affecting standing or loading</span></label>
-      </div>
+      <legend>Other Status</legend>
       <div class="chk">
         <input type="checkbox" id="r_preg">
         <label for="r_preg"><span class="lbl">Pregnancy profile</span><span class="desc">Prohibited from PFRA — composite exemption per para 4.1.4</span></label>
       </div>
+      <div class="field" style="margin-left:24px;margin-top:-4px;">
+        <label for="preg_stage">Pregnancy/Postpartum Stage (if checked above)</label>
+        <select id="preg_stage">
+          <option value="t1">1st Trimester</option>
+          <option value="t2">2nd Trimester</option>
+          <option value="t3">3rd Trimester</option>
+          <option value="pp1">Postpartum 0-6 weeks</option>
+          <option value="pp2">Postpartum 7-12 weeks</option>
+          <option value="pp3">Postpartum 13-18 weeks</option>
+        </select>
+        <div class="sub" style="margin-top:4px;">Condensed from the official Pregnancy &amp; Postpartum Performance Training Guide (P3T Program, June 2025). Always confirm with the member's OB/medical provider before use.</div>
+      </div>
       <div class="chk">
         <input type="checkbox" id="r_standing">
         <label for="r_standing"><span class="lbl">No prolonged standing / static hold</span><span class="desc">Timed forearm plank restricted, on top of any core status above</span></label>
+      </div>
+      <div class="chk">
+        <input type="checkbox" id="r_pfra_fail">
+        <label for="r_pfra_fail"><span class="lbl">PFRA Failure — enroll in FRP</span><span class="desc">Independent of any medical exemption above; auto-enrolls in Fitness Reconditioning Program</span></label>
       </div>
     </fieldset>
 
@@ -724,6 +778,11 @@
     <div class="field">
       <label for="notes">Profile notes (from AF Form 469, optional)</label>
       <textarea id="notes" placeholder="e.g. LIMFAC: no running >10 min through 15 Sep; cleared for bike/elliptical"></textarea>
+    </div>
+
+    <div class="field">
+      <label for="dietitian_notes">Dietitian Programming (fill in after appointment, optional)</label>
+      <textarea id="dietitian_notes" placeholder="Enter what the member receives from the dietitian/nutritionist here"></textarea>
     </div>
 
     <button type="submit" class="genbtn">Generate Fitness Directive</button>
@@ -788,9 +847,9 @@
           <tr><td class="term">EXEMPT</td><td>Component Exemption — member is excused from that entire test component; triggers PFRA Hold</td><td class="src">AFMAN36-2905</td></tr>
           <tr><td class="term">FAC</td><td>Fitness Assessment Cell — the installation-level cell that administers official PFRAs</td><td class="src">AFMAN36-2905</td></tr>
           <tr><td class="term">FIM</td><td>Fitness Information Manager — provides UFPM training at the installation level</td><td class="src">AFMAN36-2905</td></tr>
-          <tr><td class="term">FIP</td><td>Fitness Improvement Program — one of this tool's selectable training objectives</td><td class="src">AF usage</td></tr>
           <tr><td class="term">FITT</td><td>Frequency, Intensity, Time, Type — the basic training-variable framework</td><td class="src">Playbook 2.0</td></tr>
           <tr><td class="term">FOSI</td><td>Form Over Speed and Intensity — master the movement before adding load or pace</td><td class="src">Playbook 2.0</td></tr>
+          <tr><td class="term">FRP</td><td>Fitness Reconditioning Program — one of this tool's selectable training objectives, for a member following an unsatisfactory PFRA (replaces the older "FIP" term)</td><td class="src">AF usage</td></tr>
           <tr><td class="term">GSU</td><td>Geographically Separated Unit — referenced for climate-waiver authority alongside Wing/Detachment commanders</td><td class="src">AFMAN36-2905</td></tr>
           <tr><td class="term">HAMR</td><td>High Aerobic Multi-shuttle Run (20-meter) — alternate cardio test to the 2.0-mile run</td><td class="src">AFMAN36-2905</td></tr>
           <tr><td class="term">HAWC</td><td>Health and Wellness Center</td><td class="src">AF usage</td></tr>
@@ -833,6 +892,7 @@
 <div id="view-admin" style="display:none;">
   <div class="glossary-wrap" id="admin-content"></div>
 </div>
+
 
 <script>
 function showTab(tab){
@@ -903,6 +963,15 @@ function buildChecklist(m){
   if(amro.flagged){
     items.push({t:`On PFRA Hold ${amro.days} days (≥1 year) — notify commander for AMRO Board referral`, c:"para 4.2 / 4.3"});
   }
+  if(m.pfraFail){
+    items.push({t:"Enroll member in Fitness Reconditioning Program (FRP) following unsatisfactory PFRA", c:"AF usage"});
+    items.push({t:"Schedule accelerated reassessment per unit FRP timeline — this is independent of PFRA Hold", c:"AF usage"});
+  }
+  const mWaist = parseFloat(m.waist);
+  const mHeight = clamp(parseInt(m.height)||68, 48, 84);
+  if(!m.preg && !isNaN(mWaist) && mWaist > 0 && (mWaist / mHeight) >= 0.55){
+    items.push({t:"WHtR ≥ 0.55 — schedule dietitian/nutritionist appointment and log their programming", c:"local tracking"});
+  }
   if(items.length===0){
     items.push({t:"No exemption on file — standard assessment cycle applies (6 months Ready, 12 months ARC)", c:"para 3.10.1 / 3.10.2"});
   }
@@ -916,6 +985,44 @@ function escapeHtml(str){
   div.textContent = str;
   return div.innerHTML;
 }
+
+// ---- Sprint File pace-scaling engine (global scope) ----
+// Scaling method is deliberately transparent rather than a guessed internal
+// spreadsheet formula: every reference time is scaled linearly by (member's
+// time / the sheet's own reference time), the same method for every workout.
+function parseMinSec(str){
+  if(!str) return null;
+  const m = String(str).trim().match(/^(\d{1,2}):([0-5]\d)$/);
+  if(!m) return null;
+  return parseInt(m[1])*60 + parseInt(m[2]);
+}
+function formatMinSec(totalSec){
+  if(totalSec==null || isNaN(totalSec) || totalSec<=0) return "n/a";
+  const m = Math.floor(totalSec/60), s = Math.round(totalSec%60);
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+// The sheet's own reference point is 12:00 for 2400m (labeled "1.5mi," though
+// 1.5mi is actually 2414m — the sheet uses the round metric distance). The
+// reference is converted once, here, into 2.0-mile terms via straight
+// proportional pace scaling, so a PFL enters the actual PFRA test distance.
+const SPRINT_REF_2MILE = 720 * ((2*1609.344)/2400); // ≈ 965.6s (16:05.6)
+const SPRINT_REF_1MILE = 420; // 7:00 reassessment reference baseline (1600m / 1mi) — already a clean, unconverted distance
+const SPRINT_WORKOUTS = [
+  [{name:"2x4x400m", work:109, rest:54, setRest:180}],
+  [{name:"1x3x1200m", work:352, rest:176, setRest:null}],
+  [{name:"1x3x600m", work:162, rest:162, setRest:180},
+   {name:"1x3x200m", work:50, rest:50, setRest:180},
+   {name:"2x3x200m", work:47, rest:71, setRest:180}],
+  [{name:"1x3x800m", work:217, rest:217, setRest:240},
+   {name:"1x4x400m", work:102, rest:102, setRest:null}],
+  [{name:"1200m Aus Pursuit", work:391, rest:null, setRest:195},
+   {name:"1x3x600m", work:154, rest:154, setRest:240},
+   {name:"1x4x300m", work:72, rest:72, setRest:120},
+   {name:"1x2x100m", work:21, rest:42, setRest:null}],
+  [{name:"4x5x200m (Newtons — rest decreases each round: 45s/35s/25s/15s)", work:50, rest:45, setRest:120}],
+  [{name:"1x10x400m (Knockouts)", work:165, rest:90, setRest:null}],
+  [{name:"2x4x400m (repeat Workout 1 — compare for improvement)", work:105, rest:53, setRest:180}]
+];
 
 function buildDirective(params){
   const instanceId = params.instanceId || 'main';
@@ -931,13 +1038,22 @@ function buildDirective(params){
   const cardioType = params.cardioType||"none";
   const strengthType = params.strengthType||"none";
   const coreType = params.coreType||"none";
+  const pfraFail = !!params.pfraFail;
+  const waistRaw = params.waist;
+  const whtrDateRaw = params.whtrDate;
+  const dietitianNotes = escapeHtml((params.dietitianNotes||"").trim());
+  const sprintBaselineSec = parseMinSec(params.sprint2mile);
+  const sprintReassessSec = parseMinSec(params.sprintReassess);
+  const pregStage = params.pregStage||"t1";
   const equip = params.equip||{};
 
+  const lowerType = params.lowerType||"none";
   const R = {
     run: cardioType==="component",
     upper: strengthType==="component",
     core: coreType==="component",
-    lower: !!params.lower,
+    lower: lowerType!=="none",
+    lowerFull: lowerType==="full",
     preg: !!params.preg,
     standing: !!params.standing
   };
@@ -949,7 +1065,7 @@ function buildDirective(params){
     general:"General Conditioning / Maintenance",
     retest:"Preparation for Reassessment",
     rtd:"Return-to-Duty Progression",
-    fip:"Fitness Improvement Program (FIP)"
+    fip:"Fitness Reconditioning Program (FRP)"
   }[objective];
 
   // ---- PFRA Hold / Reconditioning Period (AFMAN36-2905, 24 Mar 2026, para 3.10.6 / 3.10.9 / 4.1.2) ----
@@ -977,6 +1093,39 @@ function buildDirective(params){
   if(R.preg && gender==="male"){
     genderWarning = `Gender is set to Male but the Pregnancy restriction is checked. Pregnancy programming (all four components exempt) is still applied correctly below regardless of this field, but double-check the Gender selection is correct for this member.`;
   }
+
+  // ---- PFRA Failure / FRP enrollment ----
+  // Independent of any medical exemption — a member can fail a PFRA for reasons
+  // that have nothing to do with a documented restriction. This does NOT set
+  // PFRA Hold (that's specifically for medical component/composite exemptions);
+  // FRP is a distinct remedial track that still tests, just on an accelerated
+  // reassessment cycle with structured programming.
+  let frpWarning = "";
+  if(pfraFail && objective!=="fip"){
+    frpWarning = `This member is enrolled in FRP following a PFRA failure, but Objective isn't set to "Fitness Reconditioning Program (FRP)." Consider updating it to match.`;
+  }
+
+  // ---- WHtR / waist tracking ----
+  // Skipped entirely for pregnancy — body composition is deferred along with
+  // the rest of the composite exemption (para 4.1.4), so tracking it here
+  // would be both moot and potentially unwelcome.
+  const waist = parseFloat(waistRaw);
+  const hasWaist = !isNaN(waist) && waist > 0;
+  const whtr = hasWaist ? (waist / height) : null;
+  let whtrDueText = "";
+  let whtrDaysSince = null;
+  if(!R.preg){
+    if(!hasWaist || !whtrDateRaw){
+      whtrDueText = "WHtR check needed — enter a waist measurement and check date to start monthly tracking.";
+    } else {
+      const lastCheck = new Date(whtrDateRaw + "T00:00:00");
+      whtrDaysSince = Math.floor((new Date() - lastCheck) / 86400000);
+      if(whtrDaysSince >= 30){
+        whtrDueText = `WHtR check overdue by ${whtrDaysSince - 30} day(s) — last checked ${whtrDaysSince} days ago. Please remeasure.`;
+      }
+    }
+  }
+  const whtrDietaryTriggered = !R.preg && whtr !== null && whtr >= 0.55;
 
   // ---- Component matrix (AFMAN36-2905, 24 Mar 2026, para 3.1.2 / 3.7 / Table 3.3 / Table 4.1) ----
   function componentStatus(type, forcedExempt){
@@ -1521,13 +1670,28 @@ function buildDirective(params){
   function pickPool(kind){
     if(kind==="cardio"){
       if(R.preg) return CARDIO_PREG;
+      if(R.lowerFull){
+        // Fully restricted: even low-impact leg-driven cardio machines are out —
+        // only genuinely leg-free modalities remain.
+        const legFree = ['arm_bike','pool','battle_ropes'];
+        const pool = libraryPool(["cardio_alt"]).filter(e=>legFree.includes(e.kind));
+        return pool.length>=3 ? pool : libraryPool(["cardio_alt"]);
+      }
       if(R.run || R.lower) return libraryPool(["cardio_alt"]);
       if(cardioModality) return libraryPool(["cardio"]); // still running/shuttle-based — cleared for HAMR
       return libraryPool(["cardio","cardio_alt"]);
     }
     if(kind==="strength"){ return libraryPool(["strength"]); }
     if(kind==="core"){ return (R.core||R.standing) ? libraryPool(["core_safe"]) : libraryPool(["core","core_safe"]); }
-    if(kind==="mobility"){ return R.lower ? libraryPool(["mobility_lowersafe"]) : libraryPool(["mobility","mobility_lowersafe"]); }
+    if(kind==="mobility"){
+      if(R.lowerFull){
+        // Fully restricted: drop lower-extremity mobility work entirely, not just
+        // the loaded strength/cardio pieces — upper-body and core mobility only.
+        const pool = libraryPool(["mobility_lowersafe","mobility"]).filter(e=>!/\bLE\b/.test(e.focus||""));
+        return pool.length>=3 ? pool : libraryPool(["mobility_lowersafe"]);
+      }
+      return R.lower ? libraryPool(["mobility_lowersafe"]) : libraryPool(["mobility","mobility_lowersafe"]);
+    }
   }
 
   function exTable(shownList, phaseIdx, scale, dayKey, fullPool){
@@ -1563,10 +1727,10 @@ function buildDirective(params){
 
   const dayTitles = {
     cardio: R.preg ? "Cardio — Low Impact (OB-Cleared)" : cardioModality ? "Cardio — HAMR Preparation (Modality Exemption)" : (R.run || R.lower) ? "Cardio — Alternate Modality" : "Cardio — Run Development",
-    strength: (R.upper && R.lower) ? "Strength — Seated / Pain-Free Range Only" :
-              R.upper ? "Strength — Lower Body & Core-Safe Upper" :
-              strengthModality ? "Strength — HRPU Progression (Modality Exemption)" :
-              R.lower ? "Strength — Upper Body Focus" : "Strength — Push-Up Progression",
+    strength: (R.upper && R.lower) ? "Upper Extremity — Seated / Pain-Free Range Only" :
+              R.upper ? "Upper Extremity — Lower Body & Core-Safe Focus" :
+              strengthModality ? "Upper Extremity — HRPU Progression (Modality Exemption)" :
+              R.lower ? "Upper Extremity — Focus (Lower Restricted)" : "Upper Extremity — Push-Up Progression",
     core: (R.core||R.standing) ? "Core — Restriction-Safe" : coreModality ? "Core — CLRC/Plank Progression (Modality Exemption)" : "Core — Endurance Work",
     mobility: "Mobility & Recovery"
   };
@@ -1589,6 +1753,177 @@ function buildDirective(params){
     return sel;
   }
 
+  // ---- Long Slow Run (Item 3d) — tied to Ability Level / PFRA score band ----
+  // Level 1 uses the actual Couch to 5K progression building toward 2 miles;
+  // Levels 2/3 progress a straight distance target across the block.
+  const C25K_WEEKS = [
+    "Jog 60s / Walk 90s, repeat — 20 min total",
+    "Jog 90s / Walk 2min, repeat — 20 min total",
+    "2x: Jog 200m, Walk 200m, Jog 400m, Walk 400m",
+    "Jog 400m, Walk 200m, Jog 800m, Walk 400m, Jog 400m, Walk 200m, Jog 800m",
+    "Jog 800m/Walk 400m x2, then Jog 800m",
+    "Jog 800m, Walk 400m, Jog 1.6km, Walk 400m, Jog 800m",
+    "Jog 4km (25 min) continuous, no walking",
+    "Jog 4.5km (28 min) continuous, no walking",
+    "Jog 5km (30 min) continuous — final week"
+  ];
+  function longSlowRunPrescription(phaseIdx, totalPhases){
+    const t = totalPhases>1 ? phaseIdx/(totalPhases-1) : 1;
+    if(ability===1){
+      const week = Math.min(9, Math.max(1, Math.round(1 + t*8)));
+      return { name:`Long Slow Run — C25K Week ${week}`, sr: C25K_WEEKS[week-1], load:"Conversational pace, build toward 2 mi" };
+    } else if(ability===2){
+      const dist = (2 + t*1).toFixed(1);
+      return { name:"Long Slow Run", sr: `${dist} mi continuous`, load:"Conversational pace" };
+    } else {
+      const dist = (3 + t*2).toFixed(1);
+      return { name:"Long Slow Run", sr: `${dist} mi continuous`, load:"Conversational pace, build toward 5 mi" };
+    }
+  }
+
+  // ---- HAMR as biweekly HIIT (Item 3c) — open to everyone regardless of restriction ----
+  function hamrBiweeklyPrescription(phaseIdx){
+    const isOnWeek = phaseIdx % 2 === 0;
+    return {
+      name:"20m HAMR (Biweekly HIIT)",
+      sr:"1x shuttle-run test effort",
+      load: isOnWeek ? "Scheduled this phase — full shuttle effort" : "Off this phase — resumes next phase (every other week)"
+    };
+  }
+
+  function staticExRow(ex){
+    return `<tr><td class="exname">${ex.name}<span class="focustag"></span></td><td class="exsr">${ex.sr}</td><td class="exload">${ex.load}</td></tr>`;
+  }
+
+  // ---- Sprint File HIIT Day (Item 3a) ----
+  // parseMinSec/formatMinSec/SPRINT_REF_2MILE/SPRINT_REF_1MILE/SPRINT_WORKOUTS
+  // now defined at global scope — see top of script.
+  // Workouts 1-4 scale off the 2.0-mile baseline; workouts 5-8 (post-reassessment)
+  // scale off the 1-mile reassessment time if entered, else an estimated
+  // 1-mile-equivalent derived proportionally from the 2.0-mile baseline.
+  function computeSprintDay(phaseIdx, totalPhases, baselineSec, reassessSec){
+    const workoutIdx = totalPhases>1 ? Math.min(7, Math.round((phaseIdx/(totalPhases-1))*7)) : 0;
+    const usesReassess = workoutIdx >= 4;
+    let ratio = 1, note = "";
+    if(usesReassess){
+      const estReassess = baselineSec ? baselineSec * (SPRINT_REF_1MILE/SPRINT_REF_2MILE) : null;
+      const actual = reassessSec || estReassess;
+      ratio = actual ? actual/SPRINT_REF_1MILE : 1;
+      note = reassessSec ? "" : "No 1-mile reassessment entered — paces estimated proportionally from the 2.0-mile baseline; enter the reassessment time after week 4-5 for accuracy.";
+    } else {
+      ratio = baselineSec ? baselineSec/SPRINT_REF_2MILE : 1;
+    }
+    return {
+      workoutNum: workoutIdx+1,
+      note,
+      rows: SPRINT_WORKOUTS[workoutIdx].map(r=>({
+        name: r.name,
+        sr: `Work ${formatMinSec(r.work*ratio)}`,
+        load: `Rest ${r.rest!=null?formatMinSec(r.rest*ratio):'n/a'}${r.setRest!=null?`, Set Rest ${formatMinSec(r.setRest*ratio)}`:''}`
+      }))
+    };
+  }
+
+  // ---- Gains Lab rowing-based HIIT (Item 3b) — for cardio-restricted members ----
+  const GAINS_LAB_WEEKS = [
+    {category:"Speed/Threshold", name:"3 Rounds: Row 5:00, Rest 2:00", subs:"Bike: YES · Run: YES · Ski: YES"},
+    {category:"Anaerobic", name:"8 Rounds: Row :30 (very high intensity), Rest 2:30", subs:"Bike: YES (Bike 1:00, Rest 5:00) · Run: NO · Ski: NO"},
+    {category:"Endurance", name:"Row 24 min, consistent pace, no kick at finish", subs:"Bike: YES · Run: YES · Ski: NO"},
+    {category:"Max Aerobic Power", name:"20 Rounds: Row :30, Rest :30", subs:"Bike: YES · Run: YES · Ski: YES"}
+  ];
+
+  // ---- Pregnancy & Postpartum Programming (Item 8) ----
+  // Condensed from the official DAF Pregnancy & Postpartum Performance Training
+  // Guide (P3T Program, June 2025) — one representative workout per stage rather
+  // than the full multi-week progression, with room to expand later. The guide's
+  // own disclaimer applies: not specific medical guidance, obtain clearance from
+  // a medical provider before starting or continuing this program.
+  const PREG_STAGES = {
+    t1: {
+      label:"1st Trimester",
+      workout:[
+        {name:"Squat Variation (air squat, goblet squat, etc.)", sr:"3x30s", load:"Bodyweight or light load"},
+        {name:"Overhead Push/Pull Variation", sr:"3x30s", load:"Bodyweight, band, or light DB"},
+        {name:"Carry Variation (farmer's, suitcase, waiter's)", sr:"3x30s", load:"Light-moderate load"},
+        {name:"Horizontal Push Variation (push-up, bench press)", sr:"3x30s", load:"Bodyweight or light load"},
+        {name:"Horizontal/Vertical Pull Variation (row)", sr:"3x30s", load:"Band or light DB"},
+        {name:"Hinge Variation (hip hinge, glute bridge)", sr:"3x30s", load:"Bodyweight or light load"},
+        {name:"Plank Variation", sr:"3x30s", load:"Bodyweight"},
+        {name:"Birth Squat", sr:"3x30s", load:"Bodyweight"}
+      ],
+      cardio:"Run, Row, or Bike — 60s on / 120s off, 15 min total",
+      note:"Progresses 3x30s (wk 1-2) → 4x30s (wk 3-4) → 5x30s (wk 5-6). Mammary tenderness, morning sickness, and increased tiredness are common — adjust as tolerated."
+    },
+    t2: {
+      label:"2nd Trimester",
+      workout:[
+        {name:"Squat Variation", sr:"3x45s", load:"Bodyweight or light load"},
+        {name:"Overhead Push/Pull Variation", sr:"3x45s", load:"Band or light DB"},
+        {name:"Carry Variation", sr:"3x45s", load:"Light-moderate load"},
+        {name:"Horizontal Push Variation", sr:"3x45s", load:"Bodyweight or light load"},
+        {name:"Horizontal/Vertical Pull Variation", sr:"3x45s", load:"Band or light DB"},
+        {name:"Hinge Variation", sr:"3x45s", load:"Bodyweight or light load"},
+        {name:"Plank Variation", sr:"3x45s", load:"Bodyweight"},
+        {name:"Birth Squat", sr:"3x45s", load:"Bodyweight"}
+      ],
+      cardio:"Continuous Step-Ups — 4 min on / 1 min off x5, or Jog/Walk 20 min",
+      note:"By 20 weeks the uterus reaches belly-button level — avoid prone (face-down) position exercises. Progresses 3x45s → 4x45s → 3x45s across the block."
+    },
+    t3: {
+      label:"3rd Trimester",
+      workout:[
+        {name:"Squat Variation", sr:"4x8", load:"Bodyweight or light load"},
+        {name:"Incline Push-Up", sr:"3x10", load:"Bodyweight"},
+        {name:"Band Pull-Apart", sr:"3x12", load:"Light band"},
+        {name:"Seated DB Overhead Press", sr:"2x10", load:"Light DB"},
+        {name:"Hip Thrust", sr:"2x15", load:"Bodyweight"}
+      ],
+      cardio:"Cycling 15 min, Continuous Step-Ups 15 min, or Sled Drag 15 min (rotate by session)",
+      note:"Avoid exercises on the back past 20 weeks unless medically cleared. Volume tapers across the block (e.g. 4x8 → 4x10 → 3x5) as term approaches."
+    },
+    pp1: {
+      label:"Postpartum 0-6 Weeks",
+      workout:[
+        {name:"Box Breathing", sr:"1-3x1 min", load:"Bodyweight"},
+        {name:"Cat-Cow", sr:"1-3x8", load:"Bodyweight"},
+        {name:"Single Leg QL Stretch", sr:"1-3x30s", load:"Bodyweight"},
+        {name:"Pelvic Tilts", sr:"1-3x10 / 2x8", load:"Bodyweight"},
+        {name:"Glute Bridge", sr:"1-3x10 / 2x8", load:"Bodyweight"},
+        {name:"Heel Slides", sr:"1-3x10 / 2x8", load:"Bodyweight"}
+      ],
+      cardio:"Walking — 5 min (wk 1-2) → 10 min (wk 3-4) → 12 min (wk 5-6)",
+      note:"Emphasis is rest, breathwork, and gentle pelvic-floor reconnection — not conditioning. Complete the Daily Readiness Assessment before every session."
+    },
+    pp2: {
+      label:"Postpartum 7-12 Weeks",
+      workout:[
+        {name:"Cat-Cow", sr:"2x10", load:"Bodyweight"},
+        {name:"High Knee March in Place", sr:"2x10 steps ea. side", load:"Bodyweight"},
+        {name:"Arm Circles", sr:"2x12", load:"Bodyweight"},
+        {name:"Bodyweight Squat", sr:"2x10", load:"Bodyweight"},
+        {name:"Incline Push-Up", sr:"2x10", load:"Bodyweight"},
+        {name:"Seated Band Row", sr:"2x10", load:"Light band"}
+      ],
+      cardio:"Walking — 10 min (wk 7-8) → 15 min (wk 9-10) → 20 min (wk 11-12)",
+      note:"Integration into strength and single-leg hip stability. If cleared for return to run, begin the R2R (Return to Run) Screen and Protocol below."
+    },
+    pp3: {
+      label:"Postpartum 13-18 Weeks",
+      workout:[
+        {name:"Quadruped Hip Circles", sr:"2x10", load:"Bodyweight"},
+        {name:"High Knee March", sr:"2x20yd", load:"Bodyweight"},
+        {name:"Side Lying Open Book", sr:"2x10", load:"Bodyweight"},
+        {name:"Front Squat Variation", sr:"4x5", load:"Light-moderate load"},
+        {name:"Push-Ups", sr:"2x10", load:"Bodyweight"},
+        {name:"1-Arm DB Row", sr:"2x12 ea. side", load:"Light-moderate DB"}
+      ],
+      cardio:"Incline Treadmill Walk 15 min",
+      note:"Slow integration into running if cleared via the R2R Screen and Protocol below. Continue building strength and cardio in parallel."
+    }
+  };
+  const PREG_R2R_SCREEN = ["Single leg balance — 10s ea. leg", "Single leg hopping — 10 reps ea. leg", "Single leg squat — 10 reps ea. leg", "Jogging in place — 60s", "Forward bounding — 10 reps ea. leg", "Running man — 10 reps ea. leg"];
+  const PREG_READINESS_CATEGORIES = ["Sleep","Mood","Energy","Stress","Soreness"];
+
   const phaseHTML = phases.map((p, idx) => {
     let cardioPool = pickPool("cardio");
     let strengthPool = pickPool("strength");
@@ -1610,6 +1945,30 @@ function buildDirective(params){
           <div class="dname">Day 1 · ${dayTitles.cardio}</div>
           ${dayNotes.cardio?`<div class="dnote">${dayNotes.cardio}</div>`:""}
           ${exTable(cardioSel, idx, false, k('cardio'), cardioPool)}
+          ${(!R.preg && (cardioType==="none" || cardioModality)) ? `
+          <table class="exlist" style="margin-top:6px;">
+            <tbody>
+              ${(cardioType==="none" && !R.preg) ? staticExRow(longSlowRunPrescription(idx, phases.length)) : ""}
+              ${staticExRow(hamrBiweeklyPrescription(idx))}
+            </tbody>
+          </table>` : ""}
+          ${(cardioType==="none" && !R.preg) ? (() => {
+            const sd = computeSprintDay(idx, phases.length, sprintBaselineSec, sprintReassessSec);
+            return `
+          <div class="dnote" style="margin-top:8px;color:var(--ink);font-style:normal;">HIIT Run Day — Sprint File Workout ${sd.workoutNum} of 8${!sprintBaselineSec ? ' (enter a 2.0-mile PFRA time above for personalized paces — showing reference pacing until then)' : ''}</div>
+          ${sd.note ? `<div class="dnote">${sd.note}</div>` : ""}
+          <table class="exlist" style="margin-top:6px;">
+            <tbody>${sd.rows.map(r=>staticExRow(r)).join("")}</tbody>
+          </table>`;
+          })() : ""}
+          ${((cardioType==="modality" || cardioType==="component") && !R.preg) ? (() => {
+            const gl = GAINS_LAB_WEEKS[idx % GAINS_LAB_WEEKS.length];
+            return `
+          <div class="dnote" style="margin-top:8px;color:var(--ink);font-style:normal;">Alternate HIIT (Gains Lab, Week ${(idx % GAINS_LAB_WEEKS.length)+1}) — ${gl.category}</div>
+          <table class="exlist" style="margin-top:6px;">
+            <tbody>${staticExRow({name:`Row — ${gl.category}`, sr: gl.name, load: gl.subs})}</tbody>
+          </table>`;
+          })() : ""}
         </div>
         <div class="day">
           <div class="dname">Day 2 · ${dayTitles.strength}</div>
@@ -1643,7 +2002,8 @@ function buildDirective(params){
   if(strengthType==="component") restrictionList.push("Strength: Component Exemption (excused entirely)");
   if(coreType==="modality") restrictionList.push("Core: Exercise Modality Exemption (excused from sit-up, cleared CLRC/Plank)");
   if(coreType==="component") restrictionList.push("Core: Component Exemption (excused entirely)");
-  if(R.lower) restrictionList.push("Lower-body / joint restriction");
+  if(R.lowerFull) restrictionList.push("Lower Extremity: Fully Restricted (avoid all lower-body loading)");
+  else if(R.lower) restrictionList.push("Lower Extremity: Restricted (avoid loaded lower-body work)");
   if(R.preg) restrictionList.push("Pregnancy profile");
   if(R.standing) restrictionList.push("No prolonged standing / static hold");
 
@@ -1693,6 +2053,17 @@ function buildDirective(params){
         <div class="cell"><div class="k">Ability</div><div class="v">L${ability}</div></div>
       </div>
 
+      <table style="width:100%;border-collapse:collapse;margin:10px 0 16px;">
+        <tr>
+          <td style="width:50%;padding:8px 12px 8px 0;font-size:11.5px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;">
+            Supervisor: _________________________________
+          </td>
+          <td style="width:50%;padding:8px 0 8px 12px;font-size:11.5px;color:var(--ink-soft);font-family:'IBM Plex Mono',monospace;">
+            Assigned PFL: _________________________________
+          </td>
+        </tr>
+      </table>
+
       <div class="notes-box" style="border-left-color:${onPfraHold ? 'var(--stamp-red)' : 'var(--stamp-green)'};">
         <b>${onPfraHold ? 'PFRA HOLD — Adaptive Fitness Program (AFP)' : 'Not on PFRA Hold'}</b><br>
         ${onPfraHold
@@ -1712,6 +2083,69 @@ function buildDirective(params){
         <b>⚠ Gender/Pregnancy Mismatch</b><br>
         ${genderWarning}
       </div>` : ""}
+
+      ${pfraFail ? `
+      <div class="notes-box" style="border-left-color:var(--amber);">
+        <b>PFRA FAILURE — FRP Enrollment</b><br>
+        This member failed a PFRA and is enrolled in the Fitness Reconditioning Program (FRP), independent of any medical exemption status above. This is a distinct remedial track — it does not place the member on PFRA Hold; the member still tests, on an accelerated reassessment cycle with structured programming.
+      </div>` : ""}
+
+      ${frpWarning ? `
+      <div class="notes-box" style="border-left-color:var(--amber);">
+        <b>⚠ Objective/FRP Mismatch</b><br>
+        ${frpWarning}
+      </div>` : ""}
+
+      ${!R.preg ? `
+      <div class="notes-box" style="border-left-color:${whtrDietaryTriggered ? 'var(--stamp-red)' : (whtrDueText ? 'var(--amber)' : 'var(--stamp-green)')};">
+        <b>Body Composition (WHtR) Tracking</b><br>
+        ${hasWaist ? `Current WHtR: <b>${whtr.toFixed(2)}</b> (waist ${waist}in / height ${height}in)${whtrDaysSince!==null ? `, last checked ${whtrDaysSince} day(s) ago` : ''}.` : 'No waist measurement on file yet.'}
+        ${whtrDueText ? `<br>${whtrDueText}` : ''}
+        ${whtrDietaryTriggered ? `<br><b>WHtR ≥ 0.55 — dietary referral indicated.</b> Schedule the member with a dietitian/nutritionist.` : ''}
+      </div>` : ""}
+
+      ${whtrDietaryTriggered ? `
+      <div class="notes-box" style="border-left-color:var(--stamp-red);">
+        <b>Dietary Programming</b><br>
+        This member's WHtR meets the threshold for a dietary referral. Schedule an appointment with a dietitian/nutritionist and enter what they provide below.
+        <div style="margin-top:8px;padding:8px 10px;background:rgba(255,255,255,0.5);border:1px dashed var(--ink-soft);border-radius:2px;min-height:24px;">
+          ${dietitianNotes ? dietitianNotes.replace(/\n/g,'<br>') : '<span style="color:var(--ink-soft);font-style:italic;">Not yet entered — fill in after the dietitian appointment.</span>'}
+        </div>
+      </div>` : ""}
+
+      ${R.preg ? (() => {
+        const stage = PREG_STAGES[pregStage] || PREG_STAGES.t1;
+        const isPostpartum = pregStage.startsWith('pp');
+        return `
+      <h4 class="section-h">Pregnancy &amp; Postpartum Programming — ${stage.label}</h4>
+      <div class="footer-note" style="margin-top:0;padding-top:0;border-top:none;">
+        Condensed from the official DAF Pregnancy &amp; Postpartum Performance Training Guide (P3T Program, June 2025) — one representative workout for this stage, not the full multi-week progression. Per the guide's own disclaimer: not specific medical guidance; obtain clearance from a medical provider before starting or continuing.
+      </div>
+      <table class="exlist" style="margin-top:8px;">
+        <thead><tr><th>Exercise</th><th>Sets x Reps</th><th>Load</th></tr></thead>
+        <tbody>${stage.workout.map(ex=>staticExRow(ex)).join("")}</tbody>
+      </table>
+      <div class="dnote" style="margin-top:6px;"><b>Aerobic conditioning:</b> ${stage.cardio}</div>
+      <div class="dnote">${stage.note}</div>
+
+      <div class="notes-box" style="border-left-color:var(--stamp-red);margin-top:10px;">
+        <b>Safety — Stop / Pause / PT Referral</b><br>
+        <b>STOP and contact medical provider:</b> swelling of face/hands, severe headaches, palpitations or chest pain, difficulty walking or calf pain/swelling, vaginal bleeding or excessive discharge, amniotic fluid leakage.<br>
+        <b>PAUSE and rest:</b> difficulty breathing/shortness of breath before exertion, nausea, dizzy or lightheaded, vomiting, excessive muscle soreness, fatigue, sudden sharp pain.<br>
+        <b>Ask for a PT referral:</b> pain/discomfort, incontinence, heaviness in the vagina, bulging or coning of the stomach, pelvic pressure.
+      </div>
+
+      ${isPostpartum ? `
+      <div class="notes-box" style="margin-top:10px;">
+        <b>Daily Readiness Assessment</b> — rate 1-5 each: ${PREG_READINESS_CATEGORIES.join(', ')} (1=worst, 5=best). Score 20-25: complete full workout. 15-19: lower weights, complete full workout. 10-14: cardio OR lifting only, not both. 0-9: rest day.
+      </div>` : ""}
+
+      ${(pregStage==='pp2'||pregStage==='pp3') ? `
+      <div class="notes-box" style="margin-top:10px;">
+        <b>Return to Run (R2R) Screen</b> — complete only if cleared and able to walk 30 min continuously symptom-free: ${PREG_R2R_SCREEN.join('; ')}. Any pain, leakage, heaviness, or bulging during the screen → choose non-impact cardio instead and notify medical provider.
+      </div>` : ""}
+      `;
+      })() : ""}
 
       <h4 class="section-h">Component Status Matrix</h4>
       <table class="matrix">
@@ -1735,7 +2169,7 @@ function buildDirective(params){
           <li>Form Over Speed and Intensity (FOSI): master the movement pattern before adding load or pace.</li>
           <li>Any component marked EXEMPT is not tested and is awarded maximum points for that component per current scoring rules — training still targets it for the member's overall readiness, not for test score. Components marked MODALITY are still tested, just on the alternate exercise.</li>
           <li>Reassess the restriction at each profile renewal date; this directive should be regenerated if the AF Form 469 changes.</li>
-          <li>Allow 2-4 weeks to acclimatize to heat or altitude before pushing intensity; scale back duration and intensity for the first 5-7 days in a new environment. Stop and seek medical attention at any sign of chest pain, dizziness, abnormal heartbeat, or other exercise warning signs.</li>
+          <li>Stop and seek medical attention at any sign of chest pain, dizziness, abnormal heartbeat, or other exercise warning signs.</li>
           <li>Use the ⟳ Swap control next to any exercise to substitute another option from the same filtered pool — useful for equipment conflicts or member preference the checkboxes don't capture. Swap controls do not appear in print/PDF output.</li>
           ${R.preg ? "<li>Pregnancy programming here is intentionally general — defer to OB and profile guidance for all specifics, especially load and heart-rate limits by trimester.</li>" : ""}
         </ul>
@@ -1801,9 +2235,16 @@ function collectParamsFromDOM(instanceId){
     cardioType: document.getElementById('cardio_type').value,
     strengthType: document.getElementById('strength_type').value,
     coreType: document.getElementById('core_type').value,
-    lower: document.getElementById('r_lower').checked,
+    lowerType: document.getElementById('lower_type').value,
     preg: document.getElementById('r_preg').checked,
+    pregStage: document.getElementById('preg_stage').value,
     standing: document.getElementById('r_standing').checked,
+    pfraFail: document.getElementById('r_pfra_fail').checked,
+    waist: document.getElementById('waist').value,
+    whtrDate: document.getElementById('whtr_date').value,
+    dietitianNotes: document.getElementById('dietitian_notes').value.trim(),
+    sprint2mile: document.getElementById('sprint_2mile').value.trim(),
+    sprintReassess: document.getElementById('sprint_1600m_reassess').value.trim(),
     equip: equip
   };
 }
@@ -1841,17 +2282,23 @@ function randomParams(instanceId){
   const strengthType = preg ? 'none' : strengthOpts[randomInt(0,4)];
   const coreType = preg ? 'none' : coreOpts[randomInt(0,4)];
   const standing = !preg && Math.random()<0.1;
+  const pfraFail = Math.random()<0.15;
   const onHold = preg || cardioType==='component' || strengthType==='component' || coreType==='component' || standing;
   // For on-hold synthetic members, back-fill plausible dates so the admin
   // tracker/AMRO demo has real variety — including some past the 1-year mark.
   const holdStartRaw = onHold ? randomDateOffset(10, 420) : "";
   const expiryRaw = onHold ? randomDateOffset(-60, 60) : "";
+  const rHeight = randomInt(60, 76);
+  const rWeight = randomInt(130, 230);
+  // Vary waist so some demo members land above/below the 0.55 WHtR trigger.
+  const rWaist = preg ? "" : String(Math.round((rHeight * (0.42 + Math.random()*0.22)) * 2) / 2);
+  const rWhtrDate = preg ? "" : (Math.random()<0.6 ? randomDateOffset(0, 55) : "");
   return {
     instanceId: instanceId,
     gender: gender,
     age: randomInt(20, 45),
-    height: randomInt(60, 76),
-    weight: randomInt(130, 230),
+    height: rHeight,
+    weight: rWeight,
     timeline: [4,6,8,12][randomInt(0,3)],
     objective: objectives[randomInt(0,3)],
     ability: randomInt(1,3),
@@ -1861,9 +2308,16 @@ function randomParams(instanceId){
     cardioType: cardioType,
     strengthType: strengthType,
     coreType: coreType,
-    lower: !preg && Math.random()<0.15,
+    lowerType: preg ? 'none' : (['none','none','none','partial','full'][randomInt(0,4)]),
     preg: preg,
+    pregStage: preg ? ['t1','t2','t3','pp1','pp2','pp3'][randomInt(0,5)] : 't1',
     standing: standing,
+    pfraFail: pfraFail,
+    waist: rWaist,
+    whtrDate: rWhtrDate,
+    dietitianNotes: "",
+    sprint2mile: (cardioType==="none" && !preg) ? `${randomInt(12,19)}:${String(randomInt(0,59)).padStart(2,'0')}` : "",
+    sprintReassess: "",
     equip: equip
   };
 }
@@ -1912,7 +2366,7 @@ function renderRoster(){
     if(m.cardioType!=='none') restr.push('Cardio:'+m.cardioType);
     if(m.strengthType!=='none') restr.push('Strength:'+m.strengthType);
     if(m.coreType!=='none') restr.push('Core:'+m.coreType);
-    if(m.lower) restr.push('Lower');
+    if(m.lowerType && m.lowerType!=='none') restr.push('LE:'+m.lowerType);
     if(m.preg) restr.push('Pregnancy');
     if(m.standing) restr.push('Standing');
     m.instanceId = 'roster'+i;
@@ -2018,9 +2472,16 @@ function normalizeMember(raw, i){
     cardioType: validType(raw.cardioType),
     strengthType: validType(raw.strengthType),
     coreType: validType(raw.coreType),
-    lower: !!raw.lower,
+    lowerType: ['none','partial','full'].includes(raw.lowerType) ? raw.lowerType : 'none',
     preg: !!raw.preg,
+    pregStage: ['t1','t2','t3','pp1','pp2','pp3'].includes(raw.pregStage) ? raw.pregStage : 't1',
     standing: !!raw.standing,
+    pfraFail: !!raw.pfraFail,
+    waist: typeof raw.waist === 'string' || typeof raw.waist === 'number' ? String(raw.waist) : '',
+    whtrDate: typeof raw.whtrDate === 'string' ? raw.whtrDate : '',
+    dietitianNotes: typeof raw.dietitianNotes === 'string' ? raw.dietitianNotes.slice(0,1000) : '',
+    sprint2mile: typeof raw.sprint2mile === 'string' ? raw.sprint2mile.slice(0,10) : '',
+    sprintReassess: typeof raw.sprintReassess === 'string' ? raw.sprintReassess.slice(0,10) : '',
     equip: equip
   };
 }
@@ -2061,7 +2522,7 @@ function exportRosterCSV(){
     const name = [m.firstName, m.lastName].filter(Boolean).join(' ') || memberLabel(i, m);
     return [
       name, m.gender==='male'?'M':'F', m.age, 'L'+m.ability, onHold?'HOLD':'READY',
-      m.cardioType, m.strengthType, m.coreType, m.lower?'Y':'N', m.preg?'Y':'N', m.standing?'Y':'N',
+      m.cardioType, m.strengthType, m.coreType, m.lowerType||'none', m.preg?'Y':'N', m.standing?'Y':'N',
       m.expiryRaw||'', m.holdStartRaw||'', recond.dueDate ? recond.dueDate.toLocaleDateString('en-US',{year:'numeric',month:'short'}) : '',
       amro.days!==null ? amro.days : '', amro.exempt ? 'N/A' : (amro.flagged?'YES':'no')
     ].map(v => `"${String(v).replace(/"/g,'""')}"`).join(',');
@@ -2139,6 +2600,27 @@ function renderAdminTab(){
       </div>
 
       ${rosterSection}
+
+      <div class="gloss-cat">PFRA Scoring Charts — Condensed Reference</div>
+      <div class="footer-note" style="margin-top:0;padding-top:0;border-top:none;">
+        Condensed to 3 representative age bands (Under 25 / 40-44 / 60+) per component, showing the maximum-points threshold only. This is a quick sanity-check reference, not a scoring tool — use myFitness or the full official chart for an actual member's score at their exact age.
+      </div>
+
+      <table class="gloss-table">
+        <thead><tr><th>Component (max pts)</th><th>Under 25</th><th>40-44</th><th>60 and Over</th></tr></thead>
+        <tbody>
+          <tr><td class="term">Push-Up (15.0)</td><td>M ≥67 · F ≥50</td><td>M ≥52 · F ≥39</td><td>M ≥38 · F ≥28</td></tr>
+          <tr><td class="term">HRPU (15.0)</td><td>M ≥52 · F ≥42</td><td>M ≥44 · F ≥34</td><td>M ≥36 · F ≥26</td></tr>
+          <tr><td class="term">Sit-Up (15.0)</td><td>M ≥58 · F ≥54</td><td>M ≥50 · F ≥41</td><td>M ≥42 · F ≥31</td></tr>
+          <tr><td class="term">CLRC (15.0)</td><td>M ≥60 · F ≥58</td><td>M ≥52 · F ≥50</td><td>M ≥44 · F ≥42</td></tr>
+          <tr><td class="term">Forearm Plank (15.0)</td><td>M ≥3:40 · F ≥3:35</td><td>M ≥3:20 · F ≥3:15</td><td>M ≥3:00 · F ≥2:55</td></tr>
+          <tr><td class="term">2.0-Mile Run (50.0)</td><td>M ≤13:25 · F ≤15:30</td><td>M ≤14:05 · F ≤16:45</td><td>M ≤16:58 · F ≤18:20</td></tr>
+          <tr><td class="term">20m HAMR (50.0)</td><td>M ≥87 · F ≥68</td><td>M ≥81 · F ≥59</td><td>M ≥65 · F ≥50</td></tr>
+        </tbody>
+      </table>
+
+      <div class="footer-note" style="margin-top:10px;">WHtR is not age/sex-dependent — the same ratio thresholds apply to every member: ≤0.49 = 20.0 pts (Low Risk) · 0.55 = 12.5 pts · ≥0.60 = 0 pts (High Risk).</div>
+      <div class="footer-note" style="margin-top:6px;">2km Walk is a pass/fail max-time standard (not point-scored), only authorized as a cardio alternate when specifically stated on AF Form 469: Male &lt;30 16:16, 40-49 16:23, 60+ 16:58 · Female &lt;30 17:22, 40-49 17:49, 60+ 18:53.</div>
 
       <div class="gloss-cat">Environmental &amp; Safety — Quick Reference</div>
       <div class="notes-box">
